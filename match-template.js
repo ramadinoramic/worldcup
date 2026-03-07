@@ -1,83 +1,293 @@
-// Generates a full match HTML page from a match data object.
-// Works in both Node (module.exports) and browser (window.generateMatchHTML).
+// Generates a full standalone match HTML page.
+// generateMatchHTML(m, brand, lang)
+//   m     — match data object from matches-data.js
+//   brand — brand config object from brands.js (defaults to BRANDS[0] if available)
+//   lang  — "en" | "de" | "tr"  (defaults to "en")
 
-function generateMatchHTML(m) {
-  const aff = "https://youwin.com/register?ref=21331414";
+const I18N = {
+  en: {
+    htmlLang: "en",
+    placeBet: "Place a Bet",
+    upcoming: "Upcoming",
+    groupStage: "Group Stage",
+    homeWin: "Home Win",
+    draw: "Draw",
+    awayWin: "Away Win",
+    after90: "After 90 min",
+    tabPreview: "Preview",
+    tabStats: "Statistics",
+    tabOdds: "Odds",
+    tabH2H: "H2H",
+    tabForm: "Form",
+    matchPreview: "Match Preview",
+    winProbability: "Win Probability",
+    basedOn: function(b) { return "Based on " + b + " odds"; },
+    teamComparison: "Team Comparison",
+    recentForm: "Recent Form",
+    last5: "Last 5 matches",
+    headToHead: "Head to Head",
+    matchesTotal: function(n) { return n + " matches total"; },
+    wins: "wins",
+    draws: "Draws",
+    bettingMarkets: "Betting Markets",
+    keyPlayers: "Key Players",
+    venueInfo: "Venue Info",
+    quickBet: "Quick Bet",
+    fifaRanking: "FIFA Ranking",
+    eloRating: "ELO Rating",
+    squadValue: "Squad Value",
+    goalsPerMatch: "Goals / Match",
+    concededPerMatch: "Conceded / Match",
+    possession: "Possession",
+    cleanSheets: "Clean Sheets",
+    matchResult: "Match Result (1X2)",
+    bothTeamsScore: "Both Teams to Score",
+    totalGoals: "Total Goals",
+    over25: "Over 2.5",
+    under25: "Under 2.5",
+    over35: "Over 3.5",
+    goalscorer: "Anytime Goalscorer",
+    correctScore: "Correct Score (Top Picks)",
+    doubleChance: "Double Chance",
+    halfTime: "Half-Time Result",
+    firstGoal: "First Goal Scorer",
+    yes: "Yes",
+    no: "No",
+    orDraw: "or Draw",
+    welcomeOffer: "Welcome Offer",
+    capacity: "Capacity",
+    surface: "Surface",
+    kickoffLocal: "Kick-off (local)",
+    kickoffCET: "Kick-off (CET)",
+    terms: "Terms & Conditions",
+    privacy: "Privacy Policy",
+    responsible: "Responsible Gaming",
+    allMatches: "All Matches"
+  },
+  de: {
+    htmlLang: "de",
+    placeBet: "Jetzt wetten",
+    upcoming: "Bevorstehend",
+    groupStage: "Gruppenphase",
+    homeWin: "Heimsieg",
+    draw: "Unentschieden",
+    awayWin: "Ausw\u00e4rtssieg",
+    after90: "Nach 90 Min.",
+    tabPreview: "Vorschau",
+    tabStats: "Statistiken",
+    tabOdds: "Quoten",
+    tabH2H: "H2H",
+    tabForm: "Form",
+    matchPreview: "Spielvorschau",
+    winProbability: "Siegwahrscheinlichkeit",
+    basedOn: function(b) { return "Basierend auf " + b + " Quoten"; },
+    teamComparison: "Teamvergleich",
+    recentForm: "Aktuelle Form",
+    last5: "Letzte 5 Spiele",
+    headToHead: "Direktvergleich",
+    matchesTotal: function(n) { return n + " Spiele gesamt"; },
+    wins: "Siege",
+    draws: "Unentschieden",
+    bettingMarkets: "Wettm\u00e4rkte",
+    keyPlayers: "Schl\u00fcsselspieler",
+    venueInfo: "Stadioninfo",
+    quickBet: "Schnellwette",
+    fifaRanking: "FIFA-Ranking",
+    eloRating: "ELO-Wertung",
+    squadValue: "Marktwert",
+    goalsPerMatch: "Tore / Spiel",
+    concededPerMatch: "Gegentore / Spiel",
+    possession: "Ballbesitz",
+    cleanSheets: "Zu-Null-Spiele",
+    matchResult: "Spielergebnis (1X2)",
+    bothTeamsScore: "Beide Teams treffen",
+    totalGoals: "Tore gesamt",
+    over25: "\u00dcber 2,5",
+    under25: "Unter 2,5",
+    over35: "\u00dcber 3,5",
+    goalscorer: "Torsch\u00fctze (jederzeit)",
+    correctScore: "Genaues Ergebnis (Top Picks)",
+    doubleChance: "Doppelte Chance",
+    halfTime: "Halbzeitergebnis",
+    firstGoal: "Erster Torsch\u00fctze",
+    yes: "Ja",
+    no: "Nein",
+    orDraw: "oder Unentsch.",
+    welcomeOffer: "Willkommensangebot",
+    capacity: "Kapazit\u00e4t",
+    surface: "Belag",
+    kickoffLocal: "Ansto\u00df (Ortszeit)",
+    kickoffCET: "Ansto\u00df (MEZ)",
+    terms: "AGB",
+    privacy: "Datenschutz",
+    responsible: "Verantwortungsvolles Spielen",
+    allMatches: "Alle Spiele"
+  },
+  tr: {
+    htmlLang: "tr",
+    placeBet: "Bahis Yap",
+    upcoming: "Yakla\u015fan",
+    groupStage: "Grup A\u015famas\u0131",
+    homeWin: "Ev Sahibi Kazan\u0131r",
+    draw: "Beraberlik",
+    awayWin: "Deplasman Kazan\u0131r",
+    after90: "90 dak. sonunda",
+    tabPreview: "\u00d6nizleme",
+    tabStats: "\u0130statistikler",
+    tabOdds: "Oranlar",
+    tabH2H: "H2H",
+    tabForm: "Form",
+    matchPreview: "Ma\u00e7 \u00d6nizlemesi",
+    winProbability: "Kazanma \u0130htimali",
+    basedOn: function(b) { return b + " oranlar\u0131na g\u00f6re"; },
+    teamComparison: "Tak\u0131m Kar\u015f\u0131la\u015ft\u0131rmas\u0131",
+    recentForm: "Son Form",
+    last5: "Son 5 ma\u00e7",
+    headToHead: "Kar\u015f\u0131l\u0131kl\u0131 Ma\u00e7lar",
+    matchesTotal: function(n) { return n + " toplam ma\u00e7"; },
+    wins: "Galibiyet",
+    draws: "Beraberlik",
+    bettingMarkets: "Bahis Piyasalar\u0131",
+    keyPlayers: "Kilit Oyuncular",
+    venueInfo: "Stadyum Bilgisi",
+    quickBet: "H\u0131zl\u0131 Bahis",
+    fifaRanking: "FIFA S\u0131ralamas\u0131",
+    eloRating: "ELO Puan\u0131",
+    squadValue: "Kadro De\u011feri",
+    goalsPerMatch: "Gol / Ma\u00e7",
+    concededPerMatch: "Yenilen Gol / Ma\u00e7",
+    possession: "Top Hakimiyeti",
+    cleanSheets: "Gol Yemeden Ma\u00e7lar",
+    matchResult: "Ma\u00e7 Sonucu (1X2)",
+    bothTeamsScore: "Kar\u015f\u0131l\u0131kl\u0131 Gol",
+    totalGoals: "Toplam Gol",
+    over25: "\u00dcst 2.5",
+    under25: "Alt 2.5",
+    over35: "\u00dcst 3.5",
+    goalscorer: "Gol Atan (herhangi bir zamanda)",
+    correctScore: "Do\u011fru Skor (\u00d6ne \u00c7\u0131kanlar)",
+    doubleChance: "\u00c7ifte \u015eans",
+    halfTime: "\u0130lk Yar\u0131 Sonucu",
+    firstGoal: "\u0130lk Gol Atan",
+    yes: "Evet",
+    no: "Hay\u0131r",
+    orDraw: "veya Beraberlik",
+    welcomeOffer: "Ho\u015fgeldin Teklifi",
+    capacity: "Kapasite",
+    surface: "Zemin",
+    kickoffLocal: "Ba\u015flang\u0131\u00e7 (yerel saat)",
+    kickoffCET: "Ba\u015flang\u0131\u00e7 (CET)",
+    terms: "\u015eartlar ve Ko\u015fullar",
+    privacy: "Gizlilik Politikas\u0131",
+    responsible: "Sorumlu Oyun",
+    allMatches: "T\u00fcm Ma\u00e7lar"
+  }
+};
+
+function generateMatchHTML(m, brand, lang) {
+  if (!brand && typeof BRANDS !== "undefined") brand = BRANDS[0];
+  if (!brand) brand = {
+    id: "youwin", name: "Youwin", logoHtml: "YOU<span>WIN</span>",
+    accentHex: "#E41E3F", registerUrl: "https://youwin.com/register?ref=21331414",
+    bonusHeadline: { en: "100% Bonus<br>up to \u20ac100", de: "100% Bonus<br>bis zu 100\u00a0\u20ac", tr: "\u20ac100\u2019a Kadar<br>%100 Bonus" },
+    bonusSub: { en: "New customers only &middot; Min. deposit \u20ac10 &middot; T&amp;Cs apply", de: "Nur Neukunden &middot; Mind. 10\u00a0\u20ac &middot; AGB gelten", tr: "Yaln\u0131zca yeni \u00fcyeler &middot; \u015eartlar ge\u00e7erlidir" },
+    claimBonus: { en: "Claim Bonus &rarr;", de: "Bonus sichern &rarr;", tr: "Bonusu Al &rarr;" },
+    disclaimer: { en: "18+ only. Please gamble responsibly. Betting involves risk.", de: "Nur ab 18 Jahren. Verantwortungsbewusst spielen.", tr: "Sadece 18+. L\u00fctfen sorumlu oynay\u0131n." },
+    mobBarLabel: { en: "Daily Prize Pool", de: "T\u00e4glicher Preispool", tr: "G\u00fcnl\u00fck \u00d6d\u00fcl Havuzu" },
+    mobBarVal:   { en: "Get free $10 in bets", de: "10$ gratis wetten", tr: "$10 \u00fccretsiz bahis" },
+    mobBarBtnMain: { en: "Bet Now", de: "Jetzt wetten", tr: "\u015eimdi Bahis Yap" },
+    mobBarBtnSub:  { en: "Get $10 Free!", de: "10$ Gratis!", tr: "$10 \u00dccretsi\u0307z!" }
+  };
+  if (!lang) lang = "en";
+  const t = I18N[lang] || I18N.en;
+  const aff = brand.registerUrl;
+  const accentHex = brand.accentHex || "#E41E3F";
+  const brandName = brand.name;
+  const logoHtml = brand.logoHtml;
+  const L = lang;
+
+  function g(obj) { return (obj && obj[L]) || (obj && obj.en) || ""; }
 
   function formBadges(team) {
-    return team.form.map(f =>
-      `<div class="fb ${f.r.toLowerCase()}" title="${f.tip}">${f.r}</div>`
-    ).join("\n              ");
+    return team.form.map(function(f) {
+      return '<div class="fb ' + f.r.toLowerCase() + '" title="' + f.tip + '">' + f.r + '</div>';
+    }).join("\n              ");
   }
 
-  function h2hRows(m) {
-    return m.h2h.matches.map(hm => {
-      const homeClass = hm.winner === "home" ? ' class="w"' : "";
-      const awayClass = hm.winner === "away" ? ' class="w"' : "";
-      return `        <div class="ml-item">
-          <span class="ml-date">${hm.date}</span>
-          <div class="ml-teams"><span${homeClass}>${hm.home}</span><span>–</span><span${awayClass}>${hm.away}</span></div>
-          <span class="ml-score">${hm.score}</span>
-          <span class="ml-comp">${hm.comp}</span>
-        </div>`;
+  function h2hRows(match) {
+    return match.h2h.matches.map(function(hm) {
+      var hc = hm.winner === "home" ? ' class="w"' : "";
+      var ac = hm.winner === "away" ? ' class="w"' : "";
+      return '        <div class="ml-item">\n' +
+        '          <span class="ml-date">' + hm.date + '</span>\n' +
+        '          <div class="ml-teams"><span' + hc + '>' + hm.home + '</span><span>\u2013</span><span' + ac + '>' + hm.away + '</span></div>\n' +
+        '          <span class="ml-score">' + hm.score + '</span>\n' +
+        '          <span class="ml-comp">' + hm.comp + '</span>\n' +
+        '        </div>';
     }).join("\n");
   }
 
   function playerRows(players) {
-    return players.map(p => `        <div class="player-row">
-          <div class="player-avatar">${p.flag}</div>
-          <div class="player-info">
-            <div class="player-name">${p.name}</div>
-            <div class="player-detail">${p.detail}</div>
-          </div>
-          <div class="player-stat">
-            <div class="player-stat-val">${p.stat}</div>
-            <div class="player-stat-label">${p.statLabel}</div>
-          </div>
-        </div>`).join("\n");
+    return players.map(function(p) {
+      return '        <div class="player-row">\n' +
+        '          <div class="player-avatar">' + p.flag + '</div>\n' +
+        '          <div class="player-info">\n' +
+        '            <div class="player-name">' + p.name + '</div>\n' +
+        '            <div class="player-detail">' + p.detail + '</div>\n' +
+        '          </div>\n' +
+        '          <div class="player-stat">\n' +
+        '            <div class="player-stat-val">' + p.stat + '</div>\n' +
+        '            <div class="player-stat-label">' + p.statLabel + '</div>\n' +
+        '          </div>\n' +
+        '        </div>';
+    }).join("\n");
   }
 
-  function mktBtns(items, labelKey = "label", valKey = "val") {
-    return items.map(i =>
-      `            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener">
-              <span class="mkt-btn-label">${i[labelKey]}</span><span class="mkt-btn-val">${i[valKey]}</span>
-            </a>`
-    ).join("\n");
+  function mktBtns(items) {
+    return items.map(function(i) {
+      return '            <a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener">\n' +
+        '              <span class="mkt-btn-label">' + i.label + '</span><span class="mkt-btn-val">' + i.val + '</span>\n' +
+        '            </a>';
+    }).join("\n");
   }
 
-  const ht = m.homeTeam, at = m.awayTeam;
-  const allPlayers = [...ht.players, ...at.players];
+  var ht = m.homeTeam, at = m.awayTeam;
+  var allPlayers = [].concat(ht.players, at.players);
 
-  // Stat bar widths — normalise each stat pair to 0–100 scale
-  function barW(a, b, flip = false) {
-    const max = Math.max(a, b, 0.001);
-    const pA = Math.round((a / max) * 95);
-    const pB = Math.round((b / max) * 95);
+  function barW(a, b, flip) {
+    var max = Math.max(a, b, 0.001);
+    var pA = Math.round((a / max) * 95);
+    var pB = Math.round((b / max) * 95);
     return flip ? [pB, pA] : [pA, pB];
   }
 
-  const [fifaH, fifaA] = barW(1 / ht.fifa, 1 / at.fifa);
-  const [eloH, eloA]   = barW(ht.elo, at.elo);
-  // squad value: strip non-numeric
-  const svH = parseFloat((ht.squadValue || "0").replace(/[^0-9.]/g, ""));
-  const svA = parseFloat((at.squadValue || "0").replace(/[^0-9.]/g, ""));
-  const [sqH, sqA] = barW(svH, svA);
-  const [gpH, gpA] = barW(ht.goalsPerGame, at.goalsPerGame);
-  // conceded: lower is better — invert
-  const [cpH, cpA] = barW(1 / ht.concededPerGame, 1 / at.concededPerGame);
-  const [posH, posA] = barW(ht.possession, at.possession);
-  const [csH, csA]   = barW(ht.cleanSheets, at.cleanSheets);
+  var fifaBars = barW(1 / ht.fifa, 1 / at.fifa);
+  var fifaH = fifaBars[0], fifaA = fifaBars[1];
+  var eloBars = barW(ht.elo, at.elo);
+  var eloH = eloBars[0], eloA = eloBars[1];
+  var svH = parseFloat((ht.squadValue || "0").replace(/[^0-9.]/g, ""));
+  var svA = parseFloat((at.squadValue || "0").replace(/[^0-9.]/g, ""));
+  var sqBars = barW(svH, svA);
+  var sqH = sqBars[0], sqA = sqBars[1];
+  var gpBars = barW(ht.goalsPerGame, at.goalsPerGame);
+  var gpH = gpBars[0], gpA = gpBars[1];
+  var cpBars = barW(1 / ht.concededPerGame, 1 / at.concededPerGame);
+  var cpH = cpBars[0], cpA = cpBars[1];
+  var posBars = barW(ht.possession, at.possession);
+  var posH = posBars[0], posA = posBars[1];
+  var csBars = barW(ht.cleanSheets, at.cleanSheets);
+  var csH = csBars[0], csA = csBars[1];
 
-  const leadH = ht.elo >= at.elo ? ' lead' : '';
-  const leadA = at.elo >= ht.elo ? ' lead' : '';
+  var leadH = ht.elo >= at.elo ? " lead" : "";
+  var leadA = at.elo >= ht.elo ? " lead" : "";
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${t.htmlLang}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${ht.name} vs ${at.name} – FIFA World Cup 2026 | Youwin Betting</title>
-  <meta name="description" content="Bet on ${ht.name} vs ${at.name} at FIFA World Cup 2026. Best odds, match preview, head-to-head stats and exclusive bonuses at Youwin.">
+  <title>${ht.name} vs ${at.name} \u2013 FIFA World Cup 2026 | ${brandName}</title>
+  <meta name="description" content="Bet on ${ht.name} vs ${at.name} at FIFA World Cup 2026. Best odds, match preview, head-to-head stats and exclusive bonuses at ${brandName}.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -85,7 +295,9 @@ function generateMatchHTML(m) {
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg-page:#F4F5F7;--bg-card:#FFFFFF;--bg-muted:#F8F9FB;--bg-input:#EEF0F4;
-      --accent:#E41E3F;--accent-dim:rgba(228,30,63,0.08);--accent-mid:rgba(228,30,63,0.18);
+      --accent:${accentHex};
+      --accent-dim:color-mix(in srgb,${accentHex} 9%,transparent);
+      --accent-mid:color-mix(in srgb,${accentHex} 18%,transparent);
       --blue:#2563EB;--blue-dim:rgba(37,99,235,0.08);
       --green:#16A34A;--green-dim:rgba(22,163,74,0.09);
       --yellow:#D97706;--yellow-dim:rgba(217,119,6,0.09);
@@ -109,10 +321,6 @@ function generateMatchHTML(m) {
     .topbar-brand{font-size:1.05rem;font-weight:900;letter-spacing:-.03em;color:var(--t0);}
     .topbar-brand span{color:var(--accent);}
     .topbar-right{display:flex;align-items:center;gap:.5rem;}
-    .lang-pill{display:flex;background:var(--bg-input);border-radius:100px;padding:3px;gap:2px;}
-    .lang-pill a{font-size:.68rem;font-weight:700;padding:.22rem .55rem;border-radius:100px;color:var(--t2);transition:all .15s;}
-    .lang-pill a.active{background:var(--accent);color:#fff;}
-    .lang-pill a:hover:not(.active){color:var(--t0);background:var(--border);}
     .topbar-cta{background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:.38rem 1rem;border-radius:100px;transition:filter .15s,transform .15s;}
     .topbar-cta:hover{filter:brightness(1.08);transform:translateY(-1px);}
     .page{max-width:1100px;margin:0 auto;padding:1.25rem 1rem;display:grid;grid-template-columns:1fr 336px;gap:1.25rem;align-items:start;}
@@ -204,11 +412,11 @@ function generateMatchHTML(m) {
     .preview-text{font-size:.82rem;color:var(--t1);line-height:1.75;}
     .preview-text+.preview-text{margin-top:.65rem;}
     .preview-highlight{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.75rem 1rem;margin-top:.85rem;font-size:.78rem;color:var(--t1);font-weight:500;line-height:1.65;}
-    .side-cta{background:linear-gradient(150deg,#E41E3F 0%,#B21130 100%);border-radius:var(--r-xl);padding:1.5rem 1.25rem;text-align:center;box-shadow:var(--shadow-md);}
+    .side-cta{border-radius:var(--r-xl);padding:1.5rem 1.25rem;text-align:center;box-shadow:var(--shadow-md);background:linear-gradient(150deg,${accentHex} 0%,color-mix(in srgb,${accentHex} 70%,#000) 100%);}
     .side-cta-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:.4rem;}
     .side-cta-headline{font-size:1.35rem;font-weight:900;line-height:1.2;color:#fff;letter-spacing:-.03em;margin-bottom:.35rem;}
     .side-cta-sub{font-size:.7rem;color:rgba(255,255,255,0.65);margin-bottom:1.1rem;line-height:1.5;}
-    .side-cta-btn{display:inline-flex;align-items:center;gap:.3rem;background:#fff;color:var(--accent);font-size:.78rem;font-weight:800;padding:.65rem 1.6rem;border-radius:100px;transition:all .15s;}
+    .side-cta-btn{display:inline-flex;align-items:center;gap:.3rem;background:#fff;color:${accentHex};font-size:.78rem;font-weight:800;padding:.65rem 1.6rem;border-radius:100px;transition:all .15s;}
     .side-cta-btn:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(0,0,0,.2);}
     .venue-row{display:flex;align-items:center;padding:.5rem 0;justify-content:space-between;}
     .venue-row+.venue-row{border-top:1px solid var(--border-subtle);}
@@ -243,10 +451,10 @@ function generateMatchHTML(m) {
       <a href="index.html" class="topbar-back" aria-label="Back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </a>
-      <a href="index.html" class="topbar-brand">YOU<span>WIN</span></a>
+      <a href="index.html" class="topbar-brand">${logoHtml}</a>
     </div>
     <div class="topbar-right">
-      <a href="${aff}" class="topbar-cta" target="_blank" rel="noopener">Place a Bet</a>
+      <a href="${aff}" class="topbar-cta" target="_blank" rel="noopener">${t.placeBet}</a>
     </div>
   </div>
 </div>
@@ -254,16 +462,16 @@ function generateMatchHTML(m) {
   <div class="match-header">
     <div class="mh-top">
       <div class="mh-tourney">
-        <div class="mh-tourney-badge">⚽</div>
-        FIFA World Cup 2026 &bull; Group Stage &bull; ${m.group}
+        <div class="mh-tourney-badge">\u26bd</div>
+        FIFA World Cup 2026 &bull; ${t.groupStage} &bull; ${m.group}
       </div>
-      <div class="mh-status"><span class="mh-dot"></span> Upcoming</div>
+      <div class="mh-status"><span class="mh-dot"></span> ${t.upcoming}</div>
     </div>
     <div class="mh-body">
       <div class="mh-team">
         <div class="mh-flag">${ht.flag}</div>
         <div class="mh-name">${ht.name}</div>
-        <div class="mh-sub">FIFA #${ht.fifa} · ${ht.role}</div>
+        <div class="mh-sub">FIFA #${ht.fifa} &middot; ${ht.role}</div>
       </div>
       <div class="mh-center">
         <div class="mh-kick">${m.kickoff}</div>
@@ -273,23 +481,23 @@ function generateMatchHTML(m) {
       <div class="mh-team">
         <div class="mh-flag">${at.flag}</div>
         <div class="mh-name">${at.name}</div>
-        <div class="mh-sub">FIFA #${at.fifa} · ${at.role}</div>
+        <div class="mh-sub">FIFA #${at.fifa} &middot; ${at.role}</div>
       </div>
     </div>
     <div class="mh-foot">
       <div class="odds-strip">
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
-          <span class="odds-btn-label">Home Win</span>
+          <span class="odds-btn-label">${t.homeWin}</span>
           <span class="odds-btn-val">${m.odds.home.toFixed(2)}</span>
           <span class="odds-btn-team">${ht.name}</span>
         </a>
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
-          <span class="odds-btn-label">Draw</span>
+          <span class="odds-btn-label">${t.draw}</span>
           <span class="odds-btn-val">${m.odds.draw.toFixed(2)}</span>
-          <span class="odds-btn-team">After 90 min</span>
+          <span class="odds-btn-team">${t.after90}</span>
         </a>
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
-          <span class="odds-btn-label">Away Win</span>
+          <span class="odds-btn-label">${t.awayWin}</span>
           <span class="odds-btn-val">${m.odds.away.toFixed(2)}</span>
           <span class="odds-btn-team">${at.name}</span>
         </a>
@@ -298,25 +506,25 @@ function generateMatchHTML(m) {
   </div>
   <div class="main" style="display:flex;flex-direction:column;gap:1rem;">
     <div class="tabs">
-      <div class="tab active">Preview</div>
-      <div class="tab">Statistics</div>
-      <div class="tab">Odds</div>
-      <div class="tab">H2H</div>
-      <div class="tab">Form</div>
+      <div class="tab active">${t.tabPreview}</div>
+      <div class="tab">${t.tabStats}</div>
+      <div class="tab">${t.tabOdds}</div>
+      <div class="tab">${t.tabH2H}</div>
+      <div class="tab">${t.tabForm}</div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">📋</span> Match Preview</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\uD83D\uDCCB</span> ${t.matchPreview}</div>
       </div>
       <div class="card-body">
-        ${m.previewLines.map(l => `<p class="preview-text">${l}</p>`).join("\n        ")}
+        ${m.previewLines.map(function(l) { return '<p class="preview-text">' + l + '</p>'; }).join("\n        ")}
         <div class="preview-highlight">${m.previewHighlight}</div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">📊</span> Win Probability</div>
-        <span class="card-chip">Based on Youwin odds</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83D\uDCCA</span> ${t.winProbability}</div>
+        <span class="card-chip">${t.basedOn(brandName)}</span>
       </div>
       <div class="card-body">
         <div class="prob-bar">
@@ -325,74 +533,74 @@ function generateMatchHTML(m) {
           <div class="ps away" style="width:${m.probAway}%;">${m.probAway}%</div>
         </div>
         <div class="prob-labels">
-          <span>${ht.flag} ${ht.name}</span><span>Draw</span><span>${at.name} ${at.flag}</span>
+          <span>${ht.flag} ${ht.name}</span><span>${t.draw}</span><span>${at.name} ${at.flag}</span>
         </div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">⚔️</span> Team Comparison</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\u2694\uFE0F</span> ${t.teamComparison}</div>
         <div style="display:flex;gap:1rem;font-size:.65rem;font-weight:700;">
-          <span style="color:var(--blue);">● ${ht.code}</span>
-          <span style="color:var(--accent);">● ${at.code}</span>
+          <span style="color:var(--blue);">&bull; ${ht.code}</span>
+          <span style="color:var(--accent);">&bull; ${at.code}</span>
         </div>
       </div>
       <div class="card-body">
         <div class="stat-row">
           <span class="sv${leadH}">${ht.fifa}</span>
           <div class="sh"><div class="sh-fill" style="width:${fifaH}%;"></div></div>
-          <span class="sn">FIFA Ranking</span>
+          <span class="sn">${t.fifaRanking}</span>
           <div class="sa"><div class="sa-fill" style="width:${fifaA}%;"></div></div>
           <span class="sv${leadA}">${at.fifa}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.elo >= at.elo ? ' lead' : ''}">${ht.elo}</span>
+          <span class="sv${ht.elo >= at.elo ? " lead" : ""}">${ht.elo}</span>
           <div class="sh"><div class="sh-fill" style="width:${eloH}%;"></div></div>
-          <span class="sn">ELO Rating</span>
+          <span class="sn">${t.eloRating}</span>
           <div class="sa"><div class="sa-fill" style="width:${eloA}%;"></div></div>
-          <span class="sv${at.elo > ht.elo ? ' lead' : ''}">${at.elo}</span>
+          <span class="sv${at.elo > ht.elo ? " lead" : ""}">${at.elo}</span>
         </div>
         <div class="stat-row">
           <span class="sv">${ht.squadValue}</span>
           <div class="sh"><div class="sh-fill" style="width:${sqH}%;"></div></div>
-          <span class="sn">Squad Value</span>
+          <span class="sn">${t.squadValue}</span>
           <div class="sa"><div class="sa-fill" style="width:${sqA}%;"></div></div>
           <span class="sv">${at.squadValue}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.goalsPerGame >= at.goalsPerGame ? ' lead' : ''}">${ht.goalsPerGame}</span>
+          <span class="sv${ht.goalsPerGame >= at.goalsPerGame ? " lead" : ""}">${ht.goalsPerGame}</span>
           <div class="sh"><div class="sh-fill" style="width:${gpH}%;"></div></div>
-          <span class="sn">Goals / Match</span>
+          <span class="sn">${t.goalsPerMatch}</span>
           <div class="sa"><div class="sa-fill" style="width:${gpA}%;"></div></div>
-          <span class="sv${at.goalsPerGame > ht.goalsPerGame ? ' lead' : ''}">${at.goalsPerGame}</span>
+          <span class="sv${at.goalsPerGame > ht.goalsPerGame ? " lead" : ""}">${at.goalsPerGame}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.concededPerGame <= at.concededPerGame ? ' lead' : ''}">${ht.concededPerGame}</span>
+          <span class="sv${ht.concededPerGame <= at.concededPerGame ? " lead" : ""}">${ht.concededPerGame}</span>
           <div class="sh"><div class="sh-fill" style="width:${cpH}%;"></div></div>
-          <span class="sn">Conceded / Match</span>
+          <span class="sn">${t.concededPerMatch}</span>
           <div class="sa"><div class="sa-fill" style="width:${cpA}%;"></div></div>
-          <span class="sv${at.concededPerGame < ht.concededPerGame ? ' lead' : ''}">${at.concededPerGame}</span>
+          <span class="sv${at.concededPerGame < ht.concededPerGame ? " lead" : ""}">${at.concededPerGame}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.possession >= at.possession ? ' lead' : ''}">${ht.possession}%</span>
+          <span class="sv${ht.possession >= at.possession ? " lead" : ""}">${ht.possession}%</span>
           <div class="sh"><div class="sh-fill" style="width:${posH}%;"></div></div>
-          <span class="sn">Possession</span>
+          <span class="sn">${t.possession}</span>
           <div class="sa"><div class="sa-fill" style="width:${posA}%;"></div></div>
-          <span class="sv${at.possession > ht.possession ? ' lead' : ''}">${at.possession}%</span>
+          <span class="sv${at.possession > ht.possession ? " lead" : ""}">${at.possession}%</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.cleanSheets >= at.cleanSheets ? ' lead' : ''}">${ht.cleanSheets}</span>
+          <span class="sv${ht.cleanSheets >= at.cleanSheets ? " lead" : ""}">${ht.cleanSheets}</span>
           <div class="sh"><div class="sh-fill" style="width:${csH}%;"></div></div>
-          <span class="sn">Clean Sheets</span>
+          <span class="sn">${t.cleanSheets}</span>
           <div class="sa"><div class="sa-fill" style="width:${csA}%;"></div></div>
-          <span class="sv${at.cleanSheets > ht.cleanSheets ? ' lead' : ''}">${at.cleanSheets}</span>
+          <span class="sv${at.cleanSheets > ht.cleanSheets ? " lead" : ""}">${at.cleanSheets}</span>
         </div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">📈</span> Recent Form</div>
-        <span class="card-chip">Last 5 matches</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83D\uDCC8</span> ${t.recentForm}</div>
+        <span class="card-chip">${t.last5}</span>
       </div>
       <div class="card-body">
         <div class="form-section">
@@ -421,68 +629,68 @@ function generateMatchHTML(m) {
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">🤝</span> Head to Head</div>
-        <span class="card-chip">${m.h2h.total} matches total</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">\uD83E\uDD1D</span> ${t.headToHead}</div>
+        <span class="card-chip">${t.matchesTotal(m.h2h.total)}</span>
       </div>
       <div class="card-body">
         <div class="prob-bar" style="height:26px;margin-bottom:.85rem;">
-          <div class="ps home" style="width:${Math.round(m.h2h.homeWins / m.h2h.total * 100)}%;">${m.h2h.homeWins} wins</div>
+          <div class="ps home" style="width:${Math.round(m.h2h.homeWins / m.h2h.total * 100)}%;">${m.h2h.homeWins} ${t.wins}</div>
           <div class="ps draw" style="width:${Math.round(m.h2h.draws / m.h2h.total * 100)}%;">${m.h2h.draws}</div>
-          <div class="ps away" style="width:${Math.round(m.h2h.awayWins / m.h2h.total * 100)}%;">${m.h2h.awayWins} wins</div>
+          <div class="ps away" style="width:${Math.round(m.h2h.awayWins / m.h2h.total * 100)}%;">${m.h2h.awayWins} ${t.wins}</div>
         </div>
         <div class="prob-labels" style="margin-bottom:.9rem;">
-          <span>${ht.flag} ${ht.name}</span><span>Draws</span><span>${at.name} ${at.flag}</span>
+          <span>${ht.flag} ${ht.name}</span><span>${t.draws}</span><span>${at.name} ${at.flag}</span>
         </div>
 ${h2hRows(m)}
-        ${m.h2h.note ? `<div style="margin-top:.6rem;font-size:.65rem;color:var(--t3);">${m.h2h.note}</div>` : ""}
+        ${m.h2h.note ? '<div style="margin-top:.6rem;font-size:.65rem;color:var(--t3);">' + m.h2h.note + '</div>' : ""}
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">💰</span> Betting Markets</div>
-        <span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">Youwin</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\uD83D\uDCB0</span> ${t.bettingMarkets}</div>
+        <span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">${brandName}</span>
       </div>
       <div class="card-body">
         <div class="market">
-          <div class="mkt-label">Match Result (1X2)</div>
+          <div class="mkt-label">${t.matchResult}</div>
           <div class="mkt-row">
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${ht.name}</span><span class="mkt-btn-val">${m.odds.home.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Draw</span><span class="mkt-btn-val">${m.odds.draw.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.draw}</span><span class="mkt-btn-val">${m.odds.draw.toFixed(2)}</span></a>
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${at.name}</span><span class="mkt-btn-val">${m.odds.away.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Both Teams to Score</div>
+          <div class="mkt-label">${t.bothTeamsScore}</div>
           <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Yes</span><span class="mkt-btn-val">${m.markets.bttsYes.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">No</span><span class="mkt-btn-val">${m.markets.bttsNo.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.yes}</span><span class="mkt-btn-val">${m.markets.bttsYes.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.no}</span><span class="mkt-btn-val">${m.markets.bttsNo.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Total Goals</div>
+          <div class="mkt-label">${t.totalGoals}</div>
           <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Over 2.5</span><span class="mkt-btn-val">${m.markets.over25.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Under 2.5</span><span class="mkt-btn-val">${m.markets.under25.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Over 3.5</span><span class="mkt-btn-val">${m.markets.over35.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.over25}</span><span class="mkt-btn-val">${m.markets.over25.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.under25}</span><span class="mkt-btn-val">${m.markets.under25.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.over35}</span><span class="mkt-btn-val">${m.markets.over35.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Anytime Goalscorer</div>
+          <div class="mkt-label">${t.goalscorer}</div>
           <div class="mkt-row">
 ${mktBtns(m.markets.goalscorers)}
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Correct Score (Top Picks)</div>
+          <div class="mkt-label">${t.correctScore}</div>
           <div class="mkt-row">
 ${mktBtns(m.markets.correctScore)}
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Double Chance</div>
+          <div class="mkt-label">${t.doubleChance}</div>
           <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">1X (${ht.code} or Draw)</span><span class="mkt-btn-val">${m.markets.dc1x.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">X2 (${at.code} or Draw)</span><span class="mkt-btn-val">${m.markets.dcX2.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">1X (${ht.code} ${t.orDraw})</span><span class="mkt-btn-val">${m.markets.dc1x.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">X2 (${at.code} ${t.orDraw})</span><span class="mkt-btn-val">${m.markets.dcX2.toFixed(2)}</span></a>
           </div>
         </div>
       </div>
@@ -490,14 +698,14 @@ ${mktBtns(m.markets.correctScore)}
   </div>
   <div class="sidebar" style="display:flex;flex-direction:column;gap:1rem;">
     <div class="side-cta">
-      <div class="side-cta-eyebrow">Welcome Offer</div>
-      <div class="side-cta-headline">100% Bonus<br>up to €100</div>
-      <div class="side-cta-sub">New customers only · Min. deposit €10 · T&amp;Cs apply</div>
-      <a href="${aff}" class="side-cta-btn" target="_blank" rel="noopener">Claim Bonus →</a>
+      <div class="side-cta-eyebrow">${t.welcomeOffer}</div>
+      <div class="side-cta-headline">${g(brand.bonusHeadline)}</div>
+      <div class="side-cta-sub">${g(brand.bonusSub)}</div>
+      <a href="${aff}" class="side-cta-btn" target="_blank" rel="noopener">${g(brand.claimBonus)}</a>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">⭐</span> Key Players</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\u2B50</span> ${t.keyPlayers}</div>
       </div>
       <div class="card-body">
 ${playerRows(allPlayers)}
@@ -505,32 +713,32 @@ ${playerRows(allPlayers)}
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">🏟️</span> Venue Info</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83C\uDFDF\uFE0F</span> ${t.venueInfo}</div>
       </div>
       <div class="card-body">
         <div style="font-size:.85rem;font-weight:800;color:var(--t0);margin-bottom:.15rem;">${m.venue.split(",")[0]}</div>
         <div style="font-size:.72rem;color:var(--t2);margin-bottom:.65rem;">${m.venue.split(",").slice(1).join(",").trim()}</div>
-        <div class="venue-row"><span class="venue-key">Capacity</span><span class="venue-val">${m.venueCapacity}</span></div>
-        <div class="venue-row"><span class="venue-key">Surface</span><span class="venue-val">${m.venueSurface}</span></div>
-        <div class="venue-row"><span class="venue-key">Kick-off (local)</span><span class="venue-val">${m.kickoffLocal}</span></div>
-        <div class="venue-row"><span class="venue-key">Kick-off (CET)</span><span class="venue-val">${m.kickoffCET}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.capacity}</span><span class="venue-val">${m.venueCapacity}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.surface}</span><span class="venue-val">${m.venueSurface}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.kickoffLocal}</span><span class="venue-val">${m.kickoffLocal}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.kickoffCET}</span><span class="venue-val">${m.kickoffCET}</span></div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">⚡</span> Quick Bet</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\u26A1</span> ${t.quickBet}</div>
       </div>
       <div class="card-body">
         <div class="market">
-          <div class="mkt-label">Half-Time Result</div>
+          <div class="mkt-label">${t.halfTime}</div>
           <div class="mkt-row">
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${ht.code}</span><span class="mkt-btn-val">${m.markets.htHome.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Draw</span><span class="mkt-btn-val">${m.markets.htDraw.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.draw}</span><span class="mkt-btn-val">${m.markets.htDraw.toFixed(2)}</span></a>
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${at.code}</span><span class="mkt-btn-val">${m.markets.htAway.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">First Goal Scorer</div>
+          <div class="mkt-label">${t.firstGoal}</div>
           <div class="mkt-row">
 ${mktBtns(m.markets.fgsFirst)}
           </div>
@@ -540,28 +748,28 @@ ${mktBtns(m.markets.fgsFirst)}
   </div>
 </div>
 <footer>
-  <div class="footer-brand">YOU<span>WIN</span></div>
-  <p class="footer-disc">18+ only. Please gamble responsibly. Youwin is licensed and regulated. Betting involves risk — only bet what you can afford to lose. If gambling becomes a problem, visit <strong>begambleaware.org</strong>.</p>
+  <div class="footer-brand">${logoHtml}</div>
+  <p class="footer-disc">${g(brand.disclaimer)}</p>
   <div class="footer-links">
-    <a href="#">Terms &amp; Conditions</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Responsible Gaming</a>
-    <a href="index.html">All Matches</a>
+    <a href="#">${t.terms}</a>
+    <a href="#">${t.privacy}</a>
+    <a href="#">${t.responsible}</a>
+    <a href="index.html">${t.allMatches}</a>
   </div>
 </footer>
 <div class="mob-bar">
   <div class="mob-bar-info">
-    <div class="mob-bar-label">Daily Prize Pool</div>
-    <div class="mob-bar-val">Get free $10 in bets</div>
+    <div class="mob-bar-label">${g(brand.mobBarLabel)}</div>
+    <div class="mob-bar-val">${g(brand.mobBarVal)}</div>
   </div>
   <a href="${aff}" class="mob-bar-btn" target="_blank" rel="noopener">
-    <span class="mob-bar-btn-main">Bet Now</span>
-    <span class="mob-bar-btn-sub">Get $10 Free Bonus!</span>
+    <span class="mob-bar-btn-main">${g(brand.mobBarBtnMain)}</span>
+    <span class="mob-bar-btn-sub">${g(brand.mobBarBtnSub)}</span>
   </a>
 </div>
 </body>
 </html>`;
 }
 
-if (typeof module !== "undefined") module.exports = { generateMatchHTML };
-else window.generateMatchHTML = generateMatchHTML;
+if (typeof module !== "undefined") module.exports = { generateMatchHTML, I18N };
+else { window.generateMatchHTML = generateMatchHTML; window.I18N = I18N; }

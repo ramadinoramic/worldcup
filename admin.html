@@ -3,106 +3,312 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Match Generator — Youwin Admin</title>
+  <title>Match Generator — Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0F1117; --bg-card: #1A1D26; --bg-hover: #22263A;
+      --bg: #0F1117; --bg-card: #1A1D26; --bg-hover: #22263A; --bg-input: #2A2F45;
       --accent: #E41E3F; --accent-dim: rgba(228,30,63,0.12);
       --green: #22C55E; --green-dim: rgba(34,197,94,0.12);
       --blue: #3B82F6; --blue-dim: rgba(59,130,246,0.12);
-      --yellow: #F59E0B;
+      --yellow: #F59E0B; --yellow-dim: rgba(245,158,11,0.12);
       --border: rgba(255,255,255,0.08);
       --t0: #F9FAFB; --t1: #D1D5DB; --t2: #9CA3AF; --t3: #6B7280;
+      --r: 10px;
     }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t1); min-height: 100vh; -webkit-font-smoothing: antialiased; }
-    .topbar { height: 56px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 2rem; background: rgba(15,17,23,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 50; }
-    .topbar-inner { max-width: 960px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-    .brand { font-size: 1rem; font-weight: 900; color: var(--t0); letter-spacing: -.03em; }
-    .brand span { color: var(--accent); }
-    .badge { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--accent-dim); color: var(--accent); padding: .22rem .65rem; border-radius: 100px; border: 1px solid rgba(228,30,63,0.25); }
-    .wrap { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
-    .page-header { margin-bottom: 2rem; }
-    .page-header h1 { font-size: 1.5rem; font-weight: 800; color: var(--t0); letter-spacing: -.03em; margin-bottom: .3rem; }
-    .page-header p { font-size: .82rem; color: var(--t2); }
-    .gen-all-bar { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
-    .gen-all-info { flex: 1; min-width: 120px; }
-    .gen-all-label { font-size: .7rem; font-weight: 600; color: var(--t2); text-transform: uppercase; letter-spacing: .07em; margin-bottom: .2rem; }
-    .gen-all-value { font-size: .88rem; font-weight: 700; color: var(--t0); }
-    .btn { display: inline-flex; align-items: center; gap: .4rem; font-size: .78rem; font-weight: 700; border: none; cursor: pointer; padding: .55rem 1.2rem; border-radius: 8px; transition: all .15s; white-space: nowrap; font-family: inherit; }
+
+    /* ── TOP BAR ── */
+    .topbar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 1.5rem; background: rgba(15,17,23,0.95); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; gap: 1rem; }
+    .topbar-brand { font-size: .95rem; font-weight: 900; color: var(--t0); letter-spacing: -.03em; white-space: nowrap; }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-badge { font-size: .58rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--accent-dim); color: var(--accent); padding: .2rem .6rem; border-radius: 100px; border: 1px solid rgba(228,30,63,0.2); white-space: nowrap; }
+    .topbar-spacer { flex: 1; }
+
+    /* controls in topbar */
+    .ctrl-group { display: flex; flex-direction: column; gap: 2px; }
+    .ctrl-label { font-size: .55rem; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--t3); }
+    .brand-select { background: var(--bg-input); border: 1px solid var(--border); border-radius: 7px; color: var(--t0); font-size: .78rem; font-weight: 600; padding: .35rem .65rem; font-family: inherit; cursor: pointer; outline: none; transition: border-color .15s; }
+    .brand-select:hover, .brand-select:focus { border-color: rgba(255,255,255,0.2); }
+    .brand-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+    .lang-tabs { display: flex; background: var(--bg-input); border-radius: 7px; padding: 3px; gap: 2px; }
+    .lang-tab { font-size: .68rem; font-weight: 700; padding: .28rem .65rem; border-radius: 5px; border: none; background: none; color: var(--t2); cursor: pointer; font-family: inherit; transition: all .15s; }
+    .lang-tab.active { background: var(--accent); color: #fff; }
+    .lang-tab:hover:not(.active) { color: var(--t0); background: rgba(255,255,255,0.06); }
+    .topbar-divider { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
+
+    /* ── LAYOUT ── */
+    .wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar { display: flex; align-items: center; gap: .5rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .filter-label { font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--t3); flex-shrink: 0; }
+    .gf-pills { display: flex; gap: .3rem; flex-wrap: wrap; flex: 1; }
+    .gf-pill { font-size: .65rem; font-weight: 700; padding: .28rem .7rem; border-radius: 100px; border: 1px solid var(--border); background: none; color: var(--t2); cursor: pointer; font-family: inherit; transition: all .15s; white-space: nowrap; }
+    .gf-pill.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .gf-pill:hover:not(.active) { border-color: rgba(255,255,255,0.18); color: var(--t0); }
+
+    /* ── BULK BAR ── */
+    .bulk-bar { display: flex; align-items: center; gap: .75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: .75rem 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .bulk-bar-info { flex: 1; min-width: 80px; }
+    .bulk-count { font-size: .82rem; font-weight: 700; color: var(--t0); }
+    .bulk-sub { font-size: .65rem; color: var(--t3); margin-top: 1px; }
+    .btn { display: inline-flex; align-items: center; gap: .35rem; font-size: .75rem; font-weight: 700; border: none; cursor: pointer; padding: .5rem 1.1rem; border-radius: 7px; transition: all .15s; white-space: nowrap; font-family: inherit; }
     .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; filter: none; }
-    .btn-secondary { background: var(--bg-hover); color: var(--t0); border: 1px solid var(--border); }
-    .btn-secondary:hover { background: #2A2F45; }
-    .btn-sm { padding: .4rem .9rem; font-size: .72rem; }
-    .match-grid { display: flex; flex-direction: column; gap: .6rem; }
-    .match-row { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; padding: .9rem 1.1rem; gap: 1rem; transition: border-color .15s, background .15s; flex-wrap: wrap; }
-    .match-row:hover { border-color: rgba(255,255,255,0.15); background: var(--bg-hover); }
-    .match-row.generated { border-color: rgba(34,197,94,0.3); }
-    .match-check { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
-    .match-teams { flex: 1; min-width: 160px; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
-    .match-flag { font-size: 1.4rem; flex-shrink: 0; }
-    .match-name { font-size: .88rem; font-weight: 700; color: var(--t0); }
-    .match-vs { font-size: .7rem; color: var(--t3); font-weight: 600; padding: 0 .2rem; }
-    .match-meta { display: flex; flex-direction: column; align-items: flex-end; gap: .2rem; flex-shrink: 0; }
-    .match-group { font-size: .62rem; font-weight: 700; color: var(--blue); background: var(--blue-dim); padding: .15rem .5rem; border-radius: 100px; }
-    .match-date { font-size: .65rem; color: var(--t2); white-space: nowrap; }
-    .status-pill { font-size: .6rem; font-weight: 700; padding: .18rem .55rem; border-radius: 100px; flex-shrink: 0; white-space: nowrap; }
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-ghost { background: var(--bg-hover); color: var(--t0); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: #2A2F45; }
+    .btn-sm { padding: .38rem .9rem; font-size: .7rem; }
+
+    /* ── CALENDAR ── */
+    .date-section { margin-bottom: 1.5rem; }
+    .date-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; }
+    .date-header-line { flex: 1; height: 1px; background: var(--border); }
+    .date-header-text { font-size: .68rem; font-weight: 700; color: var(--t2); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+    .match-list { display: flex; flex-direction: column; gap: .4rem; }
+
+    /* ── MATCH ROW ── */
+    .match-row { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); display: flex; align-items: center; padding: .7rem 1rem; gap: .75rem; transition: border-color .15s, background .15s; }
+    .match-row:hover { border-color: rgba(255,255,255,0.14); background: var(--bg-hover); }
+    .match-row.hidden { display: none; }
+    .match-row.generated { border-color: rgba(34,197,94,0.25); }
+    .match-check { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+    .match-teams { flex: 1; min-width: 0; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+    .match-flag { font-size: 1.25rem; line-height: 1; flex-shrink: 0; }
+    .match-name { font-size: .82rem; font-weight: 700; color: var(--t0); white-space: nowrap; }
+    .match-vs { font-size: .62rem; color: var(--t3); font-weight: 600; padding: 0 .15rem; flex-shrink: 0; }
+    .match-badges { display: flex; align-items: center; gap: .35rem; flex-shrink: 0; }
+    .match-group { font-size: .6rem; font-weight: 700; color: var(--blue); background: var(--blue-dim); padding: .14rem .48rem; border-radius: 100px; white-space: nowrap; }
+    .match-time { font-size: .62rem; font-weight: 600; color: var(--t2); white-space: nowrap; }
+    .match-venue { font-size: .6rem; color: var(--t3); white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+    .status-pill { font-size: .58rem; font-weight: 700; padding: .16rem .52rem; border-radius: 100px; flex-shrink: 0; white-space: nowrap; }
     .status-pill.ready { background: var(--green-dim); color: var(--green); }
-    .status-pill.pending { background: rgba(255,255,255,0.06); color: var(--t3); }
-    .match-actions { display: flex; gap: .4rem; flex-shrink: 0; }
-    .log-section { margin-top: 1.5rem; }
-    .log-title { font-size: .7rem; font-weight: 700; color: var(--t2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .5rem; }
-    .log { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: .75rem 1rem; min-height: 80px; max-height: 220px; overflow-y: auto; font-family: 'SFMono-Regular', 'Consolas', monospace; font-size: .72rem; line-height: 1.7; color: var(--t2); }
+    .status-pill.pending { background: rgba(255,255,255,0.05); color: var(--t3); }
+    .match-actions { display: flex; gap: .35rem; flex-shrink: 0; }
+
+    /* ── PROGRESS ── */
+    .progress-wrap { margin-top: 1rem; display: none; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: .75rem 1rem; }
+    .progress-wrap.visible { display: block; }
+    .progress-bar-outer { height: 4px; background: rgba(255,255,255,0.07); border-radius: 100px; overflow: hidden; margin-bottom: .4rem; }
+    .progress-bar-inner { height: 100%; background: var(--accent); border-radius: 100px; transition: width .3s ease; width: 0%; }
+    .progress-label { font-size: .64rem; color: var(--t2); }
+
+    /* ── LOG ── */
+    .log-section { margin-top: 1.25rem; }
+    .log-title { font-size: .62rem; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .4rem; }
+    .log { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: .7rem 1rem; min-height: 64px; max-height: 180px; overflow-y: auto; font-family: 'SFMono-Regular', 'Consolas', monospace; font-size: .7rem; line-height: 1.75; color: var(--t2); }
     .log::-webkit-scrollbar { width: 4px; }
     .log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
     .log-line { display: block; }
     .log-line.ok { color: var(--green); }
     .log-line.info { color: var(--blue); }
     .log-line.warn { color: var(--yellow); }
-    .progress-wrap { margin-top: .75rem; display: none; }
-    .progress-wrap.visible { display: block; }
-    .progress-bar-outer { height: 4px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
-    .progress-bar-inner { height: 100%; background: var(--accent); border-radius: 100px; transition: width .3s ease; width: 0%; }
-    .progress-label { font-size: .64rem; color: var(--t2); margin-top: .35rem; }
-    @media (max-width: 600px) { .wrap { padding: 1rem .75rem; } .gen-all-bar { flex-direction: column; align-items: flex-start; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .topbar { flex-wrap: wrap; height: auto; padding: .6rem 1rem; gap: .5rem; }
+      .match-venue { display: none; }
+      .wrap { padding: 1rem .75rem 2rem; }
+    }
+    @media (max-width: 500px) {
+      .match-time { display: none; }
+      .topbar-divider { display: none; }
+    }
   </style>
 </head>
 <body>
+
 <div class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">YOU<span>WIN</span></div>
-    <div class="badge">Admin · Match Generator</div>
+  <div class="topbar-brand">MATCH <span>GEN</span></div>
+  <div class="topbar-badge">Admin</div>
+  <div class="topbar-spacer"></div>
+
+  <div class="ctrl-group">
+    <div class="ctrl-label">Brand</div>
+    <select class="brand-select" id="brandSel" onchange="onBrandChange()"></select>
+  </div>
+
+  <div class="topbar-divider"></div>
+
+  <div class="ctrl-group">
+    <div class="ctrl-label">Language</div>
+    <div class="lang-tabs" id="langTabs">
+      <button class="lang-tab active" onclick="setLang('en')">EN</button>
+      <button class="lang-tab" onclick="setLang('de')">DE</button>
+      <button class="lang-tab" onclick="setLang('tr')">TR</button>
+    </div>
   </div>
 </div>
+
 <div class="wrap">
-  <div class="page-header">
-    <h1>Match Page Generator</h1>
-    <p>Generate and download individual match pages, or all at once. Single file — works offline, no server needed.</p>
+
+  <div class="filter-bar">
+    <span class="filter-label">Group</span>
+    <div class="gf-pills" id="groupPills"></div>
   </div>
-  <div class="gen-all-bar">
-    <div class="gen-all-info">
-      <div class="gen-all-label">Bulk Action</div>
-      <div class="gen-all-value" id="selCount">0 matches selected</div>
+
+  <div class="bulk-bar">
+    <div class="bulk-bar-info">
+      <div class="bulk-count" id="selCount">0 selected</div>
+      <div class="bulk-sub" id="selSub">Check matches below to select</div>
     </div>
-    <button class="btn btn-secondary btn-sm" onclick="toggleAll()">Select All</button>
+    <button class="btn btn-ghost btn-sm" onclick="toggleAll()">Select All</button>
+    <button class="btn btn-ghost btn-sm" onclick="generateAll()">Generate All</button>
     <button class="btn btn-primary" id="genBtn" onclick="generateSelected()" disabled>Generate Selected</button>
-    <button class="btn btn-secondary btn-sm" onclick="generateAll()">Generate All</button>
   </div>
-  <div class="match-grid" id="matchGrid"></div>
+
+  <div id="calendar"></div>
+
   <div class="progress-wrap" id="progressWrap">
     <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
     <div class="progress-label" id="progressLabel"></div>
   </div>
+
   <div class="log-section">
     <div class="log-title">Output Log</div>
-    <div class="log" id="log"><span class="log-line">Ready. Select matches and click Generate.</span></div>
+    <div class="log" id="log"><span class="log-line">Ready. Select brand, language and matches, then click Generate.</span></div>
   </div>
 </div>
+
 <script>
-// ── MATCH DATA ──────────────────────────────
+// ── BRANDS ───────────────────────────────────────────────────────────────────
+// ── BRAND CONFIGURATIONS ─────────────────────────────────────────────────────
+// Edit each brand to configure affiliate links, colors, and bonus copy.
+// registerUrl: your full affiliate link including the ref/tracking parameter.
+// accentHex:   primary brand color (used throughout the generated page).
+// logoHtml:    HTML for the brand logo — use <span> to color part of the name.
+// Bonus/disclaimer/mobile-bar copy must be provided in all 3 languages.
+
+const BRANDS = [
+  {
+    id: "youwin",
+    name: "Youwin",
+    logoHtml: "YOU<span>WIN</span>",
+    accentHex: "#E41E3F",
+    registerUrl: "https://youwin.com/register?ref=21331414",
+    bonusHeadline: {
+      en: "100% Bonus<br>up to \u20ac100",
+      de: "100% Bonus<br>bis zu 100\u00a0\u20ac",
+      tr: "\u20ac100\u2019a Kadar<br>%100 Bonus"
+    },
+    bonusSub: {
+      en: "New customers only &middot; Min. deposit \u20ac10 &middot; T&amp;Cs apply",
+      de: "Nur Neukunden &middot; Mind. 10\u00a0\u20ac Einzahlung &middot; AGB gelten",
+      tr: "Yaln\u0131zca yeni \u00fcyeler &middot; Min. \u20ac10 yat\u0131r\u0131m &middot; \u015eartlar ge\u00e7erlidir"
+    },
+    claimBonus: {
+      en: "Claim Bonus &rarr;",
+      de: "Bonus sichern &rarr;",
+      tr: "Bonusu Al &rarr;"
+    },
+    disclaimer: {
+      en: "18+ only. Please gamble responsibly. Youwin is licensed and regulated. Betting involves risk \u2014 only bet what you can afford to lose. If gambling becomes a problem, visit <strong>begambleaware.org</strong>.",
+      de: "Nur ab 18 Jahren. Bitte spielen Sie verantwortungsbewusst. Youwin ist lizenziert und reguliert. Wetten beinhalten Risiken.",
+      tr: "Sadece 18+. L\u00fctfen sorumlu oynay\u0131n. Youwin lisansl\u0131 ve denetimli bir bahis sitesidir."
+    },
+    mobBarLabel:   { en: "Daily Prize Pool",        de: "T\u00e4glicher Preispool",        tr: "G\u00fcnl\u00fck \u00d6d\u00fcl Havuzu"     },
+    mobBarVal:     { en: "Get free $10 in bets",    de: "10$ gratis wetten",              tr: "$10 \u00fccretsiz bahis kazan"       },
+    mobBarBtnMain: { en: "Bet Now",                 de: "Jetzt wetten",                   tr: "\u015eimdi Bahis Yap"               },
+    mobBarBtnSub:  { en: "Get $10 Free Bonus!",     de: "10$ Gratis-Bonus!",              tr: "$10 \u00dccretsi\u0307z Bonus Al!"  }
+  },
+  {
+    id: "brand2",
+    name: "Brand 2",
+    logoHtml: "BRAND<span>2</span>",
+    accentHex: "#2563EB",
+    registerUrl: "https://example.com/register?ref=REPLACE_BRAND2",
+    bonusHeadline: {
+      en: "200% Bonus<br>up to \u20ac200",
+      de: "200% Bonus<br>bis zu 200\u00a0\u20ac",
+      tr: "\u20ac200\u2019a Kadar<br>%200 Bonus"
+    },
+    bonusSub: {
+      en: "New customers only &middot; Min. deposit \u20ac10 &middot; T&amp;Cs apply",
+      de: "Nur Neukunden &middot; Mind. 10\u00a0\u20ac Einzahlung &middot; AGB gelten",
+      tr: "Yaln\u0131zca yeni \u00fcyeler &middot; Min. \u20ac10 yat\u0131r\u0131m &middot; \u015eartlar ge\u00e7erlidir"
+    },
+    claimBonus: {
+      en: "Claim Bonus &rarr;",
+      de: "Bonus sichern &rarr;",
+      tr: "Bonusu Al &rarr;"
+    },
+    disclaimer: {
+      en: "18+ only. Please gamble responsibly. Betting involves risk \u2014 only bet what you can afford to lose.",
+      de: "Nur ab 18 Jahren. Bitte spielen Sie verantwortungsbewusst. Wetten beinhalten Risiken.",
+      tr: "Sadece 18+. L\u00fctfen sorumlu oynay\u0131n. Kumar ba\u011f\u0131ml\u0131l\u0131k yapabilir."
+    },
+    mobBarLabel:   { en: "Welcome Bonus",           de: "Willkommensbonus",               tr: "Ho\u015fgeldin Bonusu"              },
+    mobBarVal:     { en: "Get \u20ac20 Free Bet",   de: "20\u00a0\u20ac Gratiswette",     tr: "\u20ac20 \u00dccretsi\u0307z Bahis" },
+    mobBarBtnMain: { en: "Bet Now",                 de: "Jetzt wetten",                   tr: "\u015eimdi Bahis Yap"               },
+    mobBarBtnSub:  { en: "Claim \u20ac200 Bonus!",  de: "200\u00a0\u20ac Bonus holen!",   tr: "\u20ac200 Bonus Al!"               }
+  },
+  {
+    id: "brand3",
+    name: "Brand 3",
+    logoHtml: "BRAND<span>3</span>",
+    accentHex: "#16A34A",
+    registerUrl: "https://example.com/register?ref=REPLACE_BRAND3",
+    bonusHeadline: {
+      en: "150% Bonus<br>up to \u20ac150",
+      de: "150% Bonus<br>bis zu 150\u00a0\u20ac",
+      tr: "\u20ac150\u2019a Kadar<br>%150 Bonus"
+    },
+    bonusSub: {
+      en: "New customers only &middot; Min. deposit \u20ac10 &middot; T&amp;Cs apply",
+      de: "Nur Neukunden &middot; Mind. 10\u00a0\u20ac Einzahlung &middot; AGB gelten",
+      tr: "Yaln\u0131zca yeni \u00fcyeler &middot; Min. \u20ac10 yat\u0131r\u0131m &middot; \u015eartlar ge\u00e7erlidir"
+    },
+    claimBonus: {
+      en: "Claim Bonus &rarr;",
+      de: "Bonus sichern &rarr;",
+      tr: "Bonusu Al &rarr;"
+    },
+    disclaimer: {
+      en: "18+ only. Please gamble responsibly. Betting involves risk \u2014 only bet what you can afford to lose.",
+      de: "Nur ab 18 Jahren. Bitte spielen Sie verantwortungsbewusst. Wetten beinhalten Risiken.",
+      tr: "Sadece 18+. L\u00fctfen sorumlu oynay\u0131n. Kumar ba\u011f\u0131ml\u0131l\u0131k yapabilir."
+    },
+    mobBarLabel:   { en: "Special Offer",           de: "Sonderangebot",                  tr: "\u00d6zel Teklif"                  },
+    mobBarVal:     { en: "\u20ac150 Welcome Bonus", de: "150\u00a0\u20ac Willkommensbonus",tr: "\u20ac150 Ho\u015fgeldin Bonusu"  },
+    mobBarBtnMain: { en: "Bet Now",                 de: "Jetzt wetten",                   tr: "\u015eimdi Bahis Yap"               },
+    mobBarBtnSub:  { en: "Claim \u20ac150 Bonus!",  de: "150\u00a0\u20ac Bonus holen!",   tr: "\u20ac150 Bonus Al!"               }
+  },
+  {
+    id: "brand4",
+    name: "Brand 4",
+    logoHtml: "BRAND<span>4</span>",
+    accentHex: "#D97706",
+    registerUrl: "https://example.com/register?ref=REPLACE_BRAND4",
+    bonusHeadline: {
+      en: "Free Bets<br>up to \u20ac50",
+      de: "Gratiswetten<br>bis zu 50\u00a0\u20ac",
+      tr: "\u20ac50\u2019ye Kadar<br>\u00dccretsi\u0307z Bahis"
+    },
+    bonusSub: {
+      en: "New customers only &middot; Min. deposit \u20ac10 &middot; T&amp;Cs apply",
+      de: "Nur Neukunden &middot; Mind. 10\u00a0\u20ac Einzahlung &middot; AGB gelten",
+      tr: "Yaln\u0131zca yeni \u00fcyeler &middot; Min. \u20ac10 yat\u0131r\u0131m &middot; \u015eartlar ge\u00e7erlidir"
+    },
+    claimBonus: {
+      en: "Get Free Bets &rarr;",
+      de: "Gratiswetten holen &rarr;",
+      tr: "\u00dccretsi\u0307z Bahis Al &rarr;"
+    },
+    disclaimer: {
+      en: "18+ only. Please gamble responsibly. Betting involves risk \u2014 only bet what you can afford to lose.",
+      de: "Nur ab 18 Jahren. Bitte spielen Sie verantwortungsbewusst. Wetten beinhalten Risiken.",
+      tr: "Sadece 18+. L\u00fctfen sorumlu oynay\u0131n. Kumar ba\u011f\u0131ml\u0131l\u0131k yapabilir."
+    },
+    mobBarLabel:   { en: "Free Bet Offer",          de: "Gratiswette Angebot",            tr: "\u00dccretsi\u0307z Bahis Teklifi" },
+    mobBarVal:     { en: "\u20ac50 in Free Bets",   de: "50\u00a0\u20ac Gratiswetten",    tr: "\u20ac50 \u00dccretsi\u0307z Bahis"},
+    mobBarBtnMain: { en: "Claim Now",               de: "Jetzt sichern",                  tr: "Hemen Al"                         },
+    mobBarBtnSub:  { en: "Get \u20ac50 Free!",      de: "50\u00a0\u20ac gratis!",         tr: "\u20ac50 \u00dccretsi\u0307z Al!" }
+  }
+];
+
+// ── MATCH DATA ───────────────────────────────────────────────────────────────
 // Shared match data — used by admin.html (browser) and generate.js (Node CLI)
 const MATCHES = [
   // ── GROUP A ──────────────────────────────────────────────────────────────
@@ -971,87 +1177,297 @@ const MATCHES = [
   }
 ];
 
+// ── TEMPLATE (I18N + generateMatchHTML) ──────────────────────────────────────
+// Generates a full standalone match HTML page.
+// generateMatchHTML(m, brand, lang)
+//   m     — match data object from matches-data.js
+//   brand — brand config object from brands.js (defaults to BRANDS[0] if available)
+//   lang  — "en" | "de" | "tr"  (defaults to "en")
 
-// ── TEMPLATE ────────────────────────────────
-// Works in both Node (module.exports) and browser (window.generateMatchHTML).
+const I18N = {
+  en: {
+    htmlLang: "en",
+    placeBet: "Place a Bet",
+    upcoming: "Upcoming",
+    groupStage: "Group Stage",
+    homeWin: "Home Win",
+    draw: "Draw",
+    awayWin: "Away Win",
+    after90: "After 90 min",
+    tabPreview: "Preview",
+    tabStats: "Statistics",
+    tabOdds: "Odds",
+    tabH2H: "H2H",
+    tabForm: "Form",
+    matchPreview: "Match Preview",
+    winProbability: "Win Probability",
+    basedOn: function(b) { return "Based on " + b + " odds"; },
+    teamComparison: "Team Comparison",
+    recentForm: "Recent Form",
+    last5: "Last 5 matches",
+    headToHead: "Head to Head",
+    matchesTotal: function(n) { return n + " matches total"; },
+    wins: "wins",
+    draws: "Draws",
+    bettingMarkets: "Betting Markets",
+    keyPlayers: "Key Players",
+    venueInfo: "Venue Info",
+    quickBet: "Quick Bet",
+    fifaRanking: "FIFA Ranking",
+    eloRating: "ELO Rating",
+    squadValue: "Squad Value",
+    goalsPerMatch: "Goals / Match",
+    concededPerMatch: "Conceded / Match",
+    possession: "Possession",
+    cleanSheets: "Clean Sheets",
+    matchResult: "Match Result (1X2)",
+    bothTeamsScore: "Both Teams to Score",
+    totalGoals: "Total Goals",
+    over25: "Over 2.5",
+    under25: "Under 2.5",
+    over35: "Over 3.5",
+    goalscorer: "Anytime Goalscorer",
+    correctScore: "Correct Score (Top Picks)",
+    doubleChance: "Double Chance",
+    halfTime: "Half-Time Result",
+    firstGoal: "First Goal Scorer",
+    yes: "Yes",
+    no: "No",
+    orDraw: "or Draw",
+    welcomeOffer: "Welcome Offer",
+    capacity: "Capacity",
+    surface: "Surface",
+    kickoffLocal: "Kick-off (local)",
+    kickoffCET: "Kick-off (CET)",
+    terms: "Terms & Conditions",
+    privacy: "Privacy Policy",
+    responsible: "Responsible Gaming",
+    allMatches: "All Matches"
+  },
+  de: {
+    htmlLang: "de",
+    placeBet: "Jetzt wetten",
+    upcoming: "Bevorstehend",
+    groupStage: "Gruppenphase",
+    homeWin: "Heimsieg",
+    draw: "Unentschieden",
+    awayWin: "Ausw\u00e4rtssieg",
+    after90: "Nach 90 Min.",
+    tabPreview: "Vorschau",
+    tabStats: "Statistiken",
+    tabOdds: "Quoten",
+    tabH2H: "H2H",
+    tabForm: "Form",
+    matchPreview: "Spielvorschau",
+    winProbability: "Siegwahrscheinlichkeit",
+    basedOn: function(b) { return "Basierend auf " + b + " Quoten"; },
+    teamComparison: "Teamvergleich",
+    recentForm: "Aktuelle Form",
+    last5: "Letzte 5 Spiele",
+    headToHead: "Direktvergleich",
+    matchesTotal: function(n) { return n + " Spiele gesamt"; },
+    wins: "Siege",
+    draws: "Unentschieden",
+    bettingMarkets: "Wettm\u00e4rkte",
+    keyPlayers: "Schl\u00fcsselspieler",
+    venueInfo: "Stadioninfo",
+    quickBet: "Schnellwette",
+    fifaRanking: "FIFA-Ranking",
+    eloRating: "ELO-Wertung",
+    squadValue: "Marktwert",
+    goalsPerMatch: "Tore / Spiel",
+    concededPerMatch: "Gegentore / Spiel",
+    possession: "Ballbesitz",
+    cleanSheets: "Zu-Null-Spiele",
+    matchResult: "Spielergebnis (1X2)",
+    bothTeamsScore: "Beide Teams treffen",
+    totalGoals: "Tore gesamt",
+    over25: "\u00dcber 2,5",
+    under25: "Unter 2,5",
+    over35: "\u00dcber 3,5",
+    goalscorer: "Torsch\u00fctze (jederzeit)",
+    correctScore: "Genaues Ergebnis (Top Picks)",
+    doubleChance: "Doppelte Chance",
+    halfTime: "Halbzeitergebnis",
+    firstGoal: "Erster Torsch\u00fctze",
+    yes: "Ja",
+    no: "Nein",
+    orDraw: "oder Unentsch.",
+    welcomeOffer: "Willkommensangebot",
+    capacity: "Kapazit\u00e4t",
+    surface: "Belag",
+    kickoffLocal: "Ansto\u00df (Ortszeit)",
+    kickoffCET: "Ansto\u00df (MEZ)",
+    terms: "AGB",
+    privacy: "Datenschutz",
+    responsible: "Verantwortungsvolles Spielen",
+    allMatches: "Alle Spiele"
+  },
+  tr: {
+    htmlLang: "tr",
+    placeBet: "Bahis Yap",
+    upcoming: "Yakla\u015fan",
+    groupStage: "Grup A\u015famas\u0131",
+    homeWin: "Ev Sahibi Kazan\u0131r",
+    draw: "Beraberlik",
+    awayWin: "Deplasman Kazan\u0131r",
+    after90: "90 dak. sonunda",
+    tabPreview: "\u00d6nizleme",
+    tabStats: "\u0130statistikler",
+    tabOdds: "Oranlar",
+    tabH2H: "H2H",
+    tabForm: "Form",
+    matchPreview: "Ma\u00e7 \u00d6nizlemesi",
+    winProbability: "Kazanma \u0130htimali",
+    basedOn: function(b) { return b + " oranlar\u0131na g\u00f6re"; },
+    teamComparison: "Tak\u0131m Kar\u015f\u0131la\u015ft\u0131rmas\u0131",
+    recentForm: "Son Form",
+    last5: "Son 5 ma\u00e7",
+    headToHead: "Kar\u015f\u0131l\u0131kl\u0131 Ma\u00e7lar",
+    matchesTotal: function(n) { return n + " toplam ma\u00e7"; },
+    wins: "Galibiyet",
+    draws: "Beraberlik",
+    bettingMarkets: "Bahis Piyasalar\u0131",
+    keyPlayers: "Kilit Oyuncular",
+    venueInfo: "Stadyum Bilgisi",
+    quickBet: "H\u0131zl\u0131 Bahis",
+    fifaRanking: "FIFA S\u0131ralamas\u0131",
+    eloRating: "ELO Puan\u0131",
+    squadValue: "Kadro De\u011feri",
+    goalsPerMatch: "Gol / Ma\u00e7",
+    concededPerMatch: "Yenilen Gol / Ma\u00e7",
+    possession: "Top Hakimiyeti",
+    cleanSheets: "Gol Yemeden Ma\u00e7lar",
+    matchResult: "Ma\u00e7 Sonucu (1X2)",
+    bothTeamsScore: "Kar\u015f\u0131l\u0131kl\u0131 Gol",
+    totalGoals: "Toplam Gol",
+    over25: "\u00dcst 2.5",
+    under25: "Alt 2.5",
+    over35: "\u00dcst 3.5",
+    goalscorer: "Gol Atan (herhangi bir zamanda)",
+    correctScore: "Do\u011fru Skor (\u00d6ne \u00c7\u0131kanlar)",
+    doubleChance: "\u00c7ifte \u015eans",
+    halfTime: "\u0130lk Yar\u0131 Sonucu",
+    firstGoal: "\u0130lk Gol Atan",
+    yes: "Evet",
+    no: "Hay\u0131r",
+    orDraw: "veya Beraberlik",
+    welcomeOffer: "Ho\u015fgeldin Teklifi",
+    capacity: "Kapasite",
+    surface: "Zemin",
+    kickoffLocal: "Ba\u015flang\u0131\u00e7 (yerel saat)",
+    kickoffCET: "Ba\u015flang\u0131\u00e7 (CET)",
+    terms: "\u015eartlar ve Ko\u015fullar",
+    privacy: "Gizlilik Politikas\u0131",
+    responsible: "Sorumlu Oyun",
+    allMatches: "T\u00fcm Ma\u00e7lar"
+  }
+};
 
-function generateMatchHTML(m) {
-  const aff = "https://youwin.com/register?ref=21331414";
+function generateMatchHTML(m, brand, lang) {
+  if (!brand && typeof BRANDS !== "undefined") brand = BRANDS[0];
+  if (!brand) brand = {
+    id: "youwin", name: "Youwin", logoHtml: "YOU<span>WIN</span>",
+    accentHex: "#E41E3F", registerUrl: "https://youwin.com/register?ref=21331414",
+    bonusHeadline: { en: "100% Bonus<br>up to \u20ac100", de: "100% Bonus<br>bis zu 100\u00a0\u20ac", tr: "\u20ac100\u2019a Kadar<br>%100 Bonus" },
+    bonusSub: { en: "New customers only &middot; Min. deposit \u20ac10 &middot; T&amp;Cs apply", de: "Nur Neukunden &middot; Mind. 10\u00a0\u20ac &middot; AGB gelten", tr: "Yaln\u0131zca yeni \u00fcyeler &middot; \u015eartlar ge\u00e7erlidir" },
+    claimBonus: { en: "Claim Bonus &rarr;", de: "Bonus sichern &rarr;", tr: "Bonusu Al &rarr;" },
+    disclaimer: { en: "18+ only. Please gamble responsibly. Betting involves risk.", de: "Nur ab 18 Jahren. Verantwortungsbewusst spielen.", tr: "Sadece 18+. L\u00fctfen sorumlu oynay\u0131n." },
+    mobBarLabel: { en: "Daily Prize Pool", de: "T\u00e4glicher Preispool", tr: "G\u00fcnl\u00fck \u00d6d\u00fcl Havuzu" },
+    mobBarVal:   { en: "Get free $10 in bets", de: "10$ gratis wetten", tr: "$10 \u00fccretsiz bahis" },
+    mobBarBtnMain: { en: "Bet Now", de: "Jetzt wetten", tr: "\u015eimdi Bahis Yap" },
+    mobBarBtnSub:  { en: "Get $10 Free!", de: "10$ Gratis!", tr: "$10 \u00dccretsi\u0307z!" }
+  };
+  if (!lang) lang = "en";
+  const t = I18N[lang] || I18N.en;
+  const aff = brand.registerUrl;
+  const accentHex = brand.accentHex || "#E41E3F";
+  const brandName = brand.name;
+  const logoHtml = brand.logoHtml;
+  const L = lang;
+
+  function g(obj) { return (obj && obj[L]) || (obj && obj.en) || ""; }
 
   function formBadges(team) {
-    return team.form.map(f =>
-      `<div class="fb ${f.r.toLowerCase()}" title="${f.tip}">${f.r}</div>`
-    ).join("\n              ");
+    return team.form.map(function(f) {
+      return '<div class="fb ' + f.r.toLowerCase() + '" title="' + f.tip + '">' + f.r + '</div>';
+    }).join("\n              ");
   }
 
-  function h2hRows(m) {
-    return m.h2h.matches.map(hm => {
-      const homeClass = hm.winner === "home" ? ' class="w"' : "";
-      const awayClass = hm.winner === "away" ? ' class="w"' : "";
-      return `        <div class="ml-item">
-          <span class="ml-date">${hm.date}</span>
-          <div class="ml-teams"><span${homeClass}>${hm.home}</span><span>–</span><span${awayClass}>${hm.away}</span></div>
-          <span class="ml-score">${hm.score}</span>
-          <span class="ml-comp">${hm.comp}</span>
-        </div>`;
+  function h2hRows(match) {
+    return match.h2h.matches.map(function(hm) {
+      var hc = hm.winner === "home" ? ' class="w"' : "";
+      var ac = hm.winner === "away" ? ' class="w"' : "";
+      return '        <div class="ml-item">\n' +
+        '          <span class="ml-date">' + hm.date + '</span>\n' +
+        '          <div class="ml-teams"><span' + hc + '>' + hm.home + '</span><span>\u2013</span><span' + ac + '>' + hm.away + '</span></div>\n' +
+        '          <span class="ml-score">' + hm.score + '</span>\n' +
+        '          <span class="ml-comp">' + hm.comp + '</span>\n' +
+        '        </div>';
     }).join("\n");
   }
 
   function playerRows(players) {
-    return players.map(p => `        <div class="player-row">
-          <div class="player-avatar">${p.flag}</div>
-          <div class="player-info">
-            <div class="player-name">${p.name}</div>
-            <div class="player-detail">${p.detail}</div>
-          </div>
-          <div class="player-stat">
-            <div class="player-stat-val">${p.stat}</div>
-            <div class="player-stat-label">${p.statLabel}</div>
-          </div>
-        </div>`).join("\n");
+    return players.map(function(p) {
+      return '        <div class="player-row">\n' +
+        '          <div class="player-avatar">' + p.flag + '</div>\n' +
+        '          <div class="player-info">\n' +
+        '            <div class="player-name">' + p.name + '</div>\n' +
+        '            <div class="player-detail">' + p.detail + '</div>\n' +
+        '          </div>\n' +
+        '          <div class="player-stat">\n' +
+        '            <div class="player-stat-val">' + p.stat + '</div>\n' +
+        '            <div class="player-stat-label">' + p.statLabel + '</div>\n' +
+        '          </div>\n' +
+        '        </div>';
+    }).join("\n");
   }
 
-  function mktBtns(items, labelKey = "label", valKey = "val") {
-    return items.map(i =>
-      `            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener">
-              <span class="mkt-btn-label">${i[labelKey]}</span><span class="mkt-btn-val">${i[valKey]}</span>
-            </a>`
-    ).join("\n");
+  function mktBtns(items) {
+    return items.map(function(i) {
+      return '            <a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener">\n' +
+        '              <span class="mkt-btn-label">' + i.label + '</span><span class="mkt-btn-val">' + i.val + '</span>\n' +
+        '            </a>';
+    }).join("\n");
   }
 
-  const ht = m.homeTeam, at = m.awayTeam;
-  const allPlayers = [...ht.players, ...at.players];
+  var ht = m.homeTeam, at = m.awayTeam;
+  var allPlayers = [].concat(ht.players, at.players);
 
-  // Stat bar widths — normalise each stat pair to 0–100 scale
-  function barW(a, b, flip = false) {
-    const max = Math.max(a, b, 0.001);
-    const pA = Math.round((a / max) * 95);
-    const pB = Math.round((b / max) * 95);
+  function barW(a, b, flip) {
+    var max = Math.max(a, b, 0.001);
+    var pA = Math.round((a / max) * 95);
+    var pB = Math.round((b / max) * 95);
     return flip ? [pB, pA] : [pA, pB];
   }
 
-  const [fifaH, fifaA] = barW(1 / ht.fifa, 1 / at.fifa);
-  const [eloH, eloA]   = barW(ht.elo, at.elo);
-  // squad value: strip non-numeric
-  const svH = parseFloat((ht.squadValue || "0").replace(/[^0-9.]/g, ""));
-  const svA = parseFloat((at.squadValue || "0").replace(/[^0-9.]/g, ""));
-  const [sqH, sqA] = barW(svH, svA);
-  const [gpH, gpA] = barW(ht.goalsPerGame, at.goalsPerGame);
-  // conceded: lower is better — invert
-  const [cpH, cpA] = barW(1 / ht.concededPerGame, 1 / at.concededPerGame);
-  const [posH, posA] = barW(ht.possession, at.possession);
-  const [csH, csA]   = barW(ht.cleanSheets, at.cleanSheets);
+  var fifaBars = barW(1 / ht.fifa, 1 / at.fifa);
+  var fifaH = fifaBars[0], fifaA = fifaBars[1];
+  var eloBars = barW(ht.elo, at.elo);
+  var eloH = eloBars[0], eloA = eloBars[1];
+  var svH = parseFloat((ht.squadValue || "0").replace(/[^0-9.]/g, ""));
+  var svA = parseFloat((at.squadValue || "0").replace(/[^0-9.]/g, ""));
+  var sqBars = barW(svH, svA);
+  var sqH = sqBars[0], sqA = sqBars[1];
+  var gpBars = barW(ht.goalsPerGame, at.goalsPerGame);
+  var gpH = gpBars[0], gpA = gpBars[1];
+  var cpBars = barW(1 / ht.concededPerGame, 1 / at.concededPerGame);
+  var cpH = cpBars[0], cpA = cpBars[1];
+  var posBars = barW(ht.possession, at.possession);
+  var posH = posBars[0], posA = posBars[1];
+  var csBars = barW(ht.cleanSheets, at.cleanSheets);
+  var csH = csBars[0], csA = csBars[1];
 
-  const leadH = ht.elo >= at.elo ? ' lead' : '';
-  const leadA = at.elo >= ht.elo ? ' lead' : '';
+  var leadH = ht.elo >= at.elo ? " lead" : "";
+  var leadA = at.elo >= ht.elo ? " lead" : "";
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${t.htmlLang}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${ht.name} vs ${at.name} – FIFA World Cup 2026 | Youwin Betting</title>
-  <meta name="description" content="Bet on ${ht.name} vs ${at.name} at FIFA World Cup 2026. Best odds, match preview, head-to-head stats and exclusive bonuses at Youwin.">
+  <title>${ht.name} vs ${at.name} \u2013 FIFA World Cup 2026 | ${brandName}</title>
+  <meta name="description" content="Bet on ${ht.name} vs ${at.name} at FIFA World Cup 2026. Best odds, match preview, head-to-head stats and exclusive bonuses at ${brandName}.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1059,7 +1475,9 @@ function generateMatchHTML(m) {
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg-page:#F4F5F7;--bg-card:#FFFFFF;--bg-muted:#F8F9FB;--bg-input:#EEF0F4;
-      --accent:#E41E3F;--accent-dim:rgba(228,30,63,0.08);--accent-mid:rgba(228,30,63,0.18);
+      --accent:${accentHex};
+      --accent-dim:color-mix(in srgb,${accentHex} 9%,transparent);
+      --accent-mid:color-mix(in srgb,${accentHex} 18%,transparent);
       --blue:#2563EB;--blue-dim:rgba(37,99,235,0.08);
       --green:#16A34A;--green-dim:rgba(22,163,74,0.09);
       --yellow:#D97706;--yellow-dim:rgba(217,119,6,0.09);
@@ -1083,10 +1501,6 @@ function generateMatchHTML(m) {
     .topbar-brand{font-size:1.05rem;font-weight:900;letter-spacing:-.03em;color:var(--t0);}
     .topbar-brand span{color:var(--accent);}
     .topbar-right{display:flex;align-items:center;gap:.5rem;}
-    .lang-pill{display:flex;background:var(--bg-input);border-radius:100px;padding:3px;gap:2px;}
-    .lang-pill a{font-size:.68rem;font-weight:700;padding:.22rem .55rem;border-radius:100px;color:var(--t2);transition:all .15s;}
-    .lang-pill a.active{background:var(--accent);color:#fff;}
-    .lang-pill a:hover:not(.active){color:var(--t0);background:var(--border);}
     .topbar-cta{background:var(--accent);color:#fff;font-size:.72rem;font-weight:700;padding:.38rem 1rem;border-radius:100px;transition:filter .15s,transform .15s;}
     .topbar-cta:hover{filter:brightness(1.08);transform:translateY(-1px);}
     .page{max-width:1100px;margin:0 auto;padding:1.25rem 1rem;display:grid;grid-template-columns:1fr 336px;gap:1.25rem;align-items:start;}
@@ -1178,11 +1592,11 @@ function generateMatchHTML(m) {
     .preview-text{font-size:.82rem;color:var(--t1);line-height:1.75;}
     .preview-text+.preview-text{margin-top:.65rem;}
     .preview-highlight{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:.75rem 1rem;margin-top:.85rem;font-size:.78rem;color:var(--t1);font-weight:500;line-height:1.65;}
-    .side-cta{background:linear-gradient(150deg,#E41E3F 0%,#B21130 100%);border-radius:var(--r-xl);padding:1.5rem 1.25rem;text-align:center;box-shadow:var(--shadow-md);}
+    .side-cta{border-radius:var(--r-xl);padding:1.5rem 1.25rem;text-align:center;box-shadow:var(--shadow-md);background:linear-gradient(150deg,${accentHex} 0%,color-mix(in srgb,${accentHex} 70%,#000) 100%);}
     .side-cta-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-bottom:.4rem;}
     .side-cta-headline{font-size:1.35rem;font-weight:900;line-height:1.2;color:#fff;letter-spacing:-.03em;margin-bottom:.35rem;}
     .side-cta-sub{font-size:.7rem;color:rgba(255,255,255,0.65);margin-bottom:1.1rem;line-height:1.5;}
-    .side-cta-btn{display:inline-flex;align-items:center;gap:.3rem;background:#fff;color:var(--accent);font-size:.78rem;font-weight:800;padding:.65rem 1.6rem;border-radius:100px;transition:all .15s;}
+    .side-cta-btn{display:inline-flex;align-items:center;gap:.3rem;background:#fff;color:${accentHex};font-size:.78rem;font-weight:800;padding:.65rem 1.6rem;border-radius:100px;transition:all .15s;}
     .side-cta-btn:hover{transform:scale(1.03);box-shadow:0 4px 20px rgba(0,0,0,.2);}
     .venue-row{display:flex;align-items:center;padding:.5rem 0;justify-content:space-between;}
     .venue-row+.venue-row{border-top:1px solid var(--border-subtle);}
@@ -1217,10 +1631,10 @@ function generateMatchHTML(m) {
       <a href="index.html" class="topbar-back" aria-label="Back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </a>
-      <a href="index.html" class="topbar-brand">YOU<span>WIN</span></a>
+      <a href="index.html" class="topbar-brand">${logoHtml}</a>
     </div>
     <div class="topbar-right">
-      <a href="${aff}" class="topbar-cta" target="_blank" rel="noopener">Place a Bet</a>
+      <a href="${aff}" class="topbar-cta" target="_blank" rel="noopener">${t.placeBet}</a>
     </div>
   </div>
 </div>
@@ -1228,16 +1642,16 @@ function generateMatchHTML(m) {
   <div class="match-header">
     <div class="mh-top">
       <div class="mh-tourney">
-        <div class="mh-tourney-badge">⚽</div>
-        FIFA World Cup 2026 &bull; Group Stage &bull; ${m.group}
+        <div class="mh-tourney-badge">\u26bd</div>
+        FIFA World Cup 2026 &bull; ${t.groupStage} &bull; ${m.group}
       </div>
-      <div class="mh-status"><span class="mh-dot"></span> Upcoming</div>
+      <div class="mh-status"><span class="mh-dot"></span> ${t.upcoming}</div>
     </div>
     <div class="mh-body">
       <div class="mh-team">
         <div class="mh-flag">${ht.flag}</div>
         <div class="mh-name">${ht.name}</div>
-        <div class="mh-sub">FIFA #${ht.fifa} · ${ht.role}</div>
+        <div class="mh-sub">FIFA #${ht.fifa} &middot; ${ht.role}</div>
       </div>
       <div class="mh-center">
         <div class="mh-kick">${m.kickoff}</div>
@@ -1247,23 +1661,23 @@ function generateMatchHTML(m) {
       <div class="mh-team">
         <div class="mh-flag">${at.flag}</div>
         <div class="mh-name">${at.name}</div>
-        <div class="mh-sub">FIFA #${at.fifa} · ${at.role}</div>
+        <div class="mh-sub">FIFA #${at.fifa} &middot; ${at.role}</div>
       </div>
     </div>
     <div class="mh-foot">
       <div class="odds-strip">
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
-          <span class="odds-btn-label">Home Win</span>
+          <span class="odds-btn-label">${t.homeWin}</span>
           <span class="odds-btn-val">${m.odds.home.toFixed(2)}</span>
           <span class="odds-btn-team">${ht.name}</span>
         </a>
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
-          <span class="odds-btn-label">Draw</span>
+          <span class="odds-btn-label">${t.draw}</span>
           <span class="odds-btn-val">${m.odds.draw.toFixed(2)}</span>
-          <span class="odds-btn-team">After 90 min</span>
+          <span class="odds-btn-team">${t.after90}</span>
         </a>
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
-          <span class="odds-btn-label">Away Win</span>
+          <span class="odds-btn-label">${t.awayWin}</span>
           <span class="odds-btn-val">${m.odds.away.toFixed(2)}</span>
           <span class="odds-btn-team">${at.name}</span>
         </a>
@@ -1272,25 +1686,25 @@ function generateMatchHTML(m) {
   </div>
   <div class="main" style="display:flex;flex-direction:column;gap:1rem;">
     <div class="tabs">
-      <div class="tab active">Preview</div>
-      <div class="tab">Statistics</div>
-      <div class="tab">Odds</div>
-      <div class="tab">H2H</div>
-      <div class="tab">Form</div>
+      <div class="tab active">${t.tabPreview}</div>
+      <div class="tab">${t.tabStats}</div>
+      <div class="tab">${t.tabOdds}</div>
+      <div class="tab">${t.tabH2H}</div>
+      <div class="tab">${t.tabForm}</div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">📋</span> Match Preview</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\uD83D\uDCCB</span> ${t.matchPreview}</div>
       </div>
       <div class="card-body">
-        ${m.previewLines.map(l => `<p class="preview-text">${l}</p>`).join("\n        ")}
+        ${m.previewLines.map(function(l) { return '<p class="preview-text">' + l + '</p>'; }).join("\n        ")}
         <div class="preview-highlight">${m.previewHighlight}</div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">📊</span> Win Probability</div>
-        <span class="card-chip">Based on Youwin odds</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83D\uDCCA</span> ${t.winProbability}</div>
+        <span class="card-chip">${t.basedOn(brandName)}</span>
       </div>
       <div class="card-body">
         <div class="prob-bar">
@@ -1299,74 +1713,74 @@ function generateMatchHTML(m) {
           <div class="ps away" style="width:${m.probAway}%;">${m.probAway}%</div>
         </div>
         <div class="prob-labels">
-          <span>${ht.flag} ${ht.name}</span><span>Draw</span><span>${at.name} ${at.flag}</span>
+          <span>${ht.flag} ${ht.name}</span><span>${t.draw}</span><span>${at.name} ${at.flag}</span>
         </div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">⚔️</span> Team Comparison</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\u2694\uFE0F</span> ${t.teamComparison}</div>
         <div style="display:flex;gap:1rem;font-size:.65rem;font-weight:700;">
-          <span style="color:var(--blue);">● ${ht.code}</span>
-          <span style="color:var(--accent);">● ${at.code}</span>
+          <span style="color:var(--blue);">&bull; ${ht.code}</span>
+          <span style="color:var(--accent);">&bull; ${at.code}</span>
         </div>
       </div>
       <div class="card-body">
         <div class="stat-row">
           <span class="sv${leadH}">${ht.fifa}</span>
           <div class="sh"><div class="sh-fill" style="width:${fifaH}%;"></div></div>
-          <span class="sn">FIFA Ranking</span>
+          <span class="sn">${t.fifaRanking}</span>
           <div class="sa"><div class="sa-fill" style="width:${fifaA}%;"></div></div>
           <span class="sv${leadA}">${at.fifa}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.elo >= at.elo ? ' lead' : ''}">${ht.elo}</span>
+          <span class="sv${ht.elo >= at.elo ? " lead" : ""}">${ht.elo}</span>
           <div class="sh"><div class="sh-fill" style="width:${eloH}%;"></div></div>
-          <span class="sn">ELO Rating</span>
+          <span class="sn">${t.eloRating}</span>
           <div class="sa"><div class="sa-fill" style="width:${eloA}%;"></div></div>
-          <span class="sv${at.elo > ht.elo ? ' lead' : ''}">${at.elo}</span>
+          <span class="sv${at.elo > ht.elo ? " lead" : ""}">${at.elo}</span>
         </div>
         <div class="stat-row">
           <span class="sv">${ht.squadValue}</span>
           <div class="sh"><div class="sh-fill" style="width:${sqH}%;"></div></div>
-          <span class="sn">Squad Value</span>
+          <span class="sn">${t.squadValue}</span>
           <div class="sa"><div class="sa-fill" style="width:${sqA}%;"></div></div>
           <span class="sv">${at.squadValue}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.goalsPerGame >= at.goalsPerGame ? ' lead' : ''}">${ht.goalsPerGame}</span>
+          <span class="sv${ht.goalsPerGame >= at.goalsPerGame ? " lead" : ""}">${ht.goalsPerGame}</span>
           <div class="sh"><div class="sh-fill" style="width:${gpH}%;"></div></div>
-          <span class="sn">Goals / Match</span>
+          <span class="sn">${t.goalsPerMatch}</span>
           <div class="sa"><div class="sa-fill" style="width:${gpA}%;"></div></div>
-          <span class="sv${at.goalsPerGame > ht.goalsPerGame ? ' lead' : ''}">${at.goalsPerGame}</span>
+          <span class="sv${at.goalsPerGame > ht.goalsPerGame ? " lead" : ""}">${at.goalsPerGame}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.concededPerGame <= at.concededPerGame ? ' lead' : ''}">${ht.concededPerGame}</span>
+          <span class="sv${ht.concededPerGame <= at.concededPerGame ? " lead" : ""}">${ht.concededPerGame}</span>
           <div class="sh"><div class="sh-fill" style="width:${cpH}%;"></div></div>
-          <span class="sn">Conceded / Match</span>
+          <span class="sn">${t.concededPerMatch}</span>
           <div class="sa"><div class="sa-fill" style="width:${cpA}%;"></div></div>
-          <span class="sv${at.concededPerGame < ht.concededPerGame ? ' lead' : ''}">${at.concededPerGame}</span>
+          <span class="sv${at.concededPerGame < ht.concededPerGame ? " lead" : ""}">${at.concededPerGame}</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.possession >= at.possession ? ' lead' : ''}">${ht.possession}%</span>
+          <span class="sv${ht.possession >= at.possession ? " lead" : ""}">${ht.possession}%</span>
           <div class="sh"><div class="sh-fill" style="width:${posH}%;"></div></div>
-          <span class="sn">Possession</span>
+          <span class="sn">${t.possession}</span>
           <div class="sa"><div class="sa-fill" style="width:${posA}%;"></div></div>
-          <span class="sv${at.possession > ht.possession ? ' lead' : ''}">${at.possession}%</span>
+          <span class="sv${at.possession > ht.possession ? " lead" : ""}">${at.possession}%</span>
         </div>
         <div class="stat-row">
-          <span class="sv${ht.cleanSheets >= at.cleanSheets ? ' lead' : ''}">${ht.cleanSheets}</span>
+          <span class="sv${ht.cleanSheets >= at.cleanSheets ? " lead" : ""}">${ht.cleanSheets}</span>
           <div class="sh"><div class="sh-fill" style="width:${csH}%;"></div></div>
-          <span class="sn">Clean Sheets</span>
+          <span class="sn">${t.cleanSheets}</span>
           <div class="sa"><div class="sa-fill" style="width:${csA}%;"></div></div>
-          <span class="sv${at.cleanSheets > ht.cleanSheets ? ' lead' : ''}">${at.cleanSheets}</span>
+          <span class="sv${at.cleanSheets > ht.cleanSheets ? " lead" : ""}">${at.cleanSheets}</span>
         </div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">📈</span> Recent Form</div>
-        <span class="card-chip">Last 5 matches</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83D\uDCC8</span> ${t.recentForm}</div>
+        <span class="card-chip">${t.last5}</span>
       </div>
       <div class="card-body">
         <div class="form-section">
@@ -1395,68 +1809,68 @@ function generateMatchHTML(m) {
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">🤝</span> Head to Head</div>
-        <span class="card-chip">${m.h2h.total} matches total</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">\uD83E\uDD1D</span> ${t.headToHead}</div>
+        <span class="card-chip">${t.matchesTotal(m.h2h.total)}</span>
       </div>
       <div class="card-body">
         <div class="prob-bar" style="height:26px;margin-bottom:.85rem;">
-          <div class="ps home" style="width:${Math.round(m.h2h.homeWins / m.h2h.total * 100)}%;">${m.h2h.homeWins} wins</div>
+          <div class="ps home" style="width:${Math.round(m.h2h.homeWins / m.h2h.total * 100)}%;">${m.h2h.homeWins} ${t.wins}</div>
           <div class="ps draw" style="width:${Math.round(m.h2h.draws / m.h2h.total * 100)}%;">${m.h2h.draws}</div>
-          <div class="ps away" style="width:${Math.round(m.h2h.awayWins / m.h2h.total * 100)}%;">${m.h2h.awayWins} wins</div>
+          <div class="ps away" style="width:${Math.round(m.h2h.awayWins / m.h2h.total * 100)}%;">${m.h2h.awayWins} ${t.wins}</div>
         </div>
         <div class="prob-labels" style="margin-bottom:.9rem;">
-          <span>${ht.flag} ${ht.name}</span><span>Draws</span><span>${at.name} ${at.flag}</span>
+          <span>${ht.flag} ${ht.name}</span><span>${t.draws}</span><span>${at.name} ${at.flag}</span>
         </div>
 ${h2hRows(m)}
-        ${m.h2h.note ? `<div style="margin-top:.6rem;font-size:.65rem;color:var(--t3);">${m.h2h.note}</div>` : ""}
+        ${m.h2h.note ? '<div style="margin-top:.6rem;font-size:.65rem;color:var(--t3);">' + m.h2h.note + '</div>' : ""}
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">💰</span> Betting Markets</div>
-        <span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">Youwin</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\uD83D\uDCB0</span> ${t.bettingMarkets}</div>
+        <span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">${brandName}</span>
       </div>
       <div class="card-body">
         <div class="market">
-          <div class="mkt-label">Match Result (1X2)</div>
+          <div class="mkt-label">${t.matchResult}</div>
           <div class="mkt-row">
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${ht.name}</span><span class="mkt-btn-val">${m.odds.home.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Draw</span><span class="mkt-btn-val">${m.odds.draw.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.draw}</span><span class="mkt-btn-val">${m.odds.draw.toFixed(2)}</span></a>
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${at.name}</span><span class="mkt-btn-val">${m.odds.away.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Both Teams to Score</div>
+          <div class="mkt-label">${t.bothTeamsScore}</div>
           <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Yes</span><span class="mkt-btn-val">${m.markets.bttsYes.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">No</span><span class="mkt-btn-val">${m.markets.bttsNo.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.yes}</span><span class="mkt-btn-val">${m.markets.bttsYes.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.no}</span><span class="mkt-btn-val">${m.markets.bttsNo.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Total Goals</div>
+          <div class="mkt-label">${t.totalGoals}</div>
           <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Over 2.5</span><span class="mkt-btn-val">${m.markets.over25.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Under 2.5</span><span class="mkt-btn-val">${m.markets.under25.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Over 3.5</span><span class="mkt-btn-val">${m.markets.over35.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.over25}</span><span class="mkt-btn-val">${m.markets.over25.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.under25}</span><span class="mkt-btn-val">${m.markets.under25.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.over35}</span><span class="mkt-btn-val">${m.markets.over35.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Anytime Goalscorer</div>
+          <div class="mkt-label">${t.goalscorer}</div>
           <div class="mkt-row">
 ${mktBtns(m.markets.goalscorers)}
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Correct Score (Top Picks)</div>
+          <div class="mkt-label">${t.correctScore}</div>
           <div class="mkt-row">
 ${mktBtns(m.markets.correctScore)}
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">Double Chance</div>
+          <div class="mkt-label">${t.doubleChance}</div>
           <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">1X (${ht.code} or Draw)</span><span class="mkt-btn-val">${m.markets.dc1x.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">X2 (${at.code} or Draw)</span><span class="mkt-btn-val">${m.markets.dcX2.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">1X (${ht.code} ${t.orDraw})</span><span class="mkt-btn-val">${m.markets.dc1x.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">X2 (${at.code} ${t.orDraw})</span><span class="mkt-btn-val">${m.markets.dcX2.toFixed(2)}</span></a>
           </div>
         </div>
       </div>
@@ -1464,14 +1878,14 @@ ${mktBtns(m.markets.correctScore)}
   </div>
   <div class="sidebar" style="display:flex;flex-direction:column;gap:1rem;">
     <div class="side-cta">
-      <div class="side-cta-eyebrow">Welcome Offer</div>
-      <div class="side-cta-headline">100% Bonus<br>up to €100</div>
-      <div class="side-cta-sub">New customers only · Min. deposit €10 · T&amp;Cs apply</div>
-      <a href="${aff}" class="side-cta-btn" target="_blank" rel="noopener">Claim Bonus →</a>
+      <div class="side-cta-eyebrow">${t.welcomeOffer}</div>
+      <div class="side-cta-headline">${g(brand.bonusHeadline)}</div>
+      <div class="side-cta-sub">${g(brand.bonusSub)}</div>
+      <a href="${aff}" class="side-cta-btn" target="_blank" rel="noopener">${g(brand.claimBonus)}</a>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">⭐</span> Key Players</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\u2B50</span> ${t.keyPlayers}</div>
       </div>
       <div class="card-body">
 ${playerRows(allPlayers)}
@@ -1479,32 +1893,32 @@ ${playerRows(allPlayers)}
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">🏟️</span> Venue Info</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83C\uDFDF\uFE0F</span> ${t.venueInfo}</div>
       </div>
       <div class="card-body">
         <div style="font-size:.85rem;font-weight:800;color:var(--t0);margin-bottom:.15rem;">${m.venue.split(",")[0]}</div>
         <div style="font-size:.72rem;color:var(--t2);margin-bottom:.65rem;">${m.venue.split(",").slice(1).join(",").trim()}</div>
-        <div class="venue-row"><span class="venue-key">Capacity</span><span class="venue-val">${m.venueCapacity}</span></div>
-        <div class="venue-row"><span class="venue-key">Surface</span><span class="venue-val">${m.venueSurface}</span></div>
-        <div class="venue-row"><span class="venue-key">Kick-off (local)</span><span class="venue-val">${m.kickoffLocal}</span></div>
-        <div class="venue-row"><span class="venue-key">Kick-off (CET)</span><span class="venue-val">${m.kickoffCET}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.capacity}</span><span class="venue-val">${m.venueCapacity}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.surface}</span><span class="venue-val">${m.venueSurface}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.kickoffLocal}</span><span class="venue-val">${m.kickoffLocal}</span></div>
+        <div class="venue-row"><span class="venue-key">${t.kickoffCET}</span><span class="venue-val">${m.kickoffCET}</span></div>
       </div>
     </div>
     <div class="card">
       <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">⚡</span> Quick Bet</div>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\u26A1</span> ${t.quickBet}</div>
       </div>
       <div class="card-body">
         <div class="market">
-          <div class="mkt-label">Half-Time Result</div>
+          <div class="mkt-label">${t.halfTime}</div>
           <div class="mkt-row">
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${ht.code}</span><span class="mkt-btn-val">${m.markets.htHome.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">Draw</span><span class="mkt-btn-val">${m.markets.htDraw.toFixed(2)}</span></a>
+            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.draw}</span><span class="mkt-btn-val">${m.markets.htDraw.toFixed(2)}</span></a>
             <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${at.code}</span><span class="mkt-btn-val">${m.markets.htAway.toFixed(2)}</span></a>
           </div>
         </div>
         <div class="market">
-          <div class="mkt-label">First Goal Scorer</div>
+          <div class="mkt-label">${t.firstGoal}</div>
           <div class="mkt-row">
 ${mktBtns(m.markets.fgsFirst)}
           </div>
@@ -1514,152 +1928,264 @@ ${mktBtns(m.markets.fgsFirst)}
   </div>
 </div>
 <footer>
-  <div class="footer-brand">YOU<span>WIN</span></div>
-  <p class="footer-disc">18+ only. Please gamble responsibly. Youwin is licensed and regulated. Betting involves risk — only bet what you can afford to lose. If gambling becomes a problem, visit <strong>begambleaware.org</strong>.</p>
+  <div class="footer-brand">${logoHtml}</div>
+  <p class="footer-disc">${g(brand.disclaimer)}</p>
   <div class="footer-links">
-    <a href="#">Terms &amp; Conditions</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Responsible Gaming</a>
-    <a href="index.html">All Matches</a>
+    <a href="#">${t.terms}</a>
+    <a href="#">${t.privacy}</a>
+    <a href="#">${t.responsible}</a>
+    <a href="index.html">${t.allMatches}</a>
   </div>
 </footer>
 <div class="mob-bar">
   <div class="mob-bar-info">
-    <div class="mob-bar-label">Daily Prize Pool</div>
-    <div class="mob-bar-val">Get free $10 in bets</div>
+    <div class="mob-bar-label">${g(brand.mobBarLabel)}</div>
+    <div class="mob-bar-val">${g(brand.mobBarVal)}</div>
   </div>
   <a href="${aff}" class="mob-bar-btn" target="_blank" rel="noopener">
-    <span class="mob-bar-btn-main">Bet Now</span>
-    <span class="mob-bar-btn-sub">Get $10 Free Bonus!</span>
+    <span class="mob-bar-btn-main">${g(brand.mobBarBtnMain)}</span>
+    <span class="mob-bar-btn-sub">${g(brand.mobBarBtnSub)}</span>
   </a>
 </div>
 </body>
 </html>`;
 }
 
-if (typeof module !== "undefined") module.exports = { generateMatchHTML };
+// ── ADMIN STATE ──────────────────────────────────────────────────────────────
+let selectedBrand = BRANDS[0];
+let selectedLang  = 'en';
+let selectedGroup = 'all';
+let allSelected   = false;
+const generated   = new Set();
 
-// ── ADMIN LOGIC ─────────────────────────────
-const generated = new Set();
+// ── DATE HELPERS ─────────────────────────────────────────────────────────────
+const MONTHS = {January:1,February:2,March:3,April:4,May:5,June:6,July:7,August:8,September:9,October:10,November:11,December:12};
 
-function log(msg, type) {
-  const el = document.getElementById("log");
-  const line = document.createElement("span");
-  line.className = "log-line" + (type ? " " + type : "");
-  line.textContent = msg;
-  el.appendChild(document.createTextNode("\n"));
-  el.appendChild(line);
-  el.scrollTop = el.scrollHeight;
+function parseDateKey(str) {
+  const m = str.match(/(\d+)\s+(\w+)\s+(\d+)/);
+  if (!m) return 0;
+  return parseInt(m[3]) * 10000 + (MONTHS[m[2]] || 0) * 100 + parseInt(m[1]);
 }
 
-function buildGrid() {
-  const grid = document.getElementById("matchGrid");
-  MATCHES.forEach(m => {
-    const row = document.createElement("div");
-    row.className = "match-row";
-    row.id = "row-" + m.id;
-    row.innerHTML =
-      '<input type="checkbox" class="match-check" id="chk-' + m.id + '" onchange="onCheck()">' +
-      '<div class="match-teams">' +
-        '<span class="match-flag">' + m.homeTeam.flag + '</span>' +
-        '<span class="match-name">' + m.homeTeam.name + '</span>' +
-        '<span class="match-vs">vs</span>' +
-        '<span class="match-name">' + m.awayTeam.name + '</span>' +
-        '<span class="match-flag">' + m.awayTeam.flag + '</span>' +
-      '</div>' +
-      '<div class="match-meta">' +
-        '<span class="match-group">' + m.group + '</span>' +
-        '<span class="match-date">' + m.date + '</span>' +
-      '</div>' +
-      '<span class="status-pill pending" id="pill-' + m.id + '">Not generated</span>' +
-      '<div class="match-actions">' +
-        '<button class="btn btn-secondary btn-sm" onclick="previewMatch(\'' + m.id + '\')">Preview</button>' +
-        '<button class="btn btn-primary btn-sm" onclick="downloadMatch(\'' + m.id + '\')">Download</button>' +
-      '</div>';
-    grid.appendChild(row);
+function shortDate(str) {
+  // "Thursday, 11 June 2026" → "Thu 11 Jun"
+  const m = str.match(/(\w+),\s*(\d+)\s+(\w+)\s+(\d+)/);
+  if (!m) return str;
+  return m[1].slice(0,3) + ' ' + m[2] + ' ' + m[3].slice(0,3) + ' ' + m[4];
+}
+
+// ── BUILD BRAND DROPDOWN ──────────────────────────────────────────────────────
+function buildBrandSelect() {
+  const sel = document.getElementById('brandSel');
+  BRANDS.forEach((b, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = b.name;
+    sel.appendChild(opt);
   });
 }
 
-function onCheck() {
-  const n = document.querySelectorAll(".match-check:checked").length;
-  document.getElementById("selCount").textContent =
-    n === 0 ? "0 matches selected" : n === 1 ? "1 match selected" : n + " matches selected";
-  document.getElementById("genBtn").disabled = n === 0;
+function onBrandChange() {
+  const i = parseInt(document.getElementById('brandSel').value);
+  selectedBrand = BRANDS[i] || BRANDS[0];
+  log('Brand: ' + selectedBrand.name, 'info');
 }
 
-let _allSelected = false;
-function toggleAll() {
-  _allSelected = !_allSelected;
-  document.querySelectorAll(".match-check").forEach(c => c.checked = _allSelected);
+// ── LANGUAGE SWITCH ───────────────────────────────────────────────────────────
+function setLang(lang) {
+  selectedLang = lang;
+  document.querySelectorAll('.lang-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+  });
+  log('Language: ' + lang.toUpperCase(), 'info');
+}
+
+// ── GROUP FILTER ──────────────────────────────────────────────────────────────
+function buildGroupPills() {
+  const groups = ['all', ...new Set(MATCHES.map(m => m.group).sort())];
+  const container = document.getElementById('groupPills');
+  groups.forEach(g => {
+    const btn = document.createElement('button');
+    btn.className = 'gf-pill' + (g === 'all' ? ' active' : '');
+    btn.textContent = g === 'all' ? 'All' : g;
+    btn.onclick = () => filterGroup(g);
+    container.appendChild(btn);
+  });
+}
+
+function filterGroup(group) {
+  selectedGroup = group;
+  document.querySelectorAll('.gf-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === (group === 'all' ? 'All' : group));
+  });
+  document.querySelectorAll('.match-row').forEach(row => {
+    const rg = row.dataset.group;
+    row.classList.toggle('hidden', group !== 'all' && rg !== group);
+  });
+  // uncheck hidden rows
+  document.querySelectorAll('.match-row.hidden .match-check').forEach(c => { c.checked = false; });
   onCheck();
 }
 
+// ── CALENDAR BUILD ────────────────────────────────────────────────────────────
+function buildCalendar() {
+  const sorted = [...MATCHES].sort((a, b) => parseDateKey(a.date) - parseDateKey(b.date));
+  const byDate = {};
+  const dateOrder = [];
+  sorted.forEach(m => {
+    if (!byDate[m.date]) { byDate[m.date] = []; dateOrder.push(m.date); }
+    byDate[m.date].push(m);
+  });
+
+  const cal = document.getElementById('calendar');
+  dateOrder.forEach(date => {
+    const section = document.createElement('div');
+    section.className = 'date-section';
+
+    section.innerHTML =
+      '<div class="date-header">' +
+        '<div class="date-header-line"></div>' +
+        '<div class="date-header-text">' + date + '</div>' +
+        '<div class="date-header-line"></div>' +
+      '</div>' +
+      '<div class="match-list" id="list-' + date.replace(/[^a-z0-9]/gi,'_') + '"></div>';
+
+    cal.appendChild(section);
+
+    const list = section.querySelector('.match-list');
+    byDate[date].forEach(m => {
+      list.appendChild(buildMatchRow(m));
+    });
+  });
+}
+
+function buildMatchRow(m) {
+  const row = document.createElement('div');
+  row.className = 'match-row';
+  row.id = 'row-' + m.id;
+  row.dataset.group = m.group;
+
+  row.innerHTML =
+    '<input type="checkbox" class="match-check" id="chk-' + m.id + '" onchange="onCheck()">' +
+    '<div class="match-teams">' +
+      '<span class="match-flag">' + m.homeTeam.flag + '</span>' +
+      '<span class="match-name">' + m.homeTeam.name + '</span>' +
+      '<span class="match-vs">vs</span>' +
+      '<span class="match-name">' + m.awayTeam.name + '</span>' +
+      '<span class="match-flag">' + m.awayTeam.flag + '</span>' +
+    '</div>' +
+    '<div class="match-badges">' +
+      '<span class="match-group">' + m.group + '</span>' +
+      '<span class="match-time">' + m.kickoff + '</span>' +
+      '<span class="match-venue">' + m.venue.split(',')[0] + '</span>' +
+    '</div>' +
+    '<span class="status-pill pending" id="pill-' + m.id + '">Not generated</span>' +
+    '<div class="match-actions">' +
+      '<button class="btn btn-ghost btn-sm" onclick="previewMatch(\'' + m.id + '\')">Preview</button>' +
+      '<button class="btn btn-primary btn-sm" onclick="downloadMatch(\'' + m.id + '\')">Download</button>' +
+    '</div>';
+
+  return row;
+}
+
+// ── CHECK / SELECT ────────────────────────────────────────────────────────────
+function onCheck() {
+  const checked = [...document.querySelectorAll('.match-check:checked')];
+  const n = checked.length;
+  document.getElementById('selCount').textContent = n === 0 ? '0 selected' : n === 1 ? '1 match selected' : n + ' matches selected';
+  const brandName = selectedBrand.name + ' / ' + selectedLang.toUpperCase();
+  document.getElementById('selSub').textContent = n > 0 ? 'Will generate for: ' + brandName : 'Check matches below to select';
+  document.getElementById('genBtn').disabled = n === 0;
+}
+
+function toggleAll() {
+  allSelected = !allSelected;
+  document.querySelectorAll('.match-row:not(.hidden) .match-check').forEach(c => { c.checked = allSelected; });
+  onCheck();
+}
+
+// ── GENERATE ──────────────────────────────────────────────────────────────────
 function getHTML(id) {
   const m = MATCHES.find(x => x.id === id);
-  if (!m) throw new Error("Match not found: " + id);
-  return generateMatchHTML(m);
+  if (!m) throw new Error('Match not found: ' + id);
+  return generateMatchHTML(m, selectedBrand, selectedLang);
 }
 
 function downloadMatch(id) {
   try {
-    const blob = new Blob([getHTML(id)], { type: "text/html" });
-    const a = document.createElement("a");
+    const blob = new Blob([getHTML(id)], { type: 'text/html' });
+    const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = "match-" + id + ".html";
+    a.download = 'match-' + id + '-' + selectedBrand.id + '-' + selectedLang + '.html';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     markGenerated(id);
-    log("Downloaded: match-" + id + ".html", "ok");
-  } catch(e) { log("Error: " + e.message, "warn"); }
+    log('Downloaded: match-' + id + '-' + selectedBrand.id + '-' + selectedLang + '.html', 'ok');
+  } catch(e) { log('Error: ' + e.message, 'warn'); }
 }
 
 function previewMatch(id) {
   try {
-    const blob = new Blob([getHTML(id)], { type: "text/html" });
-    window.open(URL.createObjectURL(blob), "_blank");
-    log("Previewing: " + id, "info");
-  } catch(e) { log("Error: " + e.message, "warn"); }
+    const blob = new Blob([getHTML(id)], { type: 'text/html' });
+    window.open(URL.createObjectURL(blob), '_blank');
+    log('Previewing: ' + id + ' [' + selectedBrand.name + ' / ' + selectedLang.toUpperCase() + ']', 'info');
+  } catch(e) { log('Error: ' + e.message, 'warn'); }
 }
 
 function markGenerated(id) {
   generated.add(id);
-  const pill = document.getElementById("pill-" + id);
-  if (pill) { pill.className = "status-pill ready"; pill.textContent = "Generated"; }
-  const row = document.getElementById("row-" + id);
-  if (row) row.classList.add("generated");
+  const pill = document.getElementById('pill-' + id);
+  if (pill) { pill.className = 'status-pill ready'; pill.textContent = 'Generated'; }
+  const row = document.getElementById('row-' + id);
+  if (row) row.classList.add('generated');
 }
 
 async function generateSelected() {
-  const ids = [...document.querySelectorAll(".match-check:checked")].map(c => c.id.replace("chk-", ""));
+  const ids = [...document.querySelectorAll('.match-check:checked')].map(c => c.id.replace('chk-', ''));
   await runBatch(ids);
 }
 
 async function generateAll() {
-  await runBatch(MATCHES.map(m => m.id));
+  const ids = MATCHES.map(m => m.id);
+  await runBatch(ids);
 }
 
 async function runBatch(ids) {
   if (!ids.length) return;
-  const wrap = document.getElementById("progressWrap");
-  const bar  = document.getElementById("progressBar");
-  const lbl  = document.getElementById("progressLabel");
-  wrap.classList.add("visible");
-  log("Starting batch: " + ids.length + " match(es)...", "info");
+  const wrap = document.getElementById('progressWrap');
+  const bar  = document.getElementById('progressBar');
+  const lbl  = document.getElementById('progressLabel');
+  wrap.classList.add('visible');
+  log('Batch start: ' + ids.length + ' match(es) — ' + selectedBrand.name + ' / ' + selectedLang.toUpperCase(), 'info');
   for (let i = 0; i < ids.length; i++) {
-    bar.style.width = Math.round((i / ids.length) * 100) + "%";
-    lbl.textContent = "Generating " + (i + 1) + " / " + ids.length + ": " + ids[i];
-    await new Promise(r => setTimeout(r, 50));
+    bar.style.width = Math.round((i / ids.length) * 100) + '%';
+    lbl.textContent = 'Generating ' + (i + 1) + ' / ' + ids.length + ': ' + ids[i];
+    await new Promise(r => setTimeout(r, 60));
     downloadMatch(ids[i]);
   }
-  bar.style.width = "100%";
-  lbl.textContent = "Done — " + ids.length + " file(s) downloaded.";
-  log("Batch complete: " + ids.length + " file(s).", "ok");
-  setTimeout(() => { wrap.classList.remove("visible"); bar.style.width = "0%"; }, 3500);
+  bar.style.width = '100%';
+  lbl.textContent = 'Done — ' + ids.length + ' file(s) downloaded.';
+  log('Batch complete: ' + ids.length + ' file(s).', 'ok');
+  setTimeout(() => { wrap.classList.remove('visible'); bar.style.width = '0%'; }, 4000);
 }
 
-buildGrid();
+// ── LOG ───────────────────────────────────────────────────────────────────────
+function log(msg, type) {
+  const el = document.getElementById('log');
+  const line = document.createElement('span');
+  line.className = 'log-line' + (type ? ' ' + type : '');
+  line.textContent = msg;
+  el.appendChild(document.createTextNode('\n'));
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildBrandSelect();
+buildGroupPills();
+buildCalendar();
 </script>
 </body>
 </html>
