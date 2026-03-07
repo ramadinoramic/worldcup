@@ -578,11 +578,14 @@
     .mob-bar-val { font-size: 0.88rem; font-weight: 800; color: var(--t0); }
     .mob-bar-btn {
       background: var(--accent); color: #fff;
-      font-size: 0.78rem; font-weight: 700;
-      padding: 0.65rem 1.25rem; border-radius: var(--r-sm);
+      padding: 0.5rem 1.1rem; border-radius: var(--r-sm);
       white-space: nowrap; transition: filter 0.15s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.05rem;
+      text-align: center;
     }
     .mob-bar-btn:hover { filter: brightness(1.08); }
+    .mob-bar-btn-main { font-size: 0.82rem; font-weight: 800; line-height: 1.2; }
+    .mob-bar-btn-sub { font-size: 0.62rem; font-weight: 600; opacity: 0.88; letter-spacing: 0.01em; }
 
     /* =========================================================
        RESPONSIVE
@@ -1168,7 +1171,10 @@
     <div class="mob-bar-label">Argentina vs France · 1X2</div>
     <div class="mob-bar-val">2.10 · 3.40 · 3.20</div>
   </div>
-  <a href="https://youwin.com/register?ref=21331414" class="mob-bar-btn" target="_blank" rel="noopener">Bet Now</a>
+  <a href="https://youwin.com/register?ref=21331414" class="mob-bar-btn" target="_blank" rel="noopener">
+    <span class="mob-bar-btn-main">Bet Now</span>
+    <span class="mob-bar-btn-sub">Get $10 Free Bonus!</span>
+  </a>
 </div>
 
 </body>
