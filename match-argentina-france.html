@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Argentina vs France - FIFA World Cup 2026 | Youwin Betting</title>
-  <meta name="description" content="Bet on Argentina vs France at FIFA World Cup 2026. Get the best odds, match preview, head-to-head stats and exclusive bonuses at Youwin.">
+  <title>Argentina vs France – FIFA World Cup 2026 | Youwin Betting</title>
+  <meta name="description" content="Bet on Argentina vs France at FIFA World Cup 2026. Best odds, match preview, head-to-head stats and exclusive bonuses at Youwin.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -12,809 +12,598 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-base: #0D1117;
-      --bg-card: #161B22;
-      --bg-card-elevated: #1C2129;
-      --bg-input: #21262D;
-      --accent: #E41E3F;
-      --accent-dim: rgba(228,30,63,0.12);
-      --accent-glow: rgba(228,30,63,0.25);
-      --blue: #3B82F6;
-      --blue-dim: rgba(59,130,246,0.12);
-      --green: #22C55E;
-      --green-dim: rgba(34,197,94,0.12);
-      --yellow: #FBBF24;
-      --yellow-dim: rgba(251,191,36,0.12);
-      --red: #EF4444;
-      --red-dim: rgba(239,68,68,0.12);
-      --text-0: #F0F6FC;
-      --text-1: #C9D1D9;
-      --text-2: #8B949E;
-      --text-3: #484F58;
-      --border: rgba(240,246,252,0.06);
-      --border-subtle: rgba(240,246,252,0.03);
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
-      --shadow-card: 0 1px 3px rgba(0,0,0,0.3), 0 0 0 1px rgba(240,246,252,0.04);
-      --shadow-elevated: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(240,246,252,0.04);
+      --bg-page:     #F4F5F7;
+      --bg-card:     #FFFFFF;
+      --bg-muted:    #F8F9FB;
+      --bg-input:    #EEF0F4;
+
+      --accent:      #E41E3F;
+      --accent-dim:  rgba(228,30,63,0.08);
+      --accent-mid:  rgba(228,30,63,0.18);
+
+      --blue:        #2563EB;
+      --blue-dim:    rgba(37,99,235,0.08);
+      --blue-mid:    rgba(37,99,235,0.18);
+
+      --green:       #16A34A;
+      --green-dim:   rgba(22,163,74,0.09);
+
+      --yellow:      #D97706;
+      --yellow-dim:  rgba(217,119,6,0.09);
+
+      --red:         #DC2626;
+      --red-dim:     rgba(220,38,38,0.09);
+
+      /* ---- Text ---- */
+      --t0: #111827;   /* headings, values */
+      --t1: #374151;   /* body text        */
+      --t2: #6B7280;   /* labels, captions */
+      --t3: #9CA3AF;   /* placeholders     */
+
+      /* ---- Border ---- */
+      --border:        #E5E7EB;
+      --border-subtle: #F3F4F6;
+
+      /* ---- Radii ---- */
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+      --r-xl: 20px;
+
+      /* ---- Shadow ---- */
+      --shadow-xs: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-base);
-      color: var(--text-0);
+      background: var(--bg-page);
+      color: var(--t1);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
     a { color: inherit; text-decoration: none; }
 
-    /* ============ TOPBAR ============ */
+    /* =========================================================
+       TOPBAR
+    ========================================================= */
     .topbar {
       position: sticky;
       top: 0;
       z-index: 100;
-      height: 52px;
-      background: rgba(13,17,23,0.92);
+      height: 54px;
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-xs);
       display: flex;
       align-items: center;
       padding: 0 1rem;
     }
 
     .topbar-inner {
-      max-width: 1080px;
+      max-width: 1100px;
       width: 100%;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 0.75rem;
     }
 
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
+    .topbar-left { display: flex; align-items: center; gap: 0.75rem; }
 
     .topbar-back {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-sm);
-      color: var(--text-2);
-      transition: all 0.15s;
+      width: 34px; height: 34px;
+      border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--t2);
+      transition: background 0.15s, color 0.15s;
     }
-    .topbar-back:hover { background: var(--bg-input); color: var(--text-0); }
+    .topbar-back:hover { background: var(--bg-input); color: var(--t0); }
     .topbar-back svg { width: 18px; height: 18px; }
 
-    .topbar-brand {
-      font-size: 1rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
+    .topbar-brand { font-size: 1.05rem; font-weight: 900; letter-spacing: -0.03em; color: var(--t0); }
     .topbar-brand span { color: var(--accent); }
 
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    .topbar-right { display: flex; align-items: center; gap: 0.5rem; }
 
     .lang-pill {
-      display: flex;
-      background: var(--bg-input);
-      border-radius: 100px;
-      padding: 2px;
-      gap: 1px;
+      display: flex; background: var(--bg-input);
+      border-radius: 100px; padding: 3px; gap: 2px;
     }
     .lang-pill a {
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 0.2rem 0.55rem;
-      border-radius: 100px;
-      color: var(--text-3);
-      transition: all 0.15s;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 0.22rem 0.55rem; border-radius: 100px;
+      color: var(--t2); transition: all 0.15s;
     }
     .lang-pill a.active { background: var(--accent); color: #fff; }
-    .lang-pill a:hover:not(.active) { color: var(--text-1); }
+    .lang-pill a:hover:not(.active) { color: var(--t0); background: var(--border); }
 
     .topbar-cta {
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.35rem 0.9rem;
-      border-radius: 100px;
-      transition: all 0.15s;
+      background: var(--accent); color: #fff;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.01em;
+      padding: 0.38rem 1rem; border-radius: 100px;
+      transition: filter 0.15s, transform 0.15s;
     }
-    .topbar-cta:hover { filter: brightness(1.1); }
+    .topbar-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
-    /* ============ LAYOUT ============ */
-    .layout {
-      max-width: 1080px;
+    /* =========================================================
+       PAGE WRAP
+    ========================================================= */
+    .page {
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 1rem;
+      padding: 1.25rem 1rem;
       display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 1rem;
+      grid-template-columns: 1fr 336px;
+      gap: 1.25rem;
       align-items: start;
     }
 
-    /* ============ MATCH HEADER CARD ============ */
+    /* =========================================================
+       MATCH HEADER CARD
+    ========================================================= */
     .match-header {
       grid-column: 1 / -1;
       background: var(--bg-card);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-card);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
       overflow: hidden;
     }
 
-    .match-header-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1.25rem;
-      border-bottom: 1px solid var(--border);
+    .mh-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.65rem 1.25rem;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-muted);
     }
 
-    .mh-tournament {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-2);
+    .mh-tourney {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; font-weight: 600; color: var(--t2);
     }
-    .mh-tournament-icon {
-      width: 18px;
-      height: 18px;
-      background: var(--accent-dim);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
+    .mh-tourney-badge {
+      background: var(--accent-dim); border-radius: 6px;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
     }
 
     .mh-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.68rem;
-      font-weight: 700;
-      color: var(--green);
-      background: var(--green-dim);
-      padding: 0.2rem 0.6rem;
-      border-radius: 100px;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.65rem; font-weight: 700;
+      color: var(--green); background: var(--green-dim);
+      padding: 0.2rem 0.65rem; border-radius: 100px;
     }
-    .mh-status-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: blink 1.8s infinite;
+    .mh-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--green); animation: blink 1.8s infinite;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    .match-header-body {
-      padding: 2rem 1.5rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .mh-body {
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1.5rem 1.25rem;
       gap: 0;
     }
 
     .mh-team {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      text-align: center;
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 0.5rem; text-align: center;
     }
 
     .mh-flag {
-      font-size: 3.75rem;
-      line-height: 1;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      font-size: 4rem; line-height: 1;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
     }
 
-    .mh-team-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .mh-name {
+      font-size: 1.1rem; font-weight: 800;
+      color: var(--t0); letter-spacing: -0.02em;
     }
 
-    .mh-team-sub {
-      font-size: 0.68rem;
-      color: var(--text-3);
-      font-weight: 500;
+    .mh-sub {
+      font-size: 0.7rem; font-weight: 600;
+      color: var(--t2);   /* visible, not washed out */
+      background: var(--bg-input);
+      padding: 0.15rem 0.55rem; border-radius: 100px;
+      white-space: nowrap;
     }
 
     .mh-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0 2rem;
-      flex-shrink: 0;
+      padding: 0 2.5rem; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
     }
 
-    .mh-time {
-      font-size: 1.75rem;
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      color: var(--text-0);
+    .mh-kick {
+      font-size: 1.6rem; font-weight: 900; color: var(--t0);
+      letter-spacing: -0.04em; line-height: 1;
     }
 
-    .mh-date {
-      font-size: 0.7rem;
-      color: var(--text-2);
-      font-weight: 500;
+    .mh-date { font-size: 0.72rem; font-weight: 600; color: var(--t2); }
+    .mh-venue { font-size: 0.65rem; color: var(--t3); margin-top: 0.1rem; }
+
+    .mh-foot {
+      padding: 0 1.25rem 1.1rem;
+      display: flex; justify-content: center;
     }
 
-    .mh-venue {
-      font-size: 0.65rem;
-      color: var(--text-3);
-      margin-top: 0.1rem;
+    .odds-strip {
+      display: flex; gap: 0.4rem;
+      background: var(--bg-muted); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 0.4rem;
+      width: 100%; max-width: 400px;
     }
 
-    .match-header-footer {
-      padding: 0 1.25rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .odds-btn {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 0.12rem;
+      padding: 0.55rem 0.5rem; border-radius: var(--r-md);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .odds-btn:hover { background: var(--accent-dim); }
+    .odds-btn-label {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--t3);
+    }
+    .odds-btn-val {
+      font-size: 1rem; font-weight: 800; color: var(--t0);
+      letter-spacing: -0.02em;
+    }
+    .odds-btn-team {
+      font-size: 0.6rem; font-weight: 500; color: var(--t2);
     }
 
-    .mh-odds-strip {
-      display: flex;
-      gap: 0.5rem;
-      background: var(--bg-card-elevated);
-      border-radius: var(--radius-md);
-      padding: 0.5rem;
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .mh-odd {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
-      padding: 0.6rem 0.5rem;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .mh-odd:hover { background: var(--accent-dim); }
-    .mh-odd-label { font-size: 0.6rem; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
-    .mh-odd-val { font-size: 1rem; font-weight: 800; color: var(--text-0); letter-spacing: -0.02em; }
-
-    /* ============ TABS ============ */
+    /* =========================================================
+       SECTION TABS
+    ========================================================= */
     .tabs {
-      display: flex;
-      gap: 0;
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-card);
-      padding: 0.35rem;
-      margin-bottom: 1rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      display: flex; gap: 0;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); box-shadow: var(--shadow-xs);
+      padding: 0.3rem; margin-bottom: 0;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
     }
     .tabs::-webkit-scrollbar { display: none; }
 
     .tab {
-      flex: 1;
-      text-align: center;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-3);
-      padding: 0.55rem 0.75rem;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-      user-select: none;
+      flex: 1; text-align: center;
+      font-size: 0.72rem; font-weight: 600; color: var(--t2);
+      padding: 0.52rem 0.75rem; border-radius: var(--r-md);
+      cursor: pointer; white-space: nowrap;
+      transition: all 0.15s; user-select: none;
     }
-    .tab:hover { color: var(--text-1); }
-    .tab.active {
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-    }
+    .tab:hover { color: var(--t0); background: var(--bg-muted); }
+    .tab.active { background: var(--accent); color: #fff; font-weight: 700; }
 
-    /* ============ CARD ============ */
+    /* =========================================================
+       CARD
+    ========================================================= */
     .card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-card);
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); box-shadow: var(--shadow-xs);
       overflow: hidden;
-      margin-bottom: 1rem;
     }
 
     .card-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.85rem 1.1rem;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 1.1rem;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .card-title {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-0);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.78rem; font-weight: 700; color: var(--t0);
     }
-    .card-title-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
+    .card-icon {
+      width: 22px; height: 22px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; flex-shrink: 0;
     }
 
-    .card-badge {
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: var(--text-3);
-      background: var(--bg-input);
-      padding: 0.15rem 0.5rem;
+    .card-chip {
+      font-size: 0.6rem; font-weight: 700; color: var(--t3);
+      background: var(--bg-input); padding: 0.15rem 0.5rem;
       border-radius: 100px;
     }
 
     .card-body { padding: 1rem 1.1rem; }
 
-    /* ============ STATS ROWS (Sofascore style) ============ */
+    /* =========================================================
+       STAT COMPARISON BARS (Sofascore dual-bar)
+    ========================================================= */
     .stat-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.65rem 0;
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 0;
     }
     .stat-row + .stat-row { border-top: 1px solid var(--border-subtle); }
 
-    .stat-val {
-      width: 42px;
+    .sv {
+      width: 44px; flex-shrink: 0;
+      font-size: 0.8rem; font-weight: 700; color: var(--t1);
       text-align: center;
-      font-size: 0.82rem;
-      font-weight: 700;
-      flex-shrink: 0;
     }
-    .stat-val.highlight { color: var(--accent); }
+    .sv.lead { color: var(--blue); }
 
-    .stat-bar-wrap {
-      flex: 1;
-      display: flex;
-      gap: 3px;
-      align-items: center;
+    .sn {
+      flex: 0 0 104px; text-align: center;
+      font-size: 0.68rem; font-weight: 500; color: var(--t2);
     }
 
-    .stat-bar {
-      height: 5px;
-      border-radius: 100px;
-      transition: width 0.6s ease;
+    .sh {
+      flex: 1; height: 5px; border-radius: 100px;
+      background: var(--bg-input); overflow: hidden;
+      direction: rtl;
     }
-    .stat-bar.left {
-      margin-left: auto;
-      border-radius: 100px 0 0 100px;
-    }
-    .stat-bar.right {
-      border-radius: 0 100px 100px 0;
-    }
-    .stat-bar.home { background: var(--blue); }
-    .stat-bar.away { background: var(--accent); }
-    .stat-bar.home-bg { background: var(--blue-dim); }
-    .stat-bar.away-bg { background: var(--accent-dim); }
+    .sh-fill { height: 100%; border-radius: 100px; background: var(--blue); direction: ltr; }
 
-    .stat-name {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text-2);
-      text-align: center;
-      width: 100px;
-      flex-shrink: 0;
+    .sa {
+      flex: 1; height: 5px; border-radius: 100px;
+      background: var(--bg-input); overflow: hidden;
     }
+    .sa-fill { height: 100%; border-radius: 100px; background: var(--accent); }
 
-    .stat-bar-half {
-      flex: 1;
-      height: 5px;
-      border-radius: 100px;
-      background: var(--bg-input);
-      overflow: hidden;
-      position: relative;
-    }
-    .stat-bar-half.left { direction: rtl; }
-
-    .stat-bar-fill {
-      height: 100%;
-      border-radius: 100px;
-      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
-    }
-    .stat-bar-fill.home { background: var(--blue); }
-    .stat-bar-fill.away { background: var(--accent); }
-
-    /* ============ PROBABILITY BAR ============ */
+    /* =========================================================
+       WIN PROBABILITY
+    ========================================================= */
     .prob-bar {
-      display: flex;
-      border-radius: 100px;
-      overflow: hidden;
-      height: 32px;
-      font-size: 0.7rem;
-      font-weight: 700;
+      display: flex; border-radius: 100px; overflow: hidden; height: 32px;
+      font-size: 0.68rem; font-weight: 700;
     }
-    .prob-seg {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: width 0.6s ease;
-      color: #fff;
+    .ps {
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; transition: width 0.7s ease;
     }
-    .prob-seg.home { background: var(--blue); }
-    .prob-seg.draw { background: var(--text-3); }
-    .prob-seg.away { background: var(--accent); }
+    .ps.home { background: var(--blue); }
+    .ps.draw { background: #9CA3AF; }
+    .ps.away { background: var(--accent); }
 
     .prob-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.5rem;
-      font-size: 0.65rem;
-      color: var(--text-3);
-      font-weight: 500;
+      display: flex; justify-content: space-between;
+      margin-top: 0.45rem;
+      font-size: 0.65rem; font-weight: 600; color: var(--t2);
     }
 
-    /* ============ FORM DISPLAY ============ */
-    .form-section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+    /* =========================================================
+       FORM BADGES
+    ========================================================= */
+    .form-section { display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .form-row {
+      display: flex; align-items: center; gap: 0.75rem;
     }
 
-    .form-team-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .form-meta {
+      display: flex; align-items: center; gap: 0.4rem;
+      min-width: 96px; flex-shrink: 0;
     }
+    .form-flag { font-size: 1rem; }
+    .form-label { font-size: 0.72rem; font-weight: 700; color: var(--t1); }
 
-    .form-team-info {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      width: 100px;
-      flex-shrink: 0;
-    }
-    .form-team-flag { font-size: 1rem; }
-    .form-team-label { font-size: 0.72rem; font-weight: 600; color: var(--text-1); }
-
-    .form-badges {
-      display: flex;
-      gap: 0.3rem;
-      flex: 1;
-    }
+    .form-badges { display: flex; gap: 0.3rem; flex: 1; }
 
     .fb {
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      font-weight: 800;
-      transition: transform 0.15s;
+      width: 28px; height: 28px; border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.64rem; font-weight: 800;
+      transition: transform 0.15s; cursor: default;
     }
-    .fb:hover { transform: scale(1.1); }
+    .fb:hover { transform: scale(1.12); }
     .fb.w { background: var(--green-dim); color: var(--green); }
     .fb.d { background: var(--yellow-dim); color: var(--yellow); }
     .fb.l { background: var(--red-dim); color: var(--red); }
 
-    .form-summary {
-      font-size: 0.68rem;
-      color: var(--text-3);
-      font-weight: 500;
-      width: 64px;
-      text-align: right;
-      flex-shrink: 0;
+    .form-record {
+      font-size: 0.68rem; font-weight: 600; color: var(--t2);
+      white-space: nowrap;
     }
 
-    /* ============ MATCH LIST (H2H) ============ */
-    .match-list-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.7rem 0;
+    /* =========================================================
+       H2H MATCH LIST
+    ========================================================= */
+    .ml-item {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 0;
     }
-    .match-list-item + .match-list-item { border-top: 1px solid var(--border-subtle); }
+    .ml-item + .ml-item { border-top: 1px solid var(--border-subtle); }
 
-    .ml-date {
-      font-size: 0.65rem;
-      color: var(--text-3);
-      font-weight: 500;
-      width: 72px;
-      flex-shrink: 0;
-    }
+    .ml-date { font-size: 0.64rem; font-weight: 500; color: var(--t3); width: 68px; flex-shrink: 0; }
 
     .ml-teams {
-      flex: 1;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-1);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
+      flex: 1; font-size: 0.76rem; color: var(--t2);
+      display: flex; align-items: center; gap: 0.3rem;
     }
-    .ml-teams .winner { font-weight: 700; color: var(--text-0); }
+    .ml-teams .w { font-weight: 700; color: var(--t0); }
 
     .ml-score {
-      background: var(--bg-input);
-      border-radius: 6px;
-      padding: 0.2rem 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: var(--text-0);
-      letter-spacing: 0.02em;
-      flex-shrink: 0;
+      background: var(--bg-input); border-radius: 6px;
+      padding: 0.2rem 0.55rem;
+      font-size: 0.74rem; font-weight: 800; color: var(--t0);
+      letter-spacing: 0.04em; flex-shrink: 0;
     }
 
     .ml-comp {
-      font-size: 0.6rem;
-      color: var(--text-3);
-      width: 64px;
-      text-align: right;
-      flex-shrink: 0;
+      font-size: 0.6rem; font-weight: 500; color: var(--t3);
+      width: 60px; text-align: right; flex-shrink: 0;
     }
 
-    /* ============ ODDS MARKET ============ */
-    .market { margin-bottom: 0.75rem; }
+    /* =========================================================
+       ODDS MARKETS
+    ========================================================= */
+    .market { margin-bottom: 0.85rem; }
     .market:last-child { margin-bottom: 0; }
 
-    .market-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.4rem;
+    .mkt-label {
+      font-size: 0.63rem; font-weight: 700; color: var(--t3);
+      text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.4rem;
     }
 
-    .market-row {
-      display: flex;
-      gap: 0.35rem;
-    }
+    .mkt-row { display: flex; gap: 0.35rem; }
 
-    .market-btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--bg-card-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.6rem 0.75rem;
-      cursor: pointer;
-      transition: all 0.15s;
+    .mkt-btn {
+      flex: 1; display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg-muted); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 0.6rem 0.75rem;
+      cursor: pointer; transition: all 0.15s;
     }
-    .market-btn:hover {
-      border-color: var(--accent);
-      background: var(--accent-dim);
+    .mkt-btn:hover {
+      border-color: var(--accent); background: var(--accent-dim);
     }
+    .mkt-btn-label { font-size: 0.7rem; color: var(--t1); font-weight: 500; }
+    .mkt-btn-val { font-size: 0.82rem; font-weight: 800; color: var(--t0); }
 
-    .market-btn-label {
-      font-size: 0.72rem;
-      color: var(--text-2);
-      font-weight: 500;
-    }
-
-    .market-btn-odds {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: var(--text-0);
-    }
-
-    /* ============ KEY PLAYERS ============ */
+    /* =========================================================
+       PLAYERS
+    ========================================================= */
     .player-row {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      display: flex; align-items: center; gap: 0.65rem;
       padding: 0.6rem 0;
     }
     .player-row + .player-row { border-top: 1px solid var(--border-subtle); }
 
     .player-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--bg-input);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      flex-shrink: 0;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--bg-input); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0;
     }
 
-    .player-info { flex: 1; }
-    .player-name { font-size: 0.78rem; font-weight: 600; color: var(--text-0); }
-    .player-detail { font-size: 0.65rem; color: var(--text-3); font-weight: 500; margin-top: 0.1rem; }
+    .player-info { flex: 1; min-width: 0; }
+    .player-name { font-size: 0.78rem; font-weight: 700; color: var(--t0); }
+    .player-detail { font-size: 0.64rem; color: var(--t2); font-weight: 500; margin-top: 0.1rem; }
 
-    .player-stat {
-      text-align: right;
-      flex-shrink: 0;
-    }
-    .player-stat-val { font-size: 0.85rem; font-weight: 800; color: var(--text-0); }
-    .player-stat-label { font-size: 0.6rem; color: var(--text-3); font-weight: 500; }
+    .player-stat { text-align: right; flex-shrink: 0; }
+    .player-stat-val { font-size: 0.88rem; font-weight: 800; color: var(--t0); }
+    .player-stat-label { font-size: 0.6rem; color: var(--t3); font-weight: 500; }
 
-    /* ============ SIDEBAR CTA ============ */
-    .side-cta {
-      background: linear-gradient(145deg, var(--accent), #B8102F);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem 1.25rem;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .side-cta-eyebrow {
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 0.5rem;
-    }
-    .side-cta-title {
-      font-size: 1.3rem;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.2;
-      margin-bottom: 0.5rem;
-    }
-    .side-cta-sub {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 1rem;
-      line-height: 1.5;
-    }
-    .side-cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      background: #fff;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 800;
-      padding: 0.65rem 1.5rem;
-      border-radius: 100px;
-      transition: all 0.15s;
-    }
-    .side-cta-btn:hover { transform: scale(1.03); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-
-    /* ============ PREVIEW CARD ============ */
+    /* =========================================================
+       PREVIEW TEXT
+    ========================================================= */
     .preview-text {
-      font-size: 0.82rem;
-      color: var(--text-1);
-      line-height: 1.75;
+      font-size: 0.82rem; color: var(--t1); line-height: 1.75;
     }
+    .preview-text + .preview-text { margin-top: 0.65rem; }
 
     .preview-highlight {
-      background: var(--accent-dim);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 0.75rem 1rem;
-      margin-top: 0.75rem;
-      font-size: 0.78rem;
-      color: var(--text-1);
-      font-weight: 500;
-      line-height: 1.6;
+      background: var(--accent-dim); border-left: 3px solid var(--accent);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      padding: 0.75rem 1rem; margin-top: 0.85rem;
+      font-size: 0.78rem; color: var(--t1); font-weight: 500; line-height: 1.65;
     }
 
-    /* ============ FOOTER ============ */
+    /* =========================================================
+       SIDEBAR CTA
+    ========================================================= */
+    .side-cta {
+      background: linear-gradient(150deg, #E41E3F 0%, #B21130 100%);
+      border-radius: var(--r-xl); padding: 1.5rem 1.25rem;
+      text-align: center; box-shadow: var(--shadow-md);
+    }
+    .side-cta-eyebrow {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.65);
+      margin-bottom: 0.4rem;
+    }
+    .side-cta-headline {
+      font-size: 1.35rem; font-weight: 900; line-height: 1.2;
+      color: #fff; letter-spacing: -0.03em; margin-bottom: 0.35rem;
+    }
+    .side-cta-sub {
+      font-size: 0.7rem; color: rgba(255,255,255,0.65);
+      margin-bottom: 1.1rem; line-height: 1.5;
+    }
+    .side-cta-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      background: #fff; color: var(--accent);
+      font-size: 0.78rem; font-weight: 800;
+      padding: 0.65rem 1.6rem; border-radius: 100px;
+      transition: all 0.15s;
+    }
+    .side-cta-btn:hover { transform: scale(1.03); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+
+    /* =========================================================
+       VENUE ROWS
+    ========================================================= */
+    .venue-row {
+      display: flex; align-items: center;
+      padding: 0.5rem 0; justify-content: space-between;
+    }
+    .venue-row + .venue-row { border-top: 1px solid var(--border-subtle); }
+    .venue-key { font-size: 0.7rem; color: var(--t2); font-weight: 500; }
+    .venue-val { font-size: 0.76rem; font-weight: 700; color: var(--t0); }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
     footer {
-      max-width: 1080px;
-      margin: 0 auto;
+      max-width: 1100px; margin: 0 auto;
       padding: 1.5rem 1rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
+      border-top: 1px solid var(--border); text-align: center;
     }
-    .footer-brand {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: var(--text-2);
-      margin-bottom: 0.5rem;
-    }
+    .footer-brand { font-size: 0.9rem; font-weight: 900; color: var(--t2); margin-bottom: 0.5rem; }
     .footer-brand span { color: var(--accent); }
-    .footer-disclaimer {
-      font-size: 0.65rem;
-      color: var(--text-3);
-      max-width: 560px;
-      margin: 0 auto;
-      line-height: 1.7;
+    .footer-disc {
+      font-size: 0.64rem; color: var(--t3);
+      max-width: 540px; margin: 0 auto; line-height: 1.7;
     }
     .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.25rem;
-      margin-top: 0.75rem;
-      flex-wrap: wrap;
+      display: flex; justify-content: center;
+      gap: 1.25rem; margin-top: 0.75rem; flex-wrap: wrap;
     }
-    .footer-links a {
-      font-size: 0.68rem;
-      color: var(--text-3);
-      transition: color 0.15s;
+    .footer-links a { font-size: 0.67rem; color: var(--t3); transition: color 0.15s; }
+    .footer-links a:hover { color: var(--t1); }
+
+    /* =========================================================
+       MOBILE STICKY BAR
+    ========================================================= */
+    .mob-bar {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+      background: var(--bg-card); border-top: 1px solid var(--border);
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+      padding: 0.65rem 1rem; align-items: center; gap: 0.75rem;
     }
-    .footer-links a:hover { color: var(--text-1); }
-
-    /* ============ MOBILE STICKY ============ */
-    .mobile-bar {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 99;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      padding: 0.6rem 1rem;
-      align-items: center;
-      gap: 0.6rem;
-      backdrop-filter: blur(16px);
+    .mob-bar-info { flex: 1; }
+    .mob-bar-label { font-size: 0.63rem; color: var(--t3); font-weight: 500; }
+    .mob-bar-val { font-size: 0.88rem; font-weight: 800; color: var(--t0); }
+    .mob-bar-btn {
+      background: var(--accent); color: #fff;
+      font-size: 0.78rem; font-weight: 700;
+      padding: 0.65rem 1.25rem; border-radius: var(--r-sm);
+      white-space: nowrap; transition: filter 0.15s;
     }
+    .mob-bar-btn:hover { filter: brightness(1.08); }
 
-    .mobile-bar-info { flex: 1; }
-    .mobile-bar-label { font-size: 0.65rem; color: var(--text-3); font-weight: 500; }
-    .mobile-bar-odds { font-size: 0.9rem; font-weight: 800; }
-
-    .mobile-bar-btn {
-      background: var(--accent);
-      color: #fff;
-      padding: 0.65rem 1.25rem;
-      border-radius: var(--radius-sm);
-      font-size: 0.78rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    /* ============ RESPONSIVE ============ */
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
     @media (max-width: 860px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .page { grid-template-columns: 1fr; }
       .match-header { grid-column: 1; }
       .sidebar { order: 10; }
-      .mobile-bar { display: flex; }
-      body { padding-bottom: 72px; }
+      .mob-bar { display: flex; }
+      body { padding-bottom: 74px; }
     }
 
     @media (max-width: 600px) {
-      .layout { padding: 0.5rem; gap: 0.5rem; }
-      .match-header-body { padding: 1.5rem 1rem 1rem; }
-      .mh-flag { font-size: 2.75rem; }
-      .mh-team-name { font-size: 0.9rem; }
+      .page { padding: 0.75rem 0.5rem; gap: 0.75rem; }
+      .mh-body { padding: 1.5rem 0.75rem 1rem; }
+      .mh-flag { font-size: 3rem; }
+      .mh-name { font-size: 0.95rem; }
       .mh-center { padding: 0 1rem; }
-      .mh-time { font-size: 1.3rem; }
-      .mh-odds-strip { flex-direction: row; }
-      .card-body { padding: 0.75rem 0.85rem; }
+      .mh-kick { font-size: 1.3rem; }
+      .sn { flex: 0 0 80px; font-size: 0.62rem; }
+      .sv { width: 36px; font-size: 0.72rem; }
       .topbar-cta { display: none; }
-      .stat-name { width: 80px; font-size: 0.65rem; }
-      .form-team-info { width: 80px; }
       .ml-comp { display: none; }
-      .ml-date { width: 56px; font-size: 0.6rem; }
+      .ml-date { width: 52px; }
+      .form-meta { min-width: 78px; }
     }
   </style>
 </head>
@@ -824,7 +613,7 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="topbar-left">
-      <a href="index.html" class="topbar-back">
+      <a href="index.html" class="topbar-back" aria-label="Back">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </a>
       <a href="index.html" class="topbar-brand">YOU<span>WIN</span></a>
@@ -840,62 +629,63 @@
   </div>
 </div>
 
-<!-- MATCH HEADER -->
-<div class="layout">
+<div class="page">
+
+  <!-- ── MATCH HEADER ── -->
   <div class="match-header">
-    <div class="match-header-top">
-      <div class="mh-tournament">
-        <div class="mh-tournament-icon">⚽</div>
-        FIFA World Cup 2026 &bull; Group Stage
+    <div class="mh-top">
+      <div class="mh-tourney">
+        <div class="mh-tourney-badge">⚽</div>
+        FIFA World Cup 2026 &bull; Group Stage &bull; Group C
       </div>
-      <div class="mh-status">
-        <span class="mh-status-dot"></span>
-        Upcoming
-      </div>
+      <div class="mh-status"><span class="mh-dot"></span> Upcoming</div>
     </div>
 
-    <div class="match-header-body">
+    <div class="mh-body">
       <div class="mh-team">
         <div class="mh-flag">🇦🇷</div>
-        <div class="mh-team-name">Argentina</div>
-        <div class="mh-team-sub">FIFA #1 &bull; Defending Champions</div>
+        <div class="mh-name">Argentina</div>
+        <div class="mh-sub">FIFA #1 · Defending Champions</div>
       </div>
 
       <div class="mh-center">
-        <div class="mh-time">21:00</div>
-        <div class="mh-date">Sat, 14 June 2026</div>
+        <div class="mh-kick">21:00</div>
+        <div class="mh-date">Saturday, 14 June 2026</div>
         <div class="mh-venue">MetLife Stadium, New Jersey</div>
       </div>
 
       <div class="mh-team">
         <div class="mh-flag">🇫🇷</div>
-        <div class="mh-team-name">France</div>
-        <div class="mh-team-sub">FIFA #2 &bull; 2018 World Champions</div>
+        <div class="mh-name">France</div>
+        <div class="mh-sub">FIFA #2 · 2018 World Champions</div>
       </div>
     </div>
 
-    <div class="match-header-footer">
-      <div class="mh-odds-strip">
-        <a href="https://youwin.com/register?ref=21331414" class="mh-odd" target="_blank" rel="noopener">
-          <span class="mh-odd-label">1</span>
-          <span class="mh-odd-val">2.10</span>
+    <div class="mh-foot">
+      <div class="odds-strip">
+        <a href="https://youwin.com/register?ref=21331414" class="odds-btn" target="_blank" rel="noopener">
+          <span class="odds-btn-label">Home Win</span>
+          <span class="odds-btn-val">2.10</span>
+          <span class="odds-btn-team">Argentina</span>
         </a>
-        <a href="https://youwin.com/register?ref=21331414" class="mh-odd" target="_blank" rel="noopener">
-          <span class="mh-odd-label">X</span>
-          <span class="mh-odd-val">3.40</span>
+        <a href="https://youwin.com/register?ref=21331414" class="odds-btn" target="_blank" rel="noopener">
+          <span class="odds-btn-label">Draw</span>
+          <span class="odds-btn-val">3.40</span>
+          <span class="odds-btn-team">After 90 min</span>
         </a>
-        <a href="https://youwin.com/register?ref=21331414" class="mh-odd" target="_blank" rel="noopener">
-          <span class="mh-odd-label">2</span>
-          <span class="mh-odd-val">3.20</span>
+        <a href="https://youwin.com/register?ref=21331414" class="odds-btn" target="_blank" rel="noopener">
+          <span class="odds-btn-label">Away Win</span>
+          <span class="odds-btn-val">3.20</span>
+          <span class="odds-btn-team">France</span>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
-  <div class="main">
+  <!-- ── MAIN ── -->
+  <div class="main" style="display:flex;flex-direction:column;gap:1rem;">
 
-    <!-- TABS -->
+    <!-- Tabs -->
     <div class="tabs">
       <div class="tab active">Preview</div>
       <div class="tab">Statistics</div>
@@ -904,41 +694,31 @@
       <div class="tab">Form</div>
     </div>
 
-    <!-- MATCH PREVIEW -->
+    <!-- Match Preview -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--blue-dim);">📋</span>
-          Match Preview
-        </div>
+        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">📋</span> Match Preview</div>
       </div>
       <div class="card-body">
-        <p class="preview-text">
-          A rematch of the epic 2022 World Cup Final — the greatest final in tournament history — where Argentina edged France in a penalty shootout after a 3–3 thriller. Messi and Mbappe renew their personal duel on the grandest stage of all.
-        </p>
-        <p class="preview-text" style="margin-top:0.75rem;">
-          Argentina enter as heavy favourites, backed by a 36-match unbeaten run and a squad brimming with confidence from their Copa America 2024 triumph. France, meanwhile, boast arguably the most lethal attacking frontline in world football with Mbappe, Dembele, and emerging star Barcola.
-        </p>
+        <p class="preview-text">A rematch of the epic 2022 World Cup Final — the greatest final in tournament history — where Argentina edged France in a penalty shootout after a stunning 3–3 draw. Messi and Mbappe renew their personal duel on the grandest stage.</p>
+        <p class="preview-text">Argentina enter as favourites backed by a 36-match unbeaten run and back-to-back continental triumphs. France carry the most feared attack in world football, with Mbappe, Dembele, and Barcola capable of unlocking any defence on their day.</p>
         <div class="preview-highlight">
-          <strong>Key Duel:</strong> Messi (198 caps, 112 goals) vs Mbappe (88 caps, 47 goals) — the two best players of their generation go head to head once more.
+          <strong>Key Duel:</strong> Messi (198 caps, 112 goals) vs Mbappe (88 caps, 47 goals) — the two defining players of their generation clash once more at the World Cup.
         </div>
       </div>
     </div>
 
-    <!-- WIN PROBABILITY -->
+    <!-- Win Probability -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--green-dim);">📊</span>
-          Win Probability
-        </div>
-        <span class="card-badge">Based on odds</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">📊</span> Win Probability</div>
+        <span class="card-chip">Based on Youwin odds</span>
       </div>
       <div class="card-body">
         <div class="prob-bar">
-          <div class="prob-seg home" style="width:42%;">42%</div>
-          <div class="prob-seg draw" style="width:26%;">26%</div>
-          <div class="prob-seg away" style="width:32%;">32%</div>
+          <div class="ps home" style="width:42%;">42%</div>
+          <div class="ps draw" style="width:26%;">26%</div>
+          <div class="ps away" style="width:32%;">32%</div>
         </div>
         <div class="prob-labels">
           <span>🇦🇷 Argentina</span>
@@ -948,88 +728,87 @@
       </div>
     </div>
 
-    <!-- TEAM COMPARISON -->
+    <!-- Team Comparison -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--accent-dim);">⚔️</span>
-          Team Comparison
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">⚔️</span> Team Comparison</div>
+        <div style="display:flex;gap:1rem;font-size:0.65rem;font-weight:700;">
+          <span style="color:var(--blue);">● ARG</span>
+          <span style="color:var(--accent);">● FRA</span>
         </div>
       </div>
       <div class="card-body">
+        <!-- FIFA Ranking -->
         <div class="stat-row">
-          <span class="stat-val highlight">1</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:95%;"></div></div>
-          <span class="stat-name">FIFA Ranking</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:90%;"></div></div>
-          <span class="stat-val highlight">2</span>
+          <span class="sv lead">1</span>
+          <div class="sh"><div class="sh-fill" style="width:95%;"></div></div>
+          <span class="sn">FIFA Ranking</span>
+          <div class="sa"><div class="sa-fill" style="width:90%;"></div></div>
+          <span class="sv">2</span>
         </div>
-
+        <!-- ELO Rating -->
         <div class="stat-row">
-          <span class="stat-val">2102</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:88%;"></div></div>
-          <span class="stat-name">ELO Rating</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:82%;"></div></div>
-          <span class="stat-val">2046</span>
+          <span class="sv lead">2102</span>
+          <div class="sh"><div class="sh-fill" style="width:88%;"></div></div>
+          <span class="sn">ELO Rating</span>
+          <div class="sa"><div class="sa-fill" style="width:80%;"></div></div>
+          <span class="sv">2046</span>
         </div>
-
+        <!-- Squad Value -->
         <div class="stat-row">
-          <span class="stat-val">€880M</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:70%;"></div></div>
-          <span class="stat-name">Squad Value</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:95%;"></div></div>
-          <span class="stat-val highlight">€1.2B</span>
+          <span class="sv">€880M</span>
+          <div class="sh"><div class="sh-fill" style="width:68%;"></div></div>
+          <span class="sn">Squad Value</span>
+          <div class="sa"><div class="sa-fill" style="width:95%;"></div></div>
+          <span class="sv" style="color:var(--accent);">€1.2B</span>
         </div>
-
+        <!-- Goals per game -->
         <div class="stat-row">
-          <span class="stat-val">28.2</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:65%;"></div></div>
-          <span class="stat-name">Avg. Age</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:55%;"></div></div>
-          <span class="stat-val">26.8</span>
+          <span class="sv lead">2.4</span>
+          <div class="sh"><div class="sh-fill" style="width:80%;"></div></div>
+          <span class="sn">Goals / Match</span>
+          <div class="sa"><div class="sa-fill" style="width:70%;"></div></div>
+          <span class="sv">2.1</span>
         </div>
-
+        <!-- Conceded -->
         <div class="stat-row">
-          <span class="stat-val highlight">2.4</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:80%;"></div></div>
-          <span class="stat-name">Goals/Match</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:73%;"></div></div>
-          <span class="stat-val">2.1</span>
+          <span class="sv lead">0.4</span>
+          <div class="sh"><div class="sh-fill" style="width:30%;"></div></div>
+          <span class="sn">Conceded / Match</span>
+          <div class="sa"><div class="sa-fill" style="width:52%;"></div></div>
+          <span class="sv">0.7</span>
         </div>
-
+        <!-- Possession -->
         <div class="stat-row">
-          <span class="stat-val">0.4</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:30%;"></div></div>
-          <span class="stat-name">Conceded/Match</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:50%;"></div></div>
-          <span class="stat-val">0.7</span>
+          <span class="sv lead">62%</span>
+          <div class="sh"><div class="sh-fill" style="width:62%;"></div></div>
+          <span class="sn">Possession</span>
+          <div class="sa"><div class="sa-fill" style="width:58%;"></div></div>
+          <span class="sv">58%</span>
         </div>
-
+        <!-- Clean sheets -->
         <div class="stat-row">
-          <span class="stat-val highlight">62%</span>
-          <div class="stat-bar-half left"><div class="stat-bar-fill home" style="width:62%;"></div></div>
-          <span class="stat-name">Possession</span>
-          <div class="stat-bar-half"><div class="stat-bar-fill away" style="width:58%;"></div></div>
-          <span class="stat-val">58%</span>
+          <span class="sv lead">8</span>
+          <div class="sh"><div class="sh-fill" style="width:73%;"></div></div>
+          <span class="sn">Clean Sheets</span>
+          <div class="sa"><div class="sa-fill" style="width:55%;"></div></div>
+          <span class="sv">6</span>
         </div>
       </div>
     </div>
 
-    <!-- FORM -->
+    <!-- Recent Form -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--green-dim);">📈</span>
-          Recent Form
-        </div>
-        <span class="card-badge">Last 5</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">📈</span> Recent Form</div>
+        <span class="card-chip">Last 5 matches</span>
       </div>
       <div class="card-body">
         <div class="form-section">
-          <div class="form-team-row">
-            <div class="form-team-info">
-              <span class="form-team-flag">🇦🇷</span>
-              <span class="form-team-label">Argentina</span>
+          <div class="form-row">
+            <div class="form-meta">
+              <span class="form-flag">🇦🇷</span>
+              <span class="form-label">Argentina</span>
             </div>
             <div class="form-badges">
               <div class="fb w" title="vs Ecuador 3–0">W</div>
@@ -1038,13 +817,12 @@
               <div class="fb w" title="vs Chile 1–0">W</div>
               <div class="fb d" title="vs Paraguay 0–0">D</div>
             </div>
-            <span class="form-summary">W4 D1 L0</span>
+            <span class="form-record">W4 D1 L0</span>
           </div>
-
-          <div class="form-team-row">
-            <div class="form-team-info">
-              <span class="form-team-flag">🇫🇷</span>
-              <span class="form-team-label">France</span>
+          <div class="form-row">
+            <div class="form-meta">
+              <span class="form-flag">🇫🇷</span>
+              <span class="form-label">France</span>
             </div>
             <div class="form-badges">
               <div class="fb w" title="vs Belgium 2–1">W</div>
@@ -1053,7 +831,7 @@
               <div class="fb w" title="vs Netherlands 3–1">W</div>
               <div class="fb l" title="vs Spain 0–2">L</div>
             </div>
-            <span class="form-summary">W3 D1 L1</span>
+            <span class="form-record">W3 D1 L1</span>
           </div>
         </div>
       </div>
@@ -1062,331 +840,276 @@
     <!-- H2H -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--yellow-dim);">🤝</span>
-          Head to Head
-        </div>
-        <span class="card-badge">12 matches</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">🤝</span> Head to Head</div>
+        <span class="card-chip">12 matches total</span>
       </div>
       <div class="card-body">
-        <!-- H2H Summary bar -->
-        <div class="prob-bar" style="height:28px; margin-bottom: 1rem;">
-          <div class="prob-seg home" style="width:50%;">6 wins</div>
-          <div class="prob-seg draw" style="width:25%;">3</div>
-          <div class="prob-seg away" style="width:25%;">3 wins</div>
+        <div class="prob-bar" style="height:26px; margin-bottom:0.85rem;">
+          <div class="ps home" style="width:50%;">6 wins</div>
+          <div class="ps draw" style="width:25%;">3</div>
+          <div class="ps away" style="width:25%;">3 wins</div>
         </div>
-        <div class="prob-labels" style="margin-bottom: 0.75rem;">
+        <div class="prob-labels" style="margin-bottom:0.9rem;">
           <span>🇦🇷 Argentina</span>
           <span>Draws</span>
           <span>France 🇫🇷</span>
         </div>
 
-        <!-- Recent meetings -->
-        <div class="match-list-item">
+        <div class="ml-item">
           <span class="ml-date">Dec 2022</span>
-          <div class="ml-teams">
-            <span class="winner">Argentina</span>
-            <span>-</span>
-            <span>France</span>
-          </div>
+          <div class="ml-teams"><span class="w">Argentina</span><span>–</span><span>France</span></div>
           <span class="ml-score">3 – 3*</span>
           <span class="ml-comp">WC Final</span>
         </div>
-
-        <div class="match-list-item">
+        <div class="ml-item">
           <span class="ml-date">Jun 2018</span>
-          <div class="ml-teams">
-            <span>Argentina</span>
-            <span>-</span>
-            <span class="winner">France</span>
-          </div>
+          <div class="ml-teams"><span>Argentina</span><span>–</span><span class="w">France</span></div>
           <span class="ml-score">3 – 4</span>
           <span class="ml-comp">WC R16</span>
         </div>
-
-        <div class="match-list-item">
+        <div class="ml-item">
           <span class="ml-date">Mar 2009</span>
-          <div class="ml-teams">
-            <span>France</span>
-            <span>-</span>
-            <span>Argentina</span>
-          </div>
+          <div class="ml-teams"><span>France</span><span>–</span><span class="w">Argentina</span></div>
           <span class="ml-score">0 – 2</span>
           <span class="ml-comp">Friendly</span>
         </div>
-
-        <div class="match-list-item">
+        <div class="ml-item">
           <span class="ml-date">Feb 2007</span>
-          <div class="ml-teams">
-            <span class="winner">France</span>
-            <span>-</span>
-            <span>Argentina</span>
-          </div>
+          <div class="ml-teams"><span class="w">France</span><span>–</span><span>Argentina</span></div>
           <span class="ml-score">1 – 0</span>
           <span class="ml-comp">Friendly</span>
         </div>
+        <div style="margin-top:0.6rem;font-size:0.65rem;color:var(--t3);">* Argentina won 4–2 on penalties</div>
       </div>
     </div>
 
-    <!-- ODDS MARKETS -->
+    <!-- Betting Markets -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--accent-dim);">💰</span>
-          Betting Markets
-        </div>
-        <span class="card-badge">Youwin</span>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">💰</span> Betting Markets</div>
+        <span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">Youwin</span>
       </div>
       <div class="card-body">
         <div class="market">
-          <div class="market-label">Match Result</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Argentina</span>
-              <span class="market-btn-odds">2.10</span>
+          <div class="mkt-label">Match Result (1X2)</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Argentina</span><span class="mkt-btn-val">2.10</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Draw</span>
-              <span class="market-btn-odds">3.40</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Draw</span><span class="mkt-btn-val">3.40</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">France</span>
-              <span class="market-btn-odds">3.20</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">France</span><span class="mkt-btn-val">3.20</span>
             </a>
           </div>
         </div>
 
         <div class="market">
-          <div class="market-label">Both Teams to Score</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Yes</span>
-              <span class="market-btn-odds">1.75</span>
+          <div class="mkt-label">Both Teams to Score</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Yes</span><span class="mkt-btn-val">1.75</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">No</span>
-              <span class="market-btn-odds">2.05</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">No</span><span class="mkt-btn-val">2.05</span>
             </a>
           </div>
         </div>
 
         <div class="market">
-          <div class="market-label">Total Goals</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Over 2.5</span>
-              <span class="market-btn-odds">1.90</span>
+          <div class="mkt-label">Total Goals</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Over 2.5</span><span class="mkt-btn-val">1.90</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Under 2.5</span>
-              <span class="market-btn-odds">1.95</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Under 2.5</span><span class="mkt-btn-val">1.95</span>
             </a>
-          </div>
-        </div>
-
-        <div class="market">
-          <div class="market-label">Anytime Goalscorer</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Messi</span>
-              <span class="market-btn-odds">3.40</span>
-            </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Mbappe</span>
-              <span class="market-btn-odds">2.30</span>
-            </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Lautaro</span>
-              <span class="market-btn-odds">3.10</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Over 3.5</span><span class="mkt-btn-val">2.80</span>
             </a>
           </div>
         </div>
 
         <div class="market">
-          <div class="market-label">Correct Score</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">1 – 1</span>
-              <span class="market-btn-odds">6.50</span>
+          <div class="mkt-label">Anytime Goalscorer</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Messi</span><span class="mkt-btn-val">3.40</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">2 – 1</span>
-              <span class="market-btn-odds">8.00</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Mbappe</span><span class="mkt-btn-val">2.30</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">1 – 2</span>
-              <span class="market-btn-odds">10.00</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Lautaro</span><span class="mkt-btn-val">3.10</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="market">
+          <div class="mkt-label">Correct Score (Top Picks)</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">1 – 1</span><span class="mkt-btn-val">6.50</span>
+            </a>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">2 – 1</span><span class="mkt-btn-val">8.00</span>
+            </a>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">1 – 2</span><span class="mkt-btn-val">10.00</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="market">
+          <div class="mkt-label">Double Chance</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">1X (ARG or Draw)</span><span class="mkt-btn-val">1.30</span>
+            </a>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">X2 (FRA or Draw)</span><span class="mkt-btn-val">1.65</span>
             </a>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
+  </div><!-- /main -->
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
+  <!-- ── SIDEBAR ── -->
+  <div class="sidebar" style="display:flex;flex-direction:column;gap:1rem;">
 
-    <!-- CTA -->
+    <!-- CTA Bonus -->
     <div class="side-cta">
       <div class="side-cta-eyebrow">Welcome Offer</div>
-      <div class="side-cta-title">100% Bonus<br>up to €100</div>
-      <div class="side-cta-sub">New customers only &bull; Min. deposit €10</div>
-      <a href="https://youwin.com/register?ref=21331414" class="side-cta-btn" target="_blank" rel="noopener">
-        Claim Bonus →
-      </a>
+      <div class="side-cta-headline">100% Bonus<br>up to €100</div>
+      <div class="side-cta-sub">New customers only · Min. deposit €10 · T&amp;Cs apply</div>
+      <a href="https://youwin.com/register?ref=21331414" class="side-cta-btn" target="_blank" rel="noopener">Claim Bonus →</a>
     </div>
 
-    <!-- KEY PLAYERS -->
+    <!-- Key Players -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--blue-dim);">⭐</span>
-          Key Players
-        </div>
+        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">⭐</span> Key Players</div>
       </div>
       <div class="card-body">
         <div class="player-row">
           <div class="player-avatar">🇦🇷</div>
           <div class="player-info">
             <div class="player-name">Lionel Messi</div>
-            <div class="player-detail">Forward &bull; Inter Miami</div>
+            <div class="player-detail">Forward · Inter Miami</div>
           </div>
           <div class="player-stat">
             <div class="player-stat-val">112</div>
-            <div class="player-stat-label">Goals</div>
+            <div class="player-stat-label">Intl. Goals</div>
           </div>
         </div>
-
         <div class="player-row">
           <div class="player-avatar">🇫🇷</div>
           <div class="player-info">
             <div class="player-name">Kylian Mbappe</div>
-            <div class="player-detail">Forward &bull; Real Madrid</div>
+            <div class="player-detail">Forward · Real Madrid</div>
           </div>
           <div class="player-stat">
             <div class="player-stat-val">47</div>
-            <div class="player-stat-label">Goals</div>
+            <div class="player-stat-label">Intl. Goals</div>
           </div>
         </div>
-
         <div class="player-row">
           <div class="player-avatar">🇦🇷</div>
           <div class="player-info">
             <div class="player-name">Lautaro Martinez</div>
-            <div class="player-detail">Forward &bull; Inter Milan</div>
+            <div class="player-detail">Forward · Inter Milan</div>
           </div>
           <div class="player-stat">
             <div class="player-stat-val">29</div>
-            <div class="player-stat-label">Goals</div>
+            <div class="player-stat-label">Intl. Goals</div>
           </div>
         </div>
-
         <div class="player-row">
           <div class="player-avatar">🇫🇷</div>
           <div class="player-info">
             <div class="player-name">Antoine Griezmann</div>
-            <div class="player-detail">Midfielder &bull; Atletico</div>
+            <div class="player-detail">Midfielder · Atletico Madrid</div>
           </div>
           <div class="player-stat">
             <div class="player-stat-val">44</div>
-            <div class="player-stat-label">Goals</div>
+            <div class="player-stat-label">Intl. Goals</div>
           </div>
         </div>
-
         <div class="player-row">
           <div class="player-avatar">🇦🇷</div>
           <div class="player-info">
-            <div class="player-name">Emi Martinez</div>
-            <div class="player-detail">Goalkeeper &bull; Aston Villa</div>
+            <div class="player-name">Emiliano Martinez</div>
+            <div class="player-detail">Goalkeeper · Aston Villa</div>
           </div>
           <div class="player-stat">
             <div class="player-stat-val">42%</div>
-            <div class="player-stat-label">Clean Sheets</div>
+            <div class="player-stat-label">Clean Sheet %</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- VENUE -->
+    <!-- Venue -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--green-dim);">🏟️</span>
-          Venue
-        </div>
+        <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">🏟️</span> Venue Info</div>
       </div>
       <div class="card-body">
-        <div style="font-size:0.85rem;font-weight:700;margin-bottom:0.2rem;">MetLife Stadium</div>
-        <div style="font-size:0.72rem;color:var(--text-2);margin-bottom:0.6rem;">East Rutherford, New Jersey, USA</div>
-        <div class="stat-row" style="border:none;padding:0.4rem 0;">
-          <span style="font-size:0.7rem;color:var(--text-3);font-weight:500;">Capacity</span>
-          <span style="font-size:0.78rem;font-weight:700;margin-left:auto;">82,500</span>
-        </div>
-        <div class="stat-row" style="padding:0.4rem 0;">
-          <span style="font-size:0.7rem;color:var(--text-3);font-weight:500;">Surface</span>
-          <span style="font-size:0.78rem;font-weight:700;margin-left:auto;">Artificial Turf</span>
-        </div>
-        <div class="stat-row" style="padding:0.4rem 0;">
-          <span style="font-size:0.7rem;color:var(--text-3);font-weight:500;">Timezone</span>
-          <span style="font-size:0.78rem;font-weight:700;margin-left:auto;">ET (UTC-4)</span>
-        </div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--t0);margin-bottom:0.15rem;">MetLife Stadium</div>
+        <div style="font-size:0.72rem;color:var(--t2);margin-bottom:0.65rem;">East Rutherford, New Jersey, USA</div>
+        <div class="venue-row"><span class="venue-key">Capacity</span><span class="venue-val">82,500</span></div>
+        <div class="venue-row"><span class="venue-key">Surface</span><span class="venue-val">Artificial Turf</span></div>
+        <div class="venue-row"><span class="venue-key">Kick-off (local)</span><span class="venue-val">15:00 ET</span></div>
+        <div class="venue-row"><span class="venue-key">Kick-off (CET)</span><span class="venue-val">21:00 CET</span></div>
       </div>
     </div>
 
-    <!-- QUICK ODDS -->
+    <!-- Half-Time Quick Bet -->
     <div class="card">
       <div class="card-head">
-        <div class="card-title">
-          <span class="card-title-icon" style="background:var(--accent-dim);">⚡</span>
-          Quick Bet
-        </div>
+        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">⚡</span> Quick Bet</div>
       </div>
       <div class="card-body">
         <div class="market">
-          <div class="market-label">Double Chance</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">1X</span>
-              <span class="market-btn-odds">1.30</span>
+          <div class="mkt-label">Half-Time Result</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">ARG</span><span class="mkt-btn-val">2.80</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">X2</span>
-              <span class="market-btn-odds">1.65</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Draw</span><span class="mkt-btn-val">2.10</span>
+            </a>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">FRA</span><span class="mkt-btn-val">3.80</span>
             </a>
           </div>
         </div>
-
         <div class="market">
-          <div class="market-label">Half-Time Result</div>
-          <div class="market-row">
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">ARG</span>
-              <span class="market-btn-odds">2.80</span>
+          <div class="mkt-label">First Goal Scorer</div>
+          <div class="mkt-row">
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Mbappe 1st</span><span class="mkt-btn-val">5.50</span>
             </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">Draw</span>
-              <span class="market-btn-odds">2.10</span>
-            </a>
-            <a href="https://youwin.com/register?ref=21331414" class="market-btn" target="_blank" rel="noopener">
-              <span class="market-btn-label">FRA</span>
-              <span class="market-btn-odds">3.80</span>
+            <a href="https://youwin.com/register?ref=21331414" class="mkt-btn" target="_blank" rel="noopener">
+              <span class="mkt-btn-label">Messi 1st</span><span class="mkt-btn-val">7.00</span>
             </a>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /sidebar -->
+
+</div><!-- /page -->
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">YOU<span>WIN</span></div>
-  <p class="footer-disclaimer">
-    18+ only. Please gamble responsibly. Youwin is licensed and regulated. Betting involves risk — only bet what you can afford to lose.
-    If gambling becomes a problem, visit <strong>begambleaware.org</strong>.
-  </p>
+  <p class="footer-disc">18+ only. Please gamble responsibly. Youwin is licensed and regulated. Betting involves risk — only bet what you can afford to lose. If gambling becomes a problem, visit <strong>begambleaware.org</strong>.</p>
   <div class="footer-links">
     <a href="#">Terms &amp; Conditions</a>
     <a href="#">Privacy Policy</a>
@@ -1395,13 +1118,13 @@
   </div>
 </footer>
 
-<!-- MOBILE STICKY -->
-<div class="mobile-bar">
-  <div class="mobile-bar-info">
-    <div class="mobile-bar-label">Argentina vs France &bull; 1X2</div>
-    <div class="mobile-bar-odds">2.10 &bull; 3.40 &bull; 3.20</div>
+<!-- MOBILE STICKY BAR -->
+<div class="mob-bar">
+  <div class="mob-bar-info">
+    <div class="mob-bar-label">Argentina vs France · 1X2</div>
+    <div class="mob-bar-val">2.10 · 3.40 · 3.20</div>
   </div>
-  <a href="https://youwin.com/register?ref=21331414" class="mobile-bar-btn" target="_blank" rel="noopener">Bet Now</a>
+  <a href="https://youwin.com/register?ref=21331414" class="mob-bar-btn" target="_blank" rel="noopener">Bet Now</a>
 </div>
 
 </body>
