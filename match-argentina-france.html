@@ -195,13 +195,15 @@
     }
 
     .mh-team {
-      flex: 1; display: flex; flex-direction: column;
+      flex: 1; min-width: 0; /* critical: allows flex item to shrink below content size */
+      display: flex; flex-direction: column;
       align-items: center; gap: 0.5rem; text-align: center;
     }
 
     .mh-flag {
       font-size: 4rem; line-height: 1;
       filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+      flex-shrink: 0;
     }
 
     .mh-name {
@@ -211,14 +213,15 @@
 
     .mh-sub {
       font-size: 0.7rem; font-weight: 600;
-      color: var(--t2);   /* visible, not washed out */
+      color: var(--t2);
       background: var(--bg-input);
       padding: 0.15rem 0.55rem; border-radius: 100px;
-      white-space: nowrap;
+      text-align: center; line-height: 1.4;
+      /* no white-space: nowrap so it can wrap on small screens */
     }
 
     .mh-center {
-      padding: 0 2.5rem; flex-shrink: 0;
+      padding: 0 1.75rem; flex-shrink: 0;
       display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
     }
 
@@ -561,13 +564,14 @@
     .footer-links a:hover { color: var(--t1); }
 
     /* =========================================================
-       MOBILE STICKY BAR
+       MOBILE STICKY BAR  — visible by default, hidden on desktop
     ========================================================= */
     .mob-bar {
-      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+      display: flex; /* mobile-first: always flex, hidden on desktop via min-width query */
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
       background: var(--bg-card); border-top: 1px solid var(--border);
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
-      padding: 0.65rem 1rem; align-items: center; gap: 0.75rem;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.10);
+      padding: 0.75rem 1rem; align-items: center; gap: 0.75rem;
     }
     .mob-bar-info { flex: 1; }
     .mob-bar-label { font-size: 0.63rem; color: var(--t3); font-weight: 500; }
@@ -583,27 +587,67 @@
     /* =========================================================
        RESPONSIVE
     ========================================================= */
+
+    /* Body always gets bottom padding so content isn't hidden behind the bar */
+    body { padding-bottom: 76px; }
+
+    /* On wide screens: two-column layout, hide mobile bar */
+    @media (min-width: 861px) {
+      body { padding-bottom: 0; }
+      .mob-bar { display: none; }
+    }
+
+    /* Tablet: collapse to single column */
     @media (max-width: 860px) {
       .page { grid-template-columns: 1fr; }
       .match-header { grid-column: 1; }
       .sidebar { order: 10; }
-      .mob-bar { display: flex; }
-      body { padding-bottom: 74px; }
     }
 
+    /* Mobile: tighten everything */
     @media (max-width: 600px) {
-      .page { padding: 0.75rem 0.5rem; gap: 0.75rem; }
-      .mh-body { padding: 1.5rem 0.75rem 1rem; }
-      .mh-flag { font-size: 3rem; }
-      .mh-name { font-size: 0.95rem; }
-      .mh-center { padding: 0 1rem; }
-      .mh-kick { font-size: 1.3rem; }
-      .sn { flex: 0 0 80px; font-size: 0.62rem; }
-      .sv { width: 36px; font-size: 0.72rem; }
+      .page { padding: 0.6rem 0.5rem; gap: 0.75rem; }
+
+      /* Match header */
+      .mh-body { padding: 1.25rem 0.5rem 1rem; }
+      .mh-flag { font-size: 2.75rem; }
+      .mh-name { font-size: 0.9rem; }
+      .mh-sub { font-size: 0.62rem; padding: 0.12rem 0.4rem; }
+      .mh-center { padding: 0 0.75rem; }
+      .mh-kick { font-size: 1.25rem; }
+      .mh-date { font-size: 0.65rem; }
+      .mh-venue { display: none; } /* too cramped, hide on small screens */
+
+      /* Odds strip in header */
+      .odds-strip { max-width: 100%; }
+      .odds-btn-val { font-size: 0.9rem; }
+
+      /* Stat bars */
+      .sn { flex: 0 0 76px; font-size: 0.62rem; }
+      .sv { width: 34px; font-size: 0.7rem; }
+
+      /* Nav */
       .topbar-cta { display: none; }
+
+      /* H2H list */
       .ml-comp { display: none; }
       .ml-date { width: 52px; }
-      .form-meta { min-width: 78px; }
+
+      /* Form */
+      .form-meta { min-width: 76px; }
+
+      /* Card padding */
+      .card-body { padding: 0.85rem; }
+      .card-head { padding: 0.7rem 0.85rem; }
+    }
+
+    @media (max-width: 380px) {
+      .mh-flag { font-size: 2.25rem; }
+      .mh-name { font-size: 0.82rem; }
+      .mh-sub { font-size: 0.58rem; }
+      .mh-kick { font-size: 1.1rem; }
+      .mh-center { padding: 0 0.4rem; }
+      .tabs .tab { font-size: 0.65rem; padding: 0.45rem 0.5rem; }
     }
   </style>
 </head>
