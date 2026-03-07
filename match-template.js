@@ -251,6 +251,14 @@ function generateMatchHTML(m, brand, lang) {
     }).join("\n");
   }
 
+  // Resolve a value that may be a plain string/array OR a {en,de,tr} object
+  function getLang(val) {
+    if (val && typeof val === "object" && !Array.isArray(val)) {
+      return val[lang] || val.en;
+    }
+    return val;
+  }
+
   var ht = m.homeTeam, at = m.awayTeam;
   var allPlayers = [].concat(ht.players, at.players);
 
@@ -517,8 +525,8 @@ function generateMatchHTML(m, brand, lang) {
         <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\uD83D\uDCCB</span> ${t.matchPreview}</div>
       </div>
       <div class="card-body">
-        ${m.previewLines.map(function(l) { return '<p class="preview-text">' + l + '</p>'; }).join("\n        ")}
-        <div class="preview-highlight">${m.previewHighlight}</div>
+        ${getLang(m.previewLines).map(function(l) { return '<p class="preview-text">' + l + '</p>'; }).join("\n        ")}
+        <div class="preview-highlight">${getLang(m.previewHighlight)}</div>
       </div>
     </div>
     <div class="card">

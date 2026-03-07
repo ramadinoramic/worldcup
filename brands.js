@@ -38,11 +38,11 @@ const BRANDS = [
     mobBarBtnSub:  { en: "Get $10 Free Bonus!",     de: "10$ Gratis-Bonus!",              tr: "$10 \u00dccretsi\u0307z Bonus Al!"  }
   },
   {
-    id: "brand2",
-    name: "Brand 2",
-    logoHtml: "BRAND<span>2</span>",
-    accentHex: "#2563EB",
-    registerUrl: "https://example.com/register?ref=REPLACE_BRAND2",
+    id: "bahigo",
+    name: "Bahigo",
+    logoHtml: "BAHI<span>GO</span>",
+    accentHex: "#7C3AED",
+    registerUrl: "https://bahigo.com/register?ref=REPLACE_BAHIGO",
     bonusHeadline: {
       en: "200% Bonus<br>up to \u20ac200",
       de: "200% Bonus<br>bis zu 200\u00a0\u20ac",
@@ -69,11 +69,11 @@ const BRANDS = [
     mobBarBtnSub:  { en: "Claim \u20ac200 Bonus!",  de: "200\u00a0\u20ac Bonus holen!",   tr: "\u20ac200 Bonus Al!"               }
   },
   {
-    id: "brand3",
-    name: "Brand 3",
-    logoHtml: "BRAND<span>3</span>",
-    accentHex: "#16A34A",
-    registerUrl: "https://example.com/register?ref=REPLACE_BRAND3",
+    id: "wettigo",
+    name: "Wettigo",
+    logoHtml: "WETT<span>IGO</span>",
+    accentHex: "#EA580C",
+    registerUrl: "https://wettigo.com/register?ref=REPLACE_WETTIGO",
     bonusHeadline: {
       en: "150% Bonus<br>up to \u20ac150",
       de: "150% Bonus<br>bis zu 150\u00a0\u20ac",
@@ -100,11 +100,11 @@ const BRANDS = [
     mobBarBtnSub:  { en: "Claim \u20ac150 Bonus!",  de: "150\u00a0\u20ac Bonus holen!",   tr: "\u20ac150 Bonus Al!"               }
   },
   {
-    id: "brand4",
-    name: "Brand 4",
-    logoHtml: "BRAND<span>4</span>",
-    accentHex: "#D97706",
-    registerUrl: "https://example.com/register?ref=REPLACE_BRAND4",
+    id: "bahibi",
+    name: "Bahibi",
+    logoHtml: "BAHI<span>BI</span>",
+    accentHex: "#0D9488",
+    registerUrl: "https://bahibi.com/register?ref=REPLACE_BAHIBI",
     bonusHeadline: {
       en: "Free Bets<br>up to \u20ac50",
       de: "Gratiswetten<br>bis zu 50\u00a0\u20ac",

@@ -48,11 +48,25 @@ const MATCHES = [
     group: "Group A",
     odds: { home: 2.50, draw: 3.10, away: 2.70 },
     probHome: 37, probDraw: 29, probAway: 34,
-    previewLines: [
-      "The ultimate CONCACAF rivalry opens on American soil. The USA and Mexico have met 73 times and both nations arrive as co-hosts in a fixture that carries enormous political and sporting weight.",
-      "Pulisic leads a young, dynamic USA side playing in front of their home crowd, while Mexico bring experience and tactical discipline in a match that could define Group A."
-    ],
-    previewHighlight: "<strong>Rivalry Renewed:</strong> USA vs Mexico is one of football's most intense regional rivalries — expect a ferocious atmosphere at the Rose Bowl.",
+    previewLines: {
+      en: [
+        "The ultimate CONCACAF rivalry opens on American soil. The USA and Mexico have met 73 times and both nations arrive as co-hosts in a fixture that carries enormous political and sporting weight.",
+        "Pulisic leads a young, dynamic USA side playing in front of their home crowd, while Mexico bring experience and tactical discipline in a match that could define Group A."
+      ],
+      de: [
+        "Das ultimative CONCACAF-Duell eröffnet auf amerikanischem Boden. USA und Mexiko haben sich bereits 73 Mal begegnet — als Gastgebernationen tragen sie ein Spiel aus, das enormes politisches und sportliches Gewicht trägt.",
+        "Pulisic führt ein junges, dynamisches US-Team vor eigenem Publikum an, während Mexiko mit Erfahrung und taktischer Disziplin antritt — ein Duell, das die Gruppe A entscheiden könnte."
+      ],
+      tr: [
+        "CONCACAF'ın en büyük rekabeti Amerika topraklarında başlıyor. ABD ve Meksika 73 kez karşılaştı; ev sahibi iki ülke, büyük siyasi ve sportif öneme sahip bu fikstürde karşı karşıya geliyor.",
+        "Pulisic, kendi seyircileri önünde oynayan genç ve dinamik ABD kadrosuna liderlik ederken Meksika, Grup A’yı belirleyebilecek bu karşılaşmaya deneyim ve taktik disiplinle geliyor."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Rivalry Renewed:</strong> USA vs Mexico is one of football's most intense regional rivalries — expect a ferocious atmosphere at the Rose Bowl.",
+      de: "<strong>Rivalität neu entfacht:</strong> USA vs. Mexiko gehört zu den intensivsten Regionalderbys des Weltfußballs — erwartet eine feurige Atmosphäre im Rose Bowl.",
+      tr: "<strong>Yenilenen Rekabet:</strong> ABD vs Meksika, futbolun en yoğun bölgesel derbilerinden biridir — Rose Bowl’da ateşli bir atmosfer bekleniyor."
+    },
     h2h: {
       homeWins: 21, draws: 14, awayWins: 38, total: 73,
       matches: [
@@ -120,11 +134,25 @@ const MATCHES = [
     group: "Group B",
     odds: { home: 2.70, draw: 3.10, away: 2.50 },
     probHome: 33, probDraw: 29, probAway: 38,
-    previewLines: [
-      "A rematch of the Euro 2024 semi-final — a match that defined a generation of Spanish football and shattered German hopes on home soil. Now Germany seek revenge at the World Cup, armed with a rebuilt squad led by Florian Wirtz.",
-      "Spain arrive as one of Europe's form sides and the bookmakers' second favourite for the trophy. Yamal, at just 18, has already established himself as a world-class performer capable of winning matches on his own."
-    ],
-    previewHighlight: "<strong>Tactical Battle:</strong> Spain's possession game vs Germany's high press — whichever side controls the midfield battles will likely control the tie.",
+    previewLines: {
+      en: [
+        "A rematch of the Euro 2024 semi-final — a match that defined a generation of Spanish football and shattered German hopes on home soil. Now Germany seek revenge at the World Cup, armed with a rebuilt squad led by Florian Wirtz.",
+        "Spain arrive as one of Europe's form sides and the bookmakers' second favourite for the trophy. Yamal, at just 18, has already established himself as a world-class performer capable of winning matches on his own."
+      ],
+      de: [
+        "Das Wiedersehen des EM 2024-Halbfinales — ein Spiel, das eine Generation des spanischen Fußballs prägte und Deutschlands Hoffnungen auf eigenem Boden zunichtemachte. Nun sucht Deutschland mit einem neu aufgebauten Kader unter Florian Wirtz WM-Revanche.",
+        "Spanien reist als eine der formstärksten Mannschaften Europas und als zweiter Turnierfavorit an. Der gerade 18-jährige Yamal hat sich bereits als weltklassiger Performer etabliert, der Spiele im Alleingang entscheiden kann."
+      ],
+      tr: [
+        "Euro 2024 yarı finalinin rövanşı — İspanyol futbolunun bir kuşağını tanımlayan ve Almanya’nın kendi sahasındaki umutlarını yerle bir eden o maç. Almanya şimdi Florian Wirtz önceliğinde yeniden kurulan kadrosuyla Dünya Kupası’nda intikam peşinde.",
+        "İspanya, Avrupa’nın en formlu takımlarından biri ve kupanın ikinci favorisi olarak geliyor. 18 yaşındaki Yamal, dünya standartlarında bir oyuncu olduğunu çoktan kanıtladı."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Tactical Battle:</strong> Spain's possession game vs Germany's high press — whichever side controls the midfield battles will likely control the tie.",
+      de: "<strong>Taktisches Duell:</strong> Spaniens Ballbesitzspiel gegen Deutschlands Gegenpressing — wer die Mittelfeld-Zweikämpfe gewinnt, kontrolliert das Spiel.",
+      tr: "<strong>Taktik Savaş:</strong> İspanya’nın top hakimiyeti oyununa karşı Almanya’nın yüksek baskısı — orta sahıyı kim kontrol ederse, maçı o belirler."
+    },
     h2h: {
       homeWins: 4, draws: 5, awayWins: 5, total: 14,
       matches: [
@@ -192,11 +220,25 @@ const MATCHES = [
     group: "Group C",
     odds: { home: 2.10, draw: 3.40, away: 3.20 },
     probHome: 42, probDraw: 26, probAway: 32,
-    previewLines: [
-      "A rematch of the epic 2022 World Cup Final — the greatest final in tournament history — where Argentina edged France in a penalty shootout after a stunning 3–3 draw. Messi and Mbappe renew their personal duel on the grandest stage.",
-      "Argentina enter as favourites backed by a 36-match unbeaten run and back-to-back continental triumphs. France carry the most feared attack in world football, with Mbappe, Dembele, and Barcola capable of unlocking any defence on their day."
-    ],
-    previewHighlight: "<strong>Key Duel:</strong> Messi (198 caps, 112 goals) vs Mbappe (88 caps, 47 goals) — the two defining players of their generation clash once more at the World Cup.",
+    previewLines: {
+      en: [
+        "A rematch of the epic 2022 World Cup Final — the greatest final in tournament history — where Argentina edged France in a penalty shootout after a stunning 3–3 draw. Messi and Mbappe renew their personal duel on the grandest stage.",
+        "Argentina enter as favourites backed by a 36-match unbeaten run and back-to-back continental triumphs. France carry the most feared attack in world football, with Mbappe, Dembele, and Barcola capable of unlocking any defence on their day."
+      ],
+      de: [
+        "Das Wiedersehen des epischen WM-Finals 2022 — dem größten Endspiel der Turniergeschichte — bei dem Argentinien Frankreich nach einem atemberaubenden 3:3 im Elfmeterschüessen bezwang. Messi und Mbappe erneuern ihr persönliches Duell auf der Weltbühne.",
+        "Argentinien geht als Favorit in das Spiel, gestützt auf eine 36 Partien anhaltende Ungeschlagenheit und zwei aufeinanderfolgende Kontinentaltitel. Frankreich besitzt mit Mbappe, Dembele und Barcola den gefürchtetsten Angriff des Weltfußballs."
+      ],
+      tr: [
+        "2022 Dünya Kupası Finali’nin rövanşı — turnuva tarihinin en büyük finali. Arjantin, nefes kesen 3-3 beraberliğinin ardından penaltılarda Fransa’yı geçti. Messi ve Mbappe, kişisel düellolarını en büyük sahneye taşıyor.",
+        "Arjantin, 36 maçlık yenilmezlik serisi ve art arda iki kıta şampiyonluğunu arkasına alarak favori olarak geliyor. Mbappe, Dembele ve Barcola ile Fransa, dünya futbolunun en korkulan hücum hattına sahip."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Key Duel:</strong> Messi (198 caps, 112 goals) vs Mbappe (88 caps, 47 goals) — the two defining players of their generation clash once more at the World Cup.",
+      de: "<strong>Das Schlüsselduell:</strong> Messi (198 Länderspiele, 112 Tore) vs. Mbappe (88 Länderspiele, 47 Tore) — die zwei prägenden Spieler ihrer Generation begegnen sich erneut bei der WM.",
+      tr: "<strong>Kilit Düello:</strong> Messi (198 maç, 112 gol) vs Mbappe (88 maç, 47 gol) — nesillerin iki efsanevi ismi Dünya Kupası sahnesinde bir kez daha buluşuyor."
+    },
     h2h: {
       homeWins: 6, draws: 3, awayWins: 3, total: 12,
       matches: [
@@ -264,11 +306,25 @@ const MATCHES = [
     group: "Group D",
     odds: { home: 2.40, draw: 3.20, away: 2.80 },
     probHome: 38, probDraw: 28, probAway: 34,
-    previewLines: [
-      "Two football giants meet at SoFi Stadium in what promises to be one of the standout Group D clashes. Brazil seek their sixth World Cup title under a new generation led by Vinicius Jr., while England carry the hopes of a nation desperate to end their 60-year wait.",
-      "Brazil's fluid attacking play will be tested against England — a side that has shown considerable defensive solidity while improving their offensive output under the current setup."
-    ],
-    previewHighlight: "<strong>Clash to Watch:</strong> Vinicius Jr. vs Kyle Walker — the world's most dangerous winger against one of the Premier League's most experienced right-backs.",
+    previewLines: {
+      en: [
+        "Two football giants meet at SoFi Stadium in what promises to be one of the standout Group D clashes. Brazil seek their sixth World Cup title under a new generation led by Vinicius Jr., while England carry the hopes of a nation desperate to end their 60-year wait.",
+        "Brazil's fluid attacking play will be tested against England — a side that has shown considerable defensive solidity while improving their offensive output under the current setup."
+      ],
+      de: [
+        "Zwei Fußballgiganten treffen im SoFi Stadium aufeinander — eines der Highlights der Gruppe D. Brasilien strebt unter einer neuen Generation um Vinicius Jr. nach dem sechsten WM-Titel, während England die Hoffnungen einer Nation trägt, die ihr 60-jähriges Warten beenden möchte.",
+        "Brasiliens flüssiges Angriffsspiel wird gegen England auf die Probe gestellt — eine Mannschaft, die defensive Stabilität mit wachsender Offensivkraft verbindet."
+      ],
+      tr: [
+        "İki futbol devi, Grup D’nin öne çıkan maçlarından birinde SoFi Stadium’da buluşuyor. Brezilya, Vinicius Jr. öncülüğündeki yeni kuşakla altıncı Dünya Kupası unvanını hedeflerken İngiltere, 60 yıllık özlemine son vermeyi umut ediyor.",
+        "Brezilya’nın akışkan hücum oyunu, savunmada ciddi bir istikrar sergilerken ofansif kapasitesini de geliştirmiş İngiltere’ye karşı test edilecek."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Clash to Watch:</strong> Vinicius Jr. vs Kyle Walker — the world's most dangerous winger against one of the Premier League's most experienced right-backs.",
+      de: "<strong>Das Duell im Fokus:</strong> Vinicius Jr. vs. Kyle Walker — der gefährlichste Flügelstürmer der Welt gegen einen der erfahrensten Rechtsverteidiger der Premier League.",
+      tr: "<strong>Öne Çıkan Düello:</strong> Vinicius Jr. vs Kyle Walker — dünyanın en tehlikeli sol kanadı ile Premier Lig’in en deneyimli sağ beklerinden biri arasındaki mücadele."
+    },
     h2h: {
       homeWins: 3, draws: 4, awayWins: 4, total: 11,
       matches: [
@@ -336,11 +392,25 @@ const MATCHES = [
     group: "Group E",
     odds: { home: 2.20, draw: 3.30, away: 3.10 },
     probHome: 40, probDraw: 28, probAway: 32,
-    previewLines: [
-      "Ronaldo's final World Cup? The 41-year-old captain remains Portugal's talisman as they face a Netherlands side rebuilt under Ronald Koeman and packed with Premier League talent.",
-      "Van Dijk leads one of Europe's tightest defences while Gakpo offers a genuine threat up front. This is a clash between two of Europe's most experienced tournament nations."
-    ],
-    previewHighlight: "<strong>Record Watch:</strong> Ronaldo could become the oldest player to score at a World Cup — at 41 he remains Portugal's most dangerous weapon.",
+    previewLines: {
+      en: [
+        "Ronaldo's final World Cup? The 41-year-old captain remains Portugal's talisman as they face a Netherlands side rebuilt under Ronald Koeman and packed with Premier League talent.",
+        "Van Dijk leads one of Europe's tightest defences while Gakpo offers a genuine threat up front. This is a clash between two of Europe's most experienced tournament nations."
+      ],
+      de: [
+        "Ronaldos letztes WM-Turnier? Der 41-jährige Kapitän bleibt Portugals Talisman, wenn sie auf eine unter Ronald Koeman neu aufgebaute und mit Premier-League-Talenten gespickte niederländische Mannschaft treffen.",
+        "Van Dijk führt eine der stärksten Abwehren Europas an, während Gakpo im Angriff echte Gefahr ausstrahlt. Ein Duell zweier der turniererfahrensten Nationen des Kontinents."
+      ],
+      tr: [
+        "Ronaldo’nun son Dünya Kupası mı? 41 yaşındaki kaptan, Ronald Koeman yönetiminde yeniden şekillendirilen ve Premier Lig yeteneğiyle dolu Hollanda karşısında Portekiz’in talismanı olmayı sürdürüyor.",
+        "Van Dijk, Avrupa’nın en sağlam savunmalarından birine liderlik ederken Gakpo hücumda ciddi bir tehdit oluşturuyor. Kıtanın en deneyimli iki turnuva milletinin karşılaşması."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Record Watch:</strong> Ronaldo could become the oldest player to score at a World Cup — at 41 he remains Portugal's most dangerous weapon.",
+      de: "<strong>Ronaldo gegen die Zeit:</strong> Mit 41 Jahren will Cristiano Ronaldo ein letztes WM-Kapitel schreiben — kann er Portugal allein zum Sieg führen?",
+      tr: "<strong>Ronaldo Zamana Karşı:</strong> 41 yaşında Cristiano Ronaldo son bir Dünya Kupası sayfası açmak istiyor — dehası tek başına Portekiz’i zafere taşıyabilir mi?"
+    },
     h2h: {
       homeWins: 5, draws: 3, awayWins: 6, total: 14,
       matches: [
@@ -408,11 +478,25 @@ const MATCHES = [
     group: "Group F",
     odds: { home: 2.00, draw: 3.40, away: 3.50 },
     probHome: 44, probDraw: 27, probAway: 29,
-    previewLines: [
-      "Belgium's so-called golden generation gets one last crack at World Cup glory. Led by De Bruyne and Lukaku, they face a battle-hardened Croatia side that has exceeded expectations at every major tournament.",
-      "Modric, still producing magical football at 40, leads Croatia once more. This is a clash of veteran leaders against a Belgium squad that know this may be their final chance."
-    ],
-    previewHighlight: "<strong>Veterans' Duel:</strong> De Bruyne vs Modric — two of the greatest midfielders of their generation face off, possibly for the last time at a World Cup.",
+    previewLines: {
+      en: [
+        "Belgium's so-called golden generation gets one last crack at World Cup glory. Led by De Bruyne and Lukaku, they face a battle-hardened Croatia side that has exceeded expectations at every major tournament.",
+        "Modric, still producing magical football at 40, leads Croatia once more. This is a clash of veteran leaders against a Belgium squad that know this may be their final chance."
+      ],
+      de: [
+        "Belgiens sogenannte Goldene Generation bekommt eine letzte Chance auf WM-Ruhm. Angeführt von De Bruyne und Lukaku, treffen sie auf eine kampferprobte kroatische Mannschaft, die bei jedem großen Turnier die Erwartungen übertroffen hat.",
+        "Modric, mit 40 Jahren immer noch Zauberfußball spielend, führt Kroatien erneut an. Ein Duell zwischen erfahrenen Leistungsträgern und einem belgischen Kader, der weiß: Diese Chance ist vielleicht die letzte."
+      ],
+      tr: [
+        "Belçika’nın ‘Altın Nesli’ Dünya Kupası zaferine son bir şans yakalıyor. De Bruyne ve Lukaku öncülüğünde, her büyük turnuvada beklentilerin üzerinde performans gösteren savaş deneyimli Hırvatistan’la karşı karşıya geliyorlar.",
+        "40 yaşında hâlâ büyülü futbol sergileyen Modric, Hırvatistan’a yine liderlik ediyor. Bu, belki de son şanslarının farkında olan Belçika’nın yıldızlarına karşı deneyimli liderlerin duellosudur."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Veterans' Duel:</strong> De Bruyne vs Modric — two of the greatest midfielders of their generation face off, possibly for the last time at a World Cup.",
+      de: "<strong>Veteranän-Duell:</strong> De Bruyne vs. Modric — zwei der besten Mittelfeldspieler ihrer Generation treffen aufeinander, möglicherweise ein letztes Mal bei einer WM.",
+      tr: "<strong>Veteranlar Düellosu:</strong> De Bruyne vs Modric — nesillerinin en büyük orta sahacılarından ikisi, belki de son kez bir Dünya Kupası’nda karşı karşıya geliyor."
+    },
     h2h: {
       homeWins: 5, draws: 2, awayWins: 3, total: 10,
       matches: [
@@ -480,11 +564,25 @@ const MATCHES = [
     group: "Group G",
     odds: { home: 2.30, draw: 3.20, away: 3.10 },
     probHome: 39, probDraw: 28, probAway: 33,
-    previewLines: [
-      "Two of football's most storied nations — four-time World Champions Italy and two-time champions Uruguay — collide in Group G in what promises to be a tactical, physical battle.",
-      "Italy's Azzurri, rebuilt following their shock 2022 qualifying failure, face a Uruguay side boasting Darwin Nunez at the peak of his powers alongside the tireless Federico Valverde."
-    ],
-    previewHighlight: "<strong>Battle of Champions:</strong> Italy's defensive discipline against Uruguay's relentless pressing — this match could come down to who blinks first.",
+    previewLines: {
+      en: [
+        "Two of football's most storied nations — four-time World Champions Italy and two-time champions Uruguay — collide in Group G in what promises to be a tactical, physical battle.",
+        "Italy's Azzurri, rebuilt following their shock 2022 qualifying failure, face a Uruguay side boasting Darwin Nunez at the peak of his powers alongside the tireless Federico Valverde."
+      ],
+      de: [
+        "Zwei der traditionsreichsten Fußballnationen — der viermalige Weltmeister Italien und der zweimalige Champion Uruguay — treffen in Gruppe G aufeinander und versprechen ein taktisches und physisches Duell.",
+        "Italiens Azzurri, nach dem schockierenden WM-Qualifikations-Ausfall 2022 neu aufgebaut, begegnen einem Uruguay mit Darwin Núñez auf dem Höhepunkt seiner Leistungskurve und dem unermüdlichen Federico Valverde."
+      ],
+      tr: [
+        "Futbolun iki köklü devi — dört kez dünya şampiyonu İtalya ve iki kez şampiyon Uruguay — Grup G’de taktiksel ve fiziksel açıdan zorlu bir karşılaşmada buluşuyor.",
+        "2022 eleme şokunu atlatan ve yeniden yapılandırılan İtalya Azzurri, en iyi formunda olan Darwin Núñez ve yorulmaz Federico Valverde’ye sahip Uruguay’a karşı sahaya çıkıyor."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Battle of Champions:</strong> Italy's defensive discipline against Uruguay's relentless pressing — this match could come down to who blinks first.",
+      de: "<strong>Duell der Champions:</strong> Italiens Defensivdisziplin gegen Uruguays unnächgiebiges Pressing — dieses Spiel könnte durch einen einzigen Fehler entschieden werden.",
+      tr: "<strong>Şampiyonlar Düellosu:</strong> İtalya’nın savunma disiplinine karşı Uruguay’ın amanımsız pres oyunu — bu maç, ilk hatanın yapılmasıyla sona erebilir."
+    },
     h2h: {
       homeWins: 8, draws: 5, awayWins: 5, total: 18,
       matches: [
@@ -552,11 +650,25 @@ const MATCHES = [
     group: "Group H",
     odds: { home: 2.60, draw: 3.10, away: 2.60 },
     probHome: 35, probDraw: 30, probAway: 35,
-    previewLines: [
-      "The fiercest rivalry in Asian football erupts on the World Cup stage. Japan and South Korea have met 83 times and the intensity of this fixture needs no context — it is always the most anticipated match on the Asian football calendar.",
-      "Son Heung-min leads South Korea hoping to recreate 2002 magic on foreign soil, while Japan — arguably the best Asian side in history — have their sights set on reaching the quarter-finals for the first time."
-    ],
-    previewHighlight: "<strong>Asian Derby:</strong> Japan vs South Korea is the El Clasico of Asian football — 83 meetings, fierce national pride, and everything on the line.",
+    previewLines: {
+      en: [
+        "The fiercest rivalry in Asian football erupts on the World Cup stage. Japan and South Korea have met 83 times and the intensity of this fixture needs no context — it is always the most anticipated match on the Asian football calendar.",
+        "Son Heung-min leads South Korea hoping to recreate 2002 magic on foreign soil, while Japan — arguably the best Asian side in history — have their sights set on reaching the quarter-finals for the first time."
+      ],
+      de: [
+        "Die intensivste Rivalität des asiatischen Fußballs bricht auf der WM-Bühne los. Japan und Südkorea haben sich bereits 83 Mal gegenübergestanden — die Intensität dieses Duells bedärf keiner weiteren Erklärung.",
+        "Son Heung-min führt Südkorea an, auf fremdem Boden die Magie von 2002 wiederzubeleben, während Japan — wohl die beste asiatische Mannschaft der Geschichte — erstmals das Viertelfinale anstrebt."
+      ],
+      tr: [
+        "Asya futbolunun en sert rekabeti Dünya Kupası sahnesine taşınıyor. Japonya ve Güney Kore 83 kez karşılaştı — bu fikstürün yoğunluğu açıklamaya gerek duymaz, her zaman Asya futbol takviminin en çok beklenen maçı olmuştur.",
+        "Son Heung-min, Güney Kore’yi yabancı topraklarda 2002 büyüsünü yeniden yaratmak amacıyla yönetirken Japonya — tarihin belki de en iyi Asya takımı — ilk kez çeyrek finale ulaşmayı hedefliyor."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Asian Derby:</strong> Japan vs South Korea is the El Clasico of Asian football — 83 meetings, fierce national pride, and everything on the line.",
+      de: "<strong>Asiatisches Derby:</strong> Japan vs. Südkorea ist der El Clásico des asiatischen Fußballs — 83 Begegnungen, nationaler Stolz und alles auf dem Spiel.",
+      tr: "<strong>Asya Derbisi:</strong> Japonya vs Güney Kore, Asya futbolunun El Clasico’sudur — 83 karşılaşma, keskin ulusal gurur ve her şey ortada."
+    },
     h2h: {
       homeWins: 42, draws: 23, awayWins: 18, total: 83,
       matches: [
@@ -624,11 +736,25 @@ const MATCHES = [
     group: "Group I",
     odds: { home: 2.30, draw: 3.10, away: 3.00 },
     probHome: 38, probDraw: 29, probAway: 33,
-    previewLines: [
-      "The best of African football on the world stage. Morocco, who stunned the world in Qatar by reaching the semi-finals, face an equally formidable Senegal side led by Sadio Mane.",
-      "This match between two of the continent's giants is being called the 'African final before the final' — both teams have genuine ambitions of going deep in this tournament."
-    ],
-    previewHighlight: "<strong>African Derby:</strong> Hakimi vs Mane — two of the world's most exciting wide players on opposite sides of an all-African Group I showdown.",
+    previewLines: {
+      en: [
+        "The best of African football on the world stage. Morocco, who stunned the world in Qatar by reaching the semi-finals, face an equally formidable Senegal side led by Sadio Mane.",
+        "This match between two of the continent's giants is being called the 'African final before the final' — both teams have genuine ambitions of going deep in this tournament."
+      ],
+      de: [
+        "Das Beste des afrikanischen Fußballs auf der Weltbühne. Marokko, das in Katar die Welt mit dem Einzug ins Halbfinale verbasanüffte, trifft auf ein ebenso formidables senegalesisches Team unter der Führung von Sadio Mané.",
+        "Dieses Aufeinandertreffen zweier afrikanischer Giganten wird als ‘Afrikanisches Finale vor dem Finale’ bezeichnet — beide Mannschaften haben echte Ambitionen, in diesem Turnier weit zu kommen."
+      ],
+      tr: [
+        "Afrika futbolunun en iyisi dünya sahnesinde. Katar’da yarı finale yükselerek dünyayı hayrete düşüren Fas, Sadio Mané liderliğindeki bir o kadar zorlu Senegal ile karşılaşıyor.",
+        "Kıtanın iki devinin bu buluşması ‘Final Öncesi Afrika Finali’ olarak anılıyor — her iki takım da bu turnuvada çok daha ileri gitme konusunda gerçek iddialara sahip."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>African Derby:</strong> Hakimi vs Mane — two of the world's most exciting wide players on opposite sides of an all-African Group I showdown.",
+      de: "<strong>Afrikanisches Derby:</strong> Hakimi vs. Mané — zwei der aufregendsten Außenspieler der Welt stehen sich in einem panafrikanischen Gruppenspiel gegenüber.",
+      tr: "<strong>Afrika Derbisi:</strong> Hakimi vs Mané — dünyanın en heyecanlı kanat oyuncularından ikisi, tüm Afrika Grubu I karşılaşmasında karşı saflarda yer alıyor."
+    },
     h2h: {
       homeWins: 7, draws: 3, awayWins: 4, total: 14,
       matches: [
@@ -696,10 +822,20 @@ const MATCHES = [
     group: "Group J",
     odds: { home: 1.90, draw: 3.30, away: 4.00 },
     probHome: 47, probDraw: 28, probAway: 25,
-    previewLines: [
-      "Two South American neighbours clash in Group J. Colombia, Copa America runners-up, are heavy favourites but Ecuador — led by the tireless Moises Caicedo — are no pushover.",
-      "Luis Diaz brings Liverpool form to the national stage while the legendary Enner Valencia leads Ecuador in what could be his final World Cup."
-    ],
+    previewLines: {
+      en: [
+        "Two South American neighbours clash in Group J. Colombia, Copa America runners-up, are heavy favourites but Ecuador — led by the tireless Moises Caicedo — are no pushover.",
+        "Luis Diaz brings Liverpool form to the national stage while the legendary Enner Valencia leads Ecuador in what could be his final World Cup."
+      ],
+      de: [
+        "Zwei südamerikanische Nachbarn treffen in Gruppe J aufeinander. Kolumbien, Vize-Copa-America-Champion, ist klarer Favorit — doch Ecuador, angeführt vom unermüdlichen Moises Caicedo, ist kein leichter Gegner.",
+        "Luis Díaz bringt seine Liverpool-Form auf die nationale Bühne, während der legendäre Enner Valencia Ecuador in dem anführt, was sein letztes WM-Turnier sein könnte."
+      ],
+      tr: [
+        "Güney Amerika’nın iki komşusu Grup J’de karşılaşıyor. Copa America ikincisi Kolombiya açık favori, ancak yorulmaz Moises Caicedo liderliğindeki Ekvador da hafife alınacak bir rakip değil.",
+        "Luis Díaz Liverpool formsunu ulusal sahneye taşırken efsanevi Enner Valencia, belki de son Dünya Kupası’nda Ekvador’a liderlik ediyor."
+      ]
+    },
     previewHighlight: "<strong>South American Clash:</strong> Caicedo vs James Rodriguez — a battle of generations as Chelsea's midfielder tries to shut down Colombia's creative genius.",
     h2h: {
       homeWins: 12, draws: 5, awayWins: 8, total: 25,
@@ -768,11 +904,25 @@ const MATCHES = [
     group: "Group K",
     odds: { home: 2.80, draw: 3.00, away: 2.60 },
     probHome: 32, probDraw: 31, probAway: 37,
-    previewLines: [
-      "Australia's Socceroos face their toughest Asian rival in Group K. Iran, boosted by Mehdi Taremi's Serie A brilliance, are narrow favourites but the Australians boast a resilient never-say-die spirit.",
-      "This Oceania-Asia clash has enormous group implications — the winner will be well-placed to advance, while defeat could be terminal for either nation."
-    ],
-    previewHighlight: "<strong>Asian Showdown:</strong> Taremi vs Duke — Iran's prolific Inter Milan striker against Australia's tireless target man.",
+    previewLines: {
+      en: [
+        "Australia's Socceroos face their toughest Asian rival in Group K. Iran, boosted by Mehdi Taremi's Serie A brilliance, are narrow favourites but the Australians boast a resilient never-say-die spirit.",
+        "This Oceania-Asia clash has enormous group implications — the winner will be well-placed to advance, while defeat could be terminal for either nation."
+      ],
+      de: [
+        "Australiens Socceroos treffen in Gruppe K auf ihren härtesten asiatischen Rivalen. Iran, gestärkt durch Mehdi Taremis Serie-A-Brillanz, ist leichter Favorit — doch die Australier beweisen stets eine zähe Wille, die sie über sich hinauswachsen lässt.",
+        "Dieses Ozeanien-Asien-Duell hat weitreichende Gruppenimplikationen — der Sieger wird gut positioniert sein, weiterzukommen, während eine Niederlage das Aus für eine der beiden Nationen bedeuten könnte."
+      ],
+      tr: [
+        "Avustralya Socceroos, Grup K’da en zorlu Asya rakibiyle karşılaşıyor. Serie A’daki parlak performansıyla öne çıkan Mehdi Taremi’nin güçlendirdiği İran hafif favori — ancak Avustralyalılar her zaman son derece inaççı bir mücadele ruhu sergilemişlerdir.",
+        "Bu Okyanusya-Asya derbisinin grup açısından büyük önemi var — galibin devam şansı artarken mağlup için turnuva bitebilir."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Asian Showdown:</strong> Taremi vs Duke — Iran's prolific Inter Milan striker against Australia's tireless target man.",
+      de: "<strong>Asiatisches Showdown:</strong> Taremi vs. Duke — Irans treffsicherer Inter-Mailand-Stürmer gegen Australiens unermüdlichen Zielstürmer.",
+      tr: "<strong>Asya Kapışması:</strong> Taremi vs Duke — İran’ın Inter Milan’daki gol makinesi ile Avustralya’nın yorulmaz forvet oyuncusu arasındaki mücadele."
+    },
     h2h: {
       homeWins: 3, draws: 2, awayWins: 5, total: 10,
       matches: [
@@ -840,11 +990,25 @@ const MATCHES = [
     group: "Group L",
     odds: { home: 1.80, draw: 3.50, away: 4.50 },
     probHome: 50, probDraw: 26, probAway: 24,
-    previewLines: [
-      "Canada play at home — in Vancouver — in what could be a historic moment for the country. Powered by Alphonso Davies and Jonathan David, this is a squad genuinely capable of progressing from the group stage.",
-      "Saudi Arabia, who famously beat Argentina in 2022, will not be easy opponents but Canada's home advantage and superior quality make them clear favourites."
-    ],
-    previewHighlight: "<strong>Home Advantage:</strong> Jonathan David — 29 international goals at just 25 — leads Canada's best-ever team at their home World Cup.",
+    previewLines: {
+      en: [
+        "Canada play at home — in Vancouver — in what could be a historic moment for the country. Powered by Alphonso Davies and Jonathan David, this is a squad genuinely capable of progressing from the group stage.",
+        "Saudi Arabia, who famously beat Argentina in 2022, will not be easy opponents but Canada's home advantage and superior quality make them clear favourites."
+      ],
+      de: [
+        "Kanada spielt zu Hause — in Vancouver — in einem Moment, der historisch sein könnte. Angetrieben von Alphonso Davies und Jonathan David ist dies ein Kader, der wirklich die Gruppenphase überstehen kann.",
+        "Saudi-Arabien, das 2022 sensationell Argentinien bezwang, wird kein leichter Gegner sein — doch Kanadas Heimvorteil und die überlegene Qualität machen sie zum klaren Favoriten."
+      ],
+      tr: [
+        "Kanada kendi sahasında oynuyor — Vancouver’da — tarihi bir an olabilecek bu karşılaşmada. Alphonso Davies ve Jonathan David önceliğinde bu kadro gerçekten grup aşamasını geçme kapasitesine sahip.",
+        "2022’de inanılmaz biçimde Arjantin’i yenen Suudi Arabistan kolay bir rakip olmayacak — ancak Kanada’nın ev sahibi avantajı ve üstün kalitesi onu açık favori yapıyor."
+      ]
+    },
+    previewHighlight: {
+      en: "<strong>Home Advantage:</strong> Jonathan David — 29 international goals at just 25 — leads Canada's best-ever team at their home World Cup.",
+      de: "<strong>Heimvorteil:</strong> Jonathan David — 29 Länderspieltore mit gerade einmal 25 Jahren — führt Kanadas beste Mannschaft aller Zeiten bei der Heim-WM an.",
+      tr: "<strong>Ev Sahibi Avantajı:</strong> Sadece 25 yaşında 29 uluslararası gol atan Jonathan David, Kanada’nın ev sahibi Dünya Kupası’ndaki tarihin en iyi kadrosuna önderlik ediyor."
+    },
     h2h: {
       homeWins: 3, draws: 0, awayWins: 1, total: 4,
       matches: [
