@@ -196,16 +196,11 @@ const html = `<!DOCTYPE html>
 
   <div class="live-bar">
     <div class="ctrl-group">
-      <div class="ctrl-label">League</div>
-      <select class="api-input" id="leagueSel" style="width:auto;min-width:190px;cursor:pointer;"></select>
-    </div>
-    <div class="ctrl-group">
       <div class="ctrl-label">The Odds API Key &mdash; <a href="https://the-odds-api.com" target="_blank" rel="noopener" style="color:var(--blue);font-size:.55rem;">get free key</a></div>
-      <input type="text" class="api-input" id="apiKey" placeholder="Paste key &mdash; saved automatically" oninput="saveApiKey()">
+      <input type="text" class="api-input" id="apiKey" placeholder="dd35ae5d..." oninput="saveApiKey()" style="width:260px;">
     </div>
-    <button class="btn btn-ghost" onclick="discoverLeagues()" title="Fetch all available soccer leagues from your API key">&#128269; Discover</button>
-    <button class="btn btn-primary" onclick="loadLiveMatches()">&#9889; Load Matches</button>
-    <span class="live-status" id="liveStatus" id="liveStatus"></span>
+    <button class="btn btn-primary" onclick="loadAllSoccer()">&#9889; Load All Soccer Matches</button>
+    <span class="live-status" id="liveStatus"></span>
   </div>
 </div>
 
@@ -454,21 +449,6 @@ function log(msg, type) {
 // ── LIVE MATCH LOADING ────────────────────────────────────────────────────────
 const LIVE_MATCHES = [];
 
-// When served via start.js (localhost), use local proxy to avoid CORS.
-// When opened as file://, attempt direct call (works in some browsers).
-var API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-  ? '/proxy/v4'
-  : 'https://api.the-odds-api.com/v4';
-
-const LEAGUES = [
-  { key: 'soccer_fifa_world_cup',          name: 'FIFA World Cup 2026',        round: 'Group Stage'   },
-  { key: 'soccer_epl',                     name: 'Premier League 2025/26',     round: 'Premier League'},
-  { key: 'soccer_germany_bundesliga',      name: 'Bundesliga 2025/26',         round: 'Bundesliga'    },
-  { key: 'soccer_italy_serie_a',           name: 'Serie A 2025/26',            round: 'Serie A'       },
-  { key: 'soccer_switzerland_superleague', name: 'Swiss Super League 2025/26', round: 'Super League'  },
-  { key: 'soccer_turkey_super_league',     name: 'S\\u00fcper Lig 2025/26',    round: 'S\\u00fcper Lig'},
-];
-
 const FLAG_MAP = {
   'Argentina':'🇦🇷','Australia':'🇦🇺','Austria':'🇦🇹','Belgium':'🇧🇪','Bolivia':'🇧🇴',
   'Brazil':'🇧🇷','Cameroon':'🇨🇲','Canada':'🇨🇦','Chile':'🇨🇱','China':'🇨🇳',
@@ -508,7 +488,7 @@ function makeMatchId(a, b) {
 
 function buildMinimalMatch(entry, league) {
   var tA = entry.home_team, tB = entry.away_team;
-  var lge = league || LEAGUES[0];
+  var lge = league || { key: 'soccer', name: 'Soccer', round: 'Match' };
   var market = null;
   for (var bi = 0; bi < (entry.bookmakers || []).length; bi++) {
     var mk = (entry.bookmakers[bi].markets || []).find(function(x){ return x.key === 'h2h'; });
@@ -570,97 +550,62 @@ function saveApiKey() {
   if (k) localStorage.setItem('oddsApiKey', k);
 }
 
-// Fetches real sport list from API and rebuilds the league dropdown with correct keys
-async function discoverLeagues() {
+// Single call: /sports/upcoming/odds/ returns ALL sports at once.
+// We filter client-side for soccer. This matches the URL the user verified works.
+async function loadAllSoccer() {
   var key = document.getElementById('apiKey').value.trim() || localStorage.getItem('oddsApiKey') || '';
   if (!key) {
-    document.getElementById('liveStatus').textContent = '\\u26A0 Enter your API key first, then click Discover';
+    document.getElementById('liveStatus').textContent = '\\u26A0 Paste your Odds API key first';
     document.getElementById('liveStatus').className = 'live-status err';
     return;
   }
   localStorage.setItem('oddsApiKey', key);
-  document.getElementById('liveStatus').textContent = 'Discovering available leagues\\u2026';
+  document.getElementById('liveStatus').textContent = 'Loading\\u2026';
   document.getElementById('liveStatus').className = 'live-status';
 
-  try {
-    var resp = await fetch(API_BASE + '/sports/?apiKey=' + key);
-    if (!resp.ok) throw new Error('HTTP ' + resp.status + ' \\u2014 check your key');
-    var sports = await resp.json();
-    // Filter active soccer leagues only
-    var soccer = sports.filter(function(s) {
-      return s.active && (s.group === 'Soccer' || (s.key && s.key.startsWith('soccer_')));
-    });
-    if (!soccer.length) throw new Error('No active soccer leagues found for this key');
+  // Exact same URL pattern the user confirmed works:
+  // /v4/sports/upcoming/odds/?regions=eu&markets=h2h&apiKey=KEY
+  var base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? '/proxy/v4'
+    : 'https://api.the-odds-api.com/v4';
+  var url = base + '/sports/upcoming/odds/?regions=eu&markets=h2h&apiKey=' + key;
 
-    var sel = document.getElementById('leagueSel');
-    sel.innerHTML = '';
-    soccer.forEach(function(s) {
-      var opt = document.createElement('option');
-      opt.value = s.key;
-      opt.textContent = s.description || s.title || s.key;
-      sel.appendChild(opt);
-    });
-    // Try to pre-select Bundesliga or World Cup if present
-    var preferred = ['soccer_germany_bundesliga','soccer_fifa_world_cup','soccer_epl'];
-    for (var p = 0; p < preferred.length; p++) {
-      var found = soccer.find(function(s){ return s.key === preferred[p]; });
-      if (found) { sel.value = found.key; break; }
-    }
-    var remaining = resp.headers.get('x-requests-remaining');
-    document.getElementById('liveStatus').textContent = '\\u2714 Found ' + soccer.length + ' soccer leagues. Requests left: ' + (remaining || '?') + ' \\u2014 now pick a league & click Load.';
-    document.getElementById('liveStatus').className = 'live-status ok';
-    log('Discovered ' + soccer.length + ' soccer leagues.', 'ok');
-  } catch(e) {
-    document.getElementById('liveStatus').textContent = '\\u2716 ' + e.message;
-    document.getElementById('liveStatus').className = 'live-status err';
-    log('Discover failed: ' + e.message, 'warn');
-  }
-}
-
-async function loadLiveMatches() {
-  var key = document.getElementById('apiKey').value.trim() || localStorage.getItem('oddsApiKey') || '';
-  var sel = document.getElementById('leagueSel');
-  var sportKey = sel.value;
-  var leagueName = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : sportKey;
-  // Try to get a short round name from LEAGUES fallback, else use full name
-  var leagueObj = LEAGUES.find(function(l){ return l.key === sportKey; });
-  var league = leagueObj || { key: sportKey, name: leagueName, round: leagueName };
-  if (!key) {
-    document.getElementById('liveStatus').textContent = '\\u26A0 Enter your Odds API key first';
-    document.getElementById('liveStatus').className = 'live-status err';
-    return;
-  }
-  document.getElementById('apiKey').value = key;
-  localStorage.setItem('oddsApiKey', key);
-  document.getElementById('liveStatus').textContent = 'Fetching ' + league.name + '\\u2026';
-  document.getElementById('liveStatus').className = 'live-status';
-
-  var url = API_BASE + '/sports/' + league.key + '/odds/?apiKey=' + key + '&regions=eu,uk&markets=h2h&oddsFormat=decimal';
   try {
     var resp = await fetch(url);
     if (!resp.ok) {
-      var err = await resp.text();
-      throw new Error('HTTP ' + resp.status + ': ' + err.slice(0,120));
+      var errText = await resp.text();
+      throw new Error('HTTP ' + resp.status + ': ' + errText.slice(0, 200));
     }
     var data = await resp.json();
+
+    // Keep only soccer events
+    var soccer = data.filter(function(e) {
+      return e.sport_key && e.sport_key.indexOf('soccer') !== -1;
+    });
+
     var added = 0;
-    data.forEach(function(entry) {
+    soccer.forEach(function(entry) {
+      var title = entry.sport_title || entry.sport_key;
+      var league = { key: entry.sport_key, name: title, round: title };
       var match = buildMinimalMatch(entry, league);
-      var id = match.id;
-      if (MATCHES.find(function(x){ return x.id === id; })) return;
-      if (LIVE_MATCHES.find(function(x){ return x.id === id; })) return;
+      if (MATCHES.find(function(x){ return x.id === match.id; })) return;
+      if (LIVE_MATCHES.find(function(x){ return x.id === match.id; })) return;
       LIVE_MATCHES.push(match);
       addMatchToCalendar(match);
       added++;
     });
+
     var remaining = resp.headers.get('x-requests-remaining');
-    document.getElementById('liveStatus').textContent = '\\u2714 ' + league.name + ': ' + data.length + ' matches loaded (' + added + ' new). Requests left: ' + (remaining || '?');
+    var msg = '\\u2714 Loaded ' + added + ' soccer matches across ' +
+      new Set(soccer.map(function(e){ return e.sport_key; })).size + ' leagues.';
+    if (remaining) msg += ' Requests left: ' + remaining;
+    document.getElementById('liveStatus').textContent = msg;
     document.getElementById('liveStatus').className = 'live-status ok';
-    log('Loaded ' + added + ' new matches for ' + league.name + '.', 'ok');
+    log(msg, 'ok');
   } catch(e) {
     document.getElementById('liveStatus').textContent = '\\u2716 ' + e.message;
     document.getElementById('liveStatus').className = 'live-status err';
-    log('Live fetch failed: ' + e.message, 'warn');
+    log('Load failed: ' + e.message, 'warn');
   }
 }
 
@@ -712,26 +657,11 @@ function addMatchToCalendar(m) {
 buildBrandSelect();
 buildGroupPills();
 buildCalendar();
-// Populate league selector with sport key as value
+// Restore saved API key
 (function() {
-  var sel = document.getElementById('leagueSel');
-  LEAGUES.forEach(function(lg) {
-    var opt = document.createElement('option');
-    opt.value = lg.key;
-    opt.textContent = lg.name;
-    sel.appendChild(opt);
-  });
-  // Restore saved API key
   var savedKey = localStorage.getItem('oddsApiKey');
   if (savedKey) document.getElementById('apiKey').value = savedKey;
-
-  // Show usage hint based on how admin.html is being served
-  var statusEl = document.getElementById('liveStatus');
-  if (window.location.protocol === 'file:') {
-    statusEl.innerHTML = '<strong style="color:var(--accent)">\\u26A0 Open via server, not file://</strong> &mdash; run <code style="background:var(--bg-input);padding:1px 5px;border-radius:4px;">node start.js</code> then visit <a href="http://localhost:3000" style="color:var(--blue)">localhost:3000</a>';
-  } else {
-    statusEl.textContent = 'Enter key \\u2192 Discover leagues \\u2192 Load Matches';
-  }
+  document.getElementById('liveStatus').textContent = 'Paste key & click Load \\u2014 fetches ALL soccer matches in one go';
 })();
 </script>
 </body>
