@@ -468,6 +468,99 @@ const FLAG_MAP = {
 
 function getTeamFlag(name) { return FLAG_MAP[name] || '\\uD83C\\uDFF3\\uFE0F'; }
 
+const CLUB_CRESTS = {
+  // Premier League
+  'Arsenal':'https://crests.football-data.org/57.png',
+  'Aston Villa':'https://crests.football-data.org/58.png',
+  'AFC Bournemouth':'https://crests.football-data.org/1044.png',
+  'Bournemouth':'https://crests.football-data.org/1044.png',
+  'Brentford':'https://crests.football-data.org/402.png',
+  'Brighton':'https://crests.football-data.org/397.png',
+  'Brighton and Hove Albion':'https://crests.football-data.org/397.png',
+  'Chelsea':'https://crests.football-data.org/61.png',
+  'Crystal Palace':'https://crests.football-data.org/354.png',
+  'Everton':'https://crests.football-data.org/62.png',
+  'Fulham':'https://crests.football-data.org/63.png',
+  'Ipswich':'https://crests.football-data.org/349.png',
+  'Ipswich Town':'https://crests.football-data.org/349.png',
+  'Leicester':'https://crests.football-data.org/338.png',
+  'Leicester City':'https://crests.football-data.org/338.png',
+  'Liverpool':'https://crests.football-data.org/64.png',
+  'Manchester City':'https://crests.football-data.org/65.png',
+  'Man City':'https://crests.football-data.org/65.png',
+  'Manchester United':'https://crests.football-data.org/66.png',
+  'Man United':'https://crests.football-data.org/66.png',
+  'Newcastle United':'https://crests.football-data.org/67.png',
+  'Newcastle':'https://crests.football-data.org/67.png',
+  'Nottingham Forest':'https://crests.football-data.org/351.png',
+  'Southampton':'https://crests.football-data.org/340.png',
+  'Tottenham Hotspur':'https://crests.football-data.org/73.png',
+  'Tottenham':'https://crests.football-data.org/73.png',
+  'West Ham United':'https://crests.football-data.org/563.png',
+  'West Ham':'https://crests.football-data.org/563.png',
+  'Wolverhampton Wanderers':'https://crests.football-data.org/76.png',
+  'Wolves':'https://crests.football-data.org/76.png',
+  // Bundesliga
+  'Bayern Munich':'https://crests.football-data.org/5.png',
+  'FC Bayern München':'https://crests.football-data.org/5.png',
+  'Borussia Dortmund':'https://crests.football-data.org/4.png',
+  'RB Leipzig':'https://crests.football-data.org/721.png',
+  'Bayer Leverkusen':'https://crests.football-data.org/3.png',
+  'Eintracht Frankfurt':'https://crests.football-data.org/19.png',
+  'Frankfurt':'https://crests.football-data.org/19.png',
+  '1. FC Union Berlin':'https://crests.football-data.org/28.png',
+  'Union Berlin':'https://crests.football-data.org/28.png',
+  'SC Freiburg':'https://crests.football-data.org/17.png',
+  'Freiburg':'https://crests.football-data.org/17.png',
+  'VfB Stuttgart':'https://crests.football-data.org/10.png',
+  'Stuttgart':'https://crests.football-data.org/10.png',
+  'VfL Wolfsburg':'https://crests.football-data.org/11.png',
+  'Wolfsburg':'https://crests.football-data.org/11.png',
+  'Borussia Mönchengladbach':'https://crests.football-data.org/18.png',
+  'Werder Bremen':'https://crests.football-data.org/12.png',
+  'Augsburg':'https://crests.football-data.org/16.png',
+  'FC Augsburg':'https://crests.football-data.org/16.png',
+  // Serie A
+  'AC Milan':'https://crests.football-data.org/98.png',
+  'Milan':'https://crests.football-data.org/98.png',
+  'Inter Milan':'https://crests.football-data.org/108.png',
+  'Inter':'https://crests.football-data.org/108.png',
+  'Juventus':'https://crests.football-data.org/109.png',
+  'Napoli':'https://crests.football-data.org/113.png',
+  'Roma':'https://crests.football-data.org/100.png',
+  'AS Roma':'https://crests.football-data.org/100.png',
+  'Lazio':'https://crests.football-data.org/110.png',
+  'SS Lazio':'https://crests.football-data.org/110.png',
+  'Atalanta':'https://crests.football-data.org/102.png',
+  'Fiorentina':'https://crests.football-data.org/99.png',
+  'Torino':'https://crests.football-data.org/586.png',
+  // La Liga
+  'Real Madrid':'https://crests.football-data.org/86.png',
+  'Barcelona':'https://crests.football-data.org/81.png',
+  'FC Barcelona':'https://crests.football-data.org/81.png',
+  'Atletico Madrid':'https://crests.football-data.org/78.png',
+  'Atlético de Madrid':'https://crests.football-data.org/78.png',
+  'Sevilla':'https://crests.football-data.org/95.png',
+  'Real Sociedad':'https://crests.football-data.org/92.png',
+  'Villarreal':'https://crests.football-data.org/94.png',
+  'Athletic Club':'https://crests.football-data.org/77.png',
+  'Athletic Bilbao':'https://crests.football-data.org/77.png',
+  'Valencia':'https://crests.football-data.org/93.png',
+  // Ligue 1
+  'Paris Saint-Germain':'https://crests.football-data.org/524.png',
+  'PSG':'https://crests.football-data.org/524.png',
+  'Olympique de Marseille':'https://crests.football-data.org/516.png',
+  'Marseille':'https://crests.football-data.org/516.png',
+  'Olympique Lyonnais':'https://crests.football-data.org/523.png',
+  'Lyon':'https://crests.football-data.org/523.png',
+  'Monaco':'https://crests.football-data.org/548.png',
+  'AS Monaco':'https://crests.football-data.org/548.png',
+  'Lille':'https://crests.football-data.org/521.png',
+  'LOSC Lille':'https://crests.football-data.org/521.png',
+};
+
+function getTeamCrest(name) { return CLUB_CRESTS[name] || null; }
+
 function teamCode(name) { return name.replace(/^(United |South |North |Costa |Saudi )/, '').slice(0,3).toUpperCase(); }
 
 function fmtDate(iso) {
@@ -511,7 +604,7 @@ function buildMinimalMatch(entry, league) {
   var round = lge.round;
 
   function emptyTeam(name) {
-    return { name: name, flag: getTeamFlag(name), code: teamCode(name),
+    return { name: name, flag: getTeamFlag(name), crest: getTeamCrest(name), code: teamCode(name),
              fifa: 0, role: '', elo: 0, squadValue: '\\u2014',
              goalsPerGame: 0, concededPerGame: 0, possession: 50, cleanSheets: 0,
              form: [], formRecord: '\\u2014', players: [] };

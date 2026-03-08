@@ -425,6 +425,7 @@ function generateMatchHTML(m, brand, lang) {
     .mh-body{display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem 1.25rem;gap:0;}
     .mh-team{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:.5rem;text-align:center;}
     .mh-flag{font-size:4rem;line-height:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,.15));flex-shrink:0;}
+    .mh-flag img.team-crest{width:72px;height:72px;object-fit:contain;display:block;}
     .mh-name{font-size:1.1rem;font-weight:800;color:var(--t0);letter-spacing:-.02em;}
     .mh-sub{font-size:.7rem;font-weight:600;color:var(--t2);background:var(--bg-input);padding:.15rem .55rem;border-radius:100px;line-height:1.4;}
     .mh-center{padding:0 1.75rem;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.35rem;}
@@ -560,9 +561,9 @@ function generateMatchHTML(m, brand, lang) {
     </div>
     <div class="mh-body">
       <div class="mh-team">
-        <div class="mh-flag">${ht.flag}</div>
+        <div class="mh-flag">${ht.crest ? '<img src="' + ht.crest + '" class="team-crest" onerror="this.style.display=\'none\'">' : ht.flag}</div>
         <div class="mh-name">${ht.name}</div>
-        <div class="mh-sub">${ht.fifa ? 'FIFA #' + ht.fifa + (ht.role ? ' &middot; ' + ht.role : '') : (ht.role || 'World Cup 2026')}</div>
+        <div class="mh-sub">${ht.fifa ? 'FIFA #' + ht.fifa + (ht.role ? ' &middot; ' + ht.role : '') : (ht.role || m.tournament || '')}</div>
       </div>
       <div class="mh-center">
         <div class="mh-kick">${m.kickoff || "TBC"}</div>
@@ -570,9 +571,9 @@ function generateMatchHTML(m, brand, lang) {
         <div class="mh-venue">${m.venue || ""}</div>
       </div>
       <div class="mh-team">
-        <div class="mh-flag">${at.flag}</div>
+        <div class="mh-flag">${at.crest ? '<img src="' + at.crest + '" class="team-crest" onerror="this.style.display=\'none\'">' : at.flag}</div>
         <div class="mh-name">${at.name}</div>
-        <div class="mh-sub">${at.fifa ? 'FIFA #' + at.fifa + (at.role ? ' &middot; ' + at.role : '') : (at.role || 'World Cup 2026')}</div>
+        <div class="mh-sub">${at.fifa ? 'FIFA #' + at.fifa + (at.role ? ' &middot; ' + at.role : '') : (at.role || m.tournament || '')}</div>
       </div>
     </div>
     <div class="mh-foot">
