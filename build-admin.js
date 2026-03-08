@@ -203,8 +203,9 @@ const html = `<!DOCTYPE html>
       <div class="ctrl-label">The Odds API Key &mdash; <a href="https://the-odds-api.com" target="_blank" rel="noopener" style="color:var(--blue);font-size:.55rem;">get free key</a></div>
       <input type="text" class="api-input" id="apiKey" placeholder="Paste key &mdash; saved automatically" oninput="saveApiKey()">
     </div>
+    <button class="btn btn-ghost" onclick="discoverLeagues()" title="Fetch all available soccer leagues from your API key">&#128269; Discover</button>
     <button class="btn btn-primary" onclick="loadLiveMatches()">&#9889; Load Matches</button>
-    <span class="live-status" id="liveStatus">Select league &amp; enter key to load all fixtures</span>
+    <span class="live-status" id="liveStatus">Enter key &rarr; Discover leagues &rarr; Load</span>
   </div>
 </div>
 
@@ -563,20 +564,72 @@ function saveApiKey() {
   if (k) localStorage.setItem('oddsApiKey', k);
 }
 
+// Fetches real sport list from API and rebuilds the league dropdown with correct keys
+async function discoverLeagues() {
+  var key = document.getElementById('apiKey').value.trim() || localStorage.getItem('oddsApiKey') || '';
+  if (!key) {
+    document.getElementById('liveStatus').textContent = '\\u26A0 Enter your API key first, then click Discover';
+    document.getElementById('liveStatus').className = 'live-status err';
+    return;
+  }
+  localStorage.setItem('oddsApiKey', key);
+  document.getElementById('liveStatus').textContent = 'Discovering available leagues\\u2026';
+  document.getElementById('liveStatus').className = 'live-status';
+
+  try {
+    var resp = await fetch('https://api.the-odds-api.com/v4/sports/?apiKey=' + key);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status + ' \\u2014 check your key');
+    var sports = await resp.json();
+    // Filter active soccer leagues only
+    var soccer = sports.filter(function(s) {
+      return s.active && (s.group === 'Soccer' || (s.key && s.key.startsWith('soccer_')));
+    });
+    if (!soccer.length) throw new Error('No active soccer leagues found for this key');
+
+    var sel = document.getElementById('leagueSel');
+    sel.innerHTML = '';
+    soccer.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s.key;
+      opt.textContent = s.description || s.title || s.key;
+      sel.appendChild(opt);
+    });
+    // Try to pre-select Bundesliga or World Cup if present
+    var preferred = ['soccer_germany_bundesliga','soccer_fifa_world_cup','soccer_epl'];
+    for (var p = 0; p < preferred.length; p++) {
+      var found = soccer.find(function(s){ return s.key === preferred[p]; });
+      if (found) { sel.value = found.key; break; }
+    }
+    var remaining = resp.headers.get('x-requests-remaining');
+    document.getElementById('liveStatus').textContent = '\\u2714 Found ' + soccer.length + ' soccer leagues. Requests left: ' + (remaining || '?') + ' \\u2014 now pick a league & click Load.';
+    document.getElementById('liveStatus').className = 'live-status ok';
+    log('Discovered ' + soccer.length + ' soccer leagues.', 'ok');
+  } catch(e) {
+    document.getElementById('liveStatus').textContent = '\\u2716 ' + e.message;
+    document.getElementById('liveStatus').className = 'live-status err';
+    log('Discover failed: ' + e.message, 'warn');
+  }
+}
+
 async function loadLiveMatches() {
   var key = document.getElementById('apiKey').value.trim() || localStorage.getItem('oddsApiKey') || '';
-  var leagueIdx = parseInt(document.getElementById('leagueSel').value) || 0;
-  var league = LEAGUES[leagueIdx] || LEAGUES[0];
+  var sel = document.getElementById('leagueSel');
+  var sportKey = sel.value;
+  var leagueName = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : sportKey;
+  // Try to get a short round name from LEAGUES fallback, else use full name
+  var leagueObj = LEAGUES.find(function(l){ return l.key === sportKey; });
+  var league = leagueObj || { key: sportKey, name: leagueName, round: leagueName };
   if (!key) {
     document.getElementById('liveStatus').textContent = '\\u26A0 Enter your Odds API key first';
     document.getElementById('liveStatus').className = 'live-status err';
     return;
   }
   document.getElementById('apiKey').value = key;
+  localStorage.setItem('oddsApiKey', key);
   document.getElementById('liveStatus').textContent = 'Fetching ' + league.name + '\\u2026';
   document.getElementById('liveStatus').className = 'live-status';
 
-  var url = 'https://api.the-odds-api.com/v4/sports/' + league.key + '/odds/?apiKey=' + key + '&regions=eu&markets=h2h&oddsFormat=decimal';
+  var url = 'https://api.the-odds-api.com/v4/sports/' + league.key + '/odds/?apiKey=' + key + '&regions=eu,uk&markets=h2h&oddsFormat=decimal';
   try {
     var resp = await fetch(url);
     if (!resp.ok) {
@@ -653,12 +706,12 @@ function addMatchToCalendar(m) {
 buildBrandSelect();
 buildGroupPills();
 buildCalendar();
-// Populate league selector
+// Populate league selector with sport key as value
 (function() {
   var sel = document.getElementById('leagueSel');
-  LEAGUES.forEach(function(lg, i) {
+  LEAGUES.forEach(function(lg) {
     var opt = document.createElement('option');
-    opt.value = i;
+    opt.value = lg.key;
     opt.textContent = lg.name;
     sel.appendChild(opt);
   });
