@@ -377,8 +377,8 @@ function generateMatchHTML(m, brand, lang) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${ht.name} vs ${at.name} \u2013 FIFA World Cup 2026 | ${brandName}</title>
-  <meta name="description" content="Bet on ${ht.name} vs ${at.name} at FIFA World Cup 2026. Best odds, match preview, head-to-head stats and exclusive bonuses at ${brandName}.">
+  <title>${ht.name} vs ${at.name} \u2013 ${m.tournament || 'FIFA World Cup 2026'} | ${brandName}</title>
+  <meta name="description" content="Bet on ${ht.name} vs ${at.name} (${m.tournament || 'FIFA World Cup 2026'}). Best odds, match preview, head-to-head stats and exclusive bonuses at ${brandName}.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -554,7 +554,7 @@ function generateMatchHTML(m, brand, lang) {
     <div class="mh-top">
       <div class="mh-tourney">
         <div class="mh-tourney-badge">\u26bd</div>
-        FIFA World Cup 2026 &bull; ${t.groupStage} &bull; ${m.group}
+        ${m.tournament || 'FIFA World Cup 2026'} &bull; ${m.group}
       </div>
       <div class="mh-status"><span class="mh-dot"></span> ${t.upcoming}</div>
     </div>

@@ -196,11 +196,15 @@ const html = `<!DOCTYPE html>
 
   <div class="live-bar">
     <div class="ctrl-group">
-      <div class="ctrl-label">The Odds API Key &mdash; <a href="https://the-odds-api.com" target="_blank" rel="noopener" style="color:var(--blue);font-size:.55rem;">get free key</a></div>
-      <input type="text" class="api-input" id="apiKey" placeholder="Paste your key here to load ALL WC matches" oninput="saveApiKey()">
+      <div class="ctrl-label">League</div>
+      <select class="api-input" id="leagueSel" style="width:auto;min-width:190px;cursor:pointer;"></select>
     </div>
-    <button class="btn btn-primary" onclick="loadLiveMatches()">&#9889; Load All WC Matches</button>
-    <span class="live-status" id="liveStatus">Enter key &amp; click to fetch all upcoming World Cup fixtures</span>
+    <div class="ctrl-group">
+      <div class="ctrl-label">The Odds API Key &mdash; <a href="https://the-odds-api.com" target="_blank" rel="noopener" style="color:var(--blue);font-size:.55rem;">get free key</a></div>
+      <input type="text" class="api-input" id="apiKey" placeholder="Paste key &mdash; saved automatically" oninput="saveApiKey()">
+    </div>
+    <button class="btn btn-primary" onclick="loadLiveMatches()">&#9889; Load Matches</button>
+    <span class="live-status" id="liveStatus">Select league &amp; enter key to load all fixtures</span>
   </div>
 </div>
 
@@ -447,8 +451,16 @@ function log(msg, type) {
 }
 
 // ── LIVE MATCH LOADING ────────────────────────────────────────────────────────
-// Holds matches fetched live from The Odds API
 const LIVE_MATCHES = [];
+
+const LEAGUES = [
+  { key: 'soccer_fifa_world_cup',          name: 'FIFA World Cup 2026',        round: 'Group Stage'   },
+  { key: 'soccer_epl',                     name: 'Premier League 2025/26',     round: 'Premier League'},
+  { key: 'soccer_germany_bundesliga',      name: 'Bundesliga 2025/26',         round: 'Bundesliga'    },
+  { key: 'soccer_italy_serie_a',           name: 'Serie A 2025/26',            round: 'Serie A'       },
+  { key: 'soccer_switzerland_superleague', name: 'Swiss Super League 2025/26', round: 'Super League'  },
+  { key: 'soccer_turkey_super_league',     name: 'S\\u00fcper Lig 2025/26',    round: 'S\\u00fcper Lig'},
+];
 
 const FLAG_MAP = {
   'Argentina':'🇦🇷','Australia':'🇦🇺','Austria':'🇦🇹','Belgium':'🇧🇪','Bolivia':'🇧🇴',
@@ -487,8 +499,9 @@ function makeMatchId(a, b) {
   return [a, b].map(function(n) { return n.toLowerCase().replace(/\\s+/g,'-').replace(/[^a-z0-9-]/g,''); }).join('-');
 }
 
-function buildMinimalMatch(entry) {
+function buildMinimalMatch(entry, league) {
   var tA = entry.home_team, tB = entry.away_team;
+  var lge = league || LEAGUES[0];
   var market = null;
   for (var bi = 0; bi < (entry.bookmakers || []).length; bi++) {
     var mk = (entry.bookmakers[bi].markets || []).find(function(x){ return x.key === 'h2h'; });
@@ -506,6 +519,9 @@ function buildMinimalMatch(entry) {
   var pH = Math.round((1/homeOdds)/total*100);
   var pD = Math.round((1/drawOdds)/total*100);
   var pA = 100 - pH - pD;
+  var fav = pH > pA ? tA : tB;
+  var lgName = lge.name;
+  var round = lge.round;
 
   function emptyTeam(name) {
     return { name: name, flag: getTeamFlag(name), code: teamCode(name),
@@ -515,31 +531,30 @@ function buildMinimalMatch(entry) {
   }
 
   return {
-    id: makeMatchId(tA, tB),
+    id: lge.key.replace('soccer_','').replace(/_/g,'-') + '--' + makeMatchId(tA, tB),
+    tournament: lgName,
     homeTeam: emptyTeam(tA),
     awayTeam: emptyTeam(tB),
     kickoff: fmtTime(entry.commence_time),
     date: fmtDate(entry.commence_time),
     venue: 'TBC', venueCapacity: '', venueSurface: '', kickoffLocal: '', kickoffCET: '',
-    group: 'Group Stage',
+    group: round,
     odds: { home: homeOdds, draw: drawOdds, away: awayOdds },
     probHome: pH, probDraw: pD, probAway: pA,
     previewLines: {
-      en: [tA + ' face ' + tB + ' in a FIFA World Cup 2026 group stage clash.',
-           'Both sides will be looking to claim the three points in what promises to be a competitive match.'],
-      de: [tA + ' trifft auf ' + tB + ' in der WM-Gruppenphase 2026.',
-           'Beide Teams wollen die drei Punkte — es verspricht ein hart umkämpftes Spiel zu werden.'],
-      tr: [tA + ', ' + tB + ' ile 2026 FIFA Dünya Kupası grup aşamasında karşılaşıyor.',
-           'Her iki takım da üç puan peşinde olacak — zorlu bir mücadele bekleniyor.'],
+      en: [tA + ' host ' + tB + ' in a ' + lgName + ' fixture.',
+           'Both sides will be looking to claim all three points in what promises to be a competitive encounter.'],
+      de: [tA + ' empf\\u00e4ngt ' + tB + ' in der ' + lgName + '.',
+           'Beide Teams wollen die drei Punkte \\u2014 es verspricht ein hart umk\\u00e4mpftes Spiel zu werden.'],
+      tr: [tA + ', ' + lgName + ' ma\\u00e7\\u0131nda ' + tB + ' ile evinde kar\\u015f\\u0131la\\u015f\\u0131yor.',
+           'Her iki tak\\u0131m da \\u00fc\\u00e7 puan pe\\u015finde olacak \\u2014 zorlu bir m\\u00fccadele bekleniyor.'],
     },
     previewHighlight: {
-      en: '<strong>Odds on:</strong> ' + tA + ' priced at ' + homeOdds.toFixed(2) + ', ' + tB + ' at ' + awayOdds.toFixed(2) + ' — ' + (pH > pA ? tA : tB) + ' slight favourites.',
-      de: '<strong>Quote:</strong> ' + tA + ' bei ' + homeOdds.toFixed(2) + ', ' + tB + ' bei ' + awayOdds.toFixed(2) + ' — ' + (pH > pA ? tA : tB) + ' leichter Favorit.',
-      tr: '<strong>Oran:</strong> ' + tA + ' ' + homeOdds.toFixed(2) + ', ' + tB + ' ' + awayOdds.toFixed(2) + ' — ' + (pH > pA ? tA : tB) + ' hafif favori.',
+      en: '<strong>Odds:</strong> ' + tA + ' ' + homeOdds.toFixed(2) + ' &middot; Draw ' + drawOdds.toFixed(2) + ' &middot; ' + tB + ' ' + awayOdds.toFixed(2) + ' \\u2014 <strong>' + fav + '</strong> slight favourites.',
+      de: '<strong>Quoten:</strong> ' + tA + ' ' + homeOdds.toFixed(2) + ' &middot; Unentsch. ' + drawOdds.toFixed(2) + ' &middot; ' + tB + ' ' + awayOdds.toFixed(2) + ' \\u2014 <strong>' + fav + '</strong> leichter Favorit.',
+      tr: '<strong>Oranlar:</strong> ' + tA + ' ' + homeOdds.toFixed(2) + ' &middot; Berab. ' + drawOdds.toFixed(2) + ' &middot; ' + tB + ' ' + awayOdds.toFixed(2) + ' \\u2014 <strong>' + fav + '</strong> hafif favori.',
     },
-    h2h: null,
-    markets: null,
-    stats: [],
+    h2h: null, markets: null, stats: [],
   };
 }
 
@@ -550,16 +565,18 @@ function saveApiKey() {
 
 async function loadLiveMatches() {
   var key = document.getElementById('apiKey').value.trim() || localStorage.getItem('oddsApiKey') || '';
+  var leagueIdx = parseInt(document.getElementById('leagueSel').value) || 0;
+  var league = LEAGUES[leagueIdx] || LEAGUES[0];
   if (!key) {
     document.getElementById('liveStatus').textContent = '\\u26A0 Enter your Odds API key first';
     document.getElementById('liveStatus').className = 'live-status err';
     return;
   }
   document.getElementById('apiKey').value = key;
-  document.getElementById('liveStatus').textContent = 'Fetching\\u2026';
+  document.getElementById('liveStatus').textContent = 'Fetching ' + league.name + '\\u2026';
   document.getElementById('liveStatus').className = 'live-status';
 
-  var url = 'https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds/?apiKey=' + key + '&regions=eu&markets=h2h&oddsFormat=decimal';
+  var url = 'https://api.the-odds-api.com/v4/sports/' + league.key + '/odds/?apiKey=' + key + '&regions=eu&markets=h2h&oddsFormat=decimal';
   try {
     var resp = await fetch(url);
     if (!resp.ok) {
@@ -569,19 +586,18 @@ async function loadLiveMatches() {
     var data = await resp.json();
     var added = 0;
     data.forEach(function(entry) {
-      var id = makeMatchId(entry.home_team, entry.away_team);
-      // Skip if already in MATCHES or LIVE_MATCHES
+      var match = buildMinimalMatch(entry, league);
+      var id = match.id;
       if (MATCHES.find(function(x){ return x.id === id; })) return;
       if (LIVE_MATCHES.find(function(x){ return x.id === id; })) return;
-      var match = buildMinimalMatch(entry);
       LIVE_MATCHES.push(match);
       addMatchToCalendar(match);
       added++;
     });
     var remaining = resp.headers.get('x-requests-remaining');
-    document.getElementById('liveStatus').textContent = '\\u2714 Loaded ' + data.length + ' WC matches (' + added + ' new). Requests left: ' + (remaining || '?');
+    document.getElementById('liveStatus').textContent = '\\u2714 ' + league.name + ': ' + data.length + ' matches loaded (' + added + ' new). Requests left: ' + (remaining || '?');
     document.getElementById('liveStatus').className = 'live-status ok';
-    log('Loaded ' + data.length + ' live matches from The Odds API (' + added + ' new added).', 'ok');
+    log('Loaded ' + added + ' new matches for ' + league.name + '.', 'ok');
   } catch(e) {
     document.getElementById('liveStatus').textContent = '\\u2716 ' + e.message;
     document.getElementById('liveStatus').className = 'live-status err';
@@ -637,9 +653,19 @@ function addMatchToCalendar(m) {
 buildBrandSelect();
 buildGroupPills();
 buildCalendar();
-// Restore saved API key
-var savedKey = localStorage.getItem('oddsApiKey');
-if (savedKey) document.getElementById('apiKey').value = savedKey;
+// Populate league selector
+(function() {
+  var sel = document.getElementById('leagueSel');
+  LEAGUES.forEach(function(lg, i) {
+    var opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = lg.name;
+    sel.appendChild(opt);
+  });
+  // Restore saved API key
+  var savedKey = localStorage.getItem('oddsApiKey');
+  if (savedKey) document.getElementById('apiKey').value = savedKey;
+})();
 </script>
 </body>
 </html>`;
