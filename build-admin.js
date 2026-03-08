@@ -121,6 +121,14 @@ const html = `<!DOCTYPE html>
     .log-line.info { color: var(--blue); }
     .log-line.warn { color: var(--yellow); }
 
+    /* ── LIVE LOAD BAR ── */
+    .live-bar { display: flex; align-items: flex-end; gap: .75rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: .75rem 1rem; margin-top: 1rem; flex-wrap: wrap; }
+    .api-input { background: var(--bg-input); border: 1px solid var(--border); border-radius: 7px; color: var(--t0); font-size: .75rem; padding: .38rem .75rem; font-family: inherit; outline: none; width: 260px; transition: border-color .15s; }
+    .api-input:focus { border-color: rgba(255,255,255,0.25); }
+    .live-status { font-size: .7rem; color: var(--t2); align-self: center; flex: 1; min-width: 120px; }
+    .live-status.ok { color: var(--green); }
+    .live-status.err { color: var(--accent); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 700px) {
       .topbar { flex-wrap: wrap; height: auto; padding: .6rem 1rem; gap: .5rem; }
@@ -184,6 +192,15 @@ const html = `<!DOCTYPE html>
   <div class="log-section">
     <div class="log-title">Output Log</div>
     <div class="log" id="log"><span class="log-line">Ready. Select brand, language and matches, then click Generate.</span></div>
+  </div>
+
+  <div class="live-bar">
+    <div class="ctrl-group">
+      <div class="ctrl-label">The Odds API Key &mdash; <a href="https://the-odds-api.com" target="_blank" rel="noopener" style="color:var(--blue);font-size:.55rem;">get free key</a></div>
+      <input type="text" class="api-input" id="apiKey" placeholder="Paste your key here to load ALL WC matches" oninput="saveApiKey()">
+    </div>
+    <button class="btn btn-primary" onclick="loadLiveMatches()">&#9889; Load All WC Matches</button>
+    <span class="live-status" id="liveStatus">Enter key &amp; click to fetch all upcoming World Cup fixtures</span>
   </div>
 </div>
 
@@ -253,6 +270,7 @@ function buildGroupPills() {
   groups.forEach(g => {
     const btn = document.createElement('button');
     btn.className = 'gf-pill' + (g === 'all' ? ' active' : '');
+    btn.dataset.group = g;
     btn.textContent = g === 'all' ? 'All' : g;
     btn.onclick = () => filterGroup(g);
     container.appendChild(btn);
@@ -352,7 +370,7 @@ function toggleAll() {
 
 // ── GENERATE ──────────────────────────────────────────────────────────────────
 function getHTML(id) {
-  const m = MATCHES.find(x => x.id === id);
+  const m = MATCHES.find(x => x.id === id) || LIVE_MATCHES.find(x => x.id === id);
   if (!m) throw new Error('Match not found: ' + id);
   return generateMatchHTML(m, selectedBrand, selectedLang);
 }
@@ -394,7 +412,7 @@ async function generateSelected() {
 }
 
 async function generateAll() {
-  const ids = MATCHES.map(m => m.id);
+  const ids = [...MATCHES, ...LIVE_MATCHES].map(m => m.id);
   await runBatch(ids);
 }
 
@@ -428,10 +446,200 @@ function log(msg, type) {
   el.scrollTop = el.scrollHeight;
 }
 
+// ── LIVE MATCH LOADING ────────────────────────────────────────────────────────
+// Holds matches fetched live from The Odds API
+const LIVE_MATCHES = [];
+
+const FLAG_MAP = {
+  'Argentina':'🇦🇷','Australia':'🇦🇺','Austria':'🇦🇹','Belgium':'🇧🇪','Bolivia':'🇧🇴',
+  'Brazil':'🇧🇷','Cameroon':'🇨🇲','Canada':'🇨🇦','Chile':'🇨🇱','China':'🇨🇳',
+  'Colombia':'🇨🇴','Costa Rica':'🇨🇷','Croatia':'🇭🇷','Czech Republic':'🇨🇿',
+  'Denmark':'🇩🇰','Ecuador':'🇪🇨','Egypt':'🇪🇬','England':'🏴\\uDB40\\uDC67\\uDB40\\uDC62\\uDB40\\uDC65\\uDB40\\uDC6E\\uDB40\\uDC67\\uDB40\\uDC7F',
+  'France':'🇫🇷','Germany':'🇩🇪','Ghana':'🇬🇭','Honduras':'🇭🇳','Hungary':'🇭🇺',
+  'Indonesia':'🇮🇩','Iran':'🇮🇷','Italy':'🇮🇹','Jamaica':'🇯🇲','Japan':'🇯🇵',
+  'Korea Republic':'🇰🇷','South Korea':'🇰🇷','Mali':'🇲🇱','Mexico':'🇲🇽',
+  'Morocco':'🇲🇦','Netherlands':'🇳🇱','New Zealand':'🇳🇿','Nigeria':'🇳🇬',
+  'Panama':'🇵🇦','Paraguay':'🇵🇾','Peru':'🇵🇪','Poland':'🇵🇱','Portugal':'🇵🇹',
+  'Qatar':'🇶🇦','Romania':'🇷🇴','Saudi Arabia':'🇸🇦','Scotland':'🏴\\uDB40\\uDC67\\uDB40\\uDC62\\uDB40\\uDC73\\uDB40\\uDC63\\uDB40\\uDC74\\uDB40\\uDC7F',
+  'Senegal':'🇸🇳','Serbia':'🇷🇸','South Africa':'🇿🇦','Spain':'🇪🇸',
+  'Switzerland':'🇨🇭','Tunisia':'🇹🇳','Turkey':'🇹🇷','Türkiye':'🇹🇷',
+  'Ukraine':'🇺🇦','United States':'🇺🇸','USA':'🇺🇸','Uruguay':'🇺🇾',
+  'Venezuela':'🇻🇪','Wales':'🏴\\uDB40\\uDC67\\uDB40\\uDC62\\uDB40\\uDC77\\uDB40\\uDC6C\\uDB40\\uDC73\\uDB40\\uDC7F',
+};
+
+function getTeamFlag(name) { return FLAG_MAP[name] || '\\uD83C\\uDFF3\\uFE0F'; }
+
+function teamCode(name) { return name.replace(/^(United |South |North |Costa |Saudi )/, '').slice(0,3).toUpperCase(); }
+
+function fmtDate(iso) {
+  var d = new Date(iso);
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return days[d.getUTCDay()] + ', ' + d.getUTCDate() + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+}
+
+function fmtTime(iso) {
+  var d = new Date(iso);
+  return String(d.getUTCHours()).padStart(2,'0') + ':' + String(d.getUTCMinutes()).padStart(2,'0');
+}
+
+function makeMatchId(a, b) {
+  return [a, b].map(function(n) { return n.toLowerCase().replace(/\\s+/g,'-').replace(/[^a-z0-9-]/g,''); }).join('-');
+}
+
+function buildMinimalMatch(entry) {
+  var tA = entry.home_team, tB = entry.away_team;
+  var market = null;
+  for (var bi = 0; bi < (entry.bookmakers || []).length; bi++) {
+    var mk = (entry.bookmakers[bi].markets || []).find(function(x){ return x.key === 'h2h'; });
+    if (mk) { market = mk; break; }
+  }
+  var homeOdds = 2.50, drawOdds = 3.20, awayOdds = 3.00;
+  if (market) {
+    (market.outcomes || []).forEach(function(o) {
+      if (o.name === tA) homeOdds = o.price;
+      else if (o.name === tB) awayOdds = o.price;
+      else if (o.name === 'Draw') drawOdds = o.price;
+    });
+  }
+  var total = 1/homeOdds + 1/drawOdds + 1/awayOdds;
+  var pH = Math.round((1/homeOdds)/total*100);
+  var pD = Math.round((1/drawOdds)/total*100);
+  var pA = 100 - pH - pD;
+
+  function emptyTeam(name) {
+    return { name: name, flag: getTeamFlag(name), code: teamCode(name),
+             fifa: 0, role: '', elo: 0, squadValue: '\\u2014',
+             goalsPerGame: 0, concededPerGame: 0, possession: 50, cleanSheets: 0,
+             form: [], formRecord: '\\u2014', players: [] };
+  }
+
+  return {
+    id: makeMatchId(tA, tB),
+    homeTeam: emptyTeam(tA),
+    awayTeam: emptyTeam(tB),
+    kickoff: fmtTime(entry.commence_time),
+    date: fmtDate(entry.commence_time),
+    venue: 'TBC', venueCapacity: '', venueSurface: '', kickoffLocal: '', kickoffCET: '',
+    group: 'Group Stage',
+    odds: { home: homeOdds, draw: drawOdds, away: awayOdds },
+    probHome: pH, probDraw: pD, probAway: pA,
+    previewLines: {
+      en: [tA + ' face ' + tB + ' in a FIFA World Cup 2026 group stage clash.',
+           'Both sides will be looking to claim the three points in what promises to be a competitive match.'],
+      de: [tA + ' trifft auf ' + tB + ' in der WM-Gruppenphase 2026.',
+           'Beide Teams wollen die drei Punkte — es verspricht ein hart umkämpftes Spiel zu werden.'],
+      tr: [tA + ', ' + tB + ' ile 2026 FIFA Dünya Kupası grup aşamasında karşılaşıyor.',
+           'Her iki takım da üç puan peşinde olacak — zorlu bir mücadele bekleniyor.'],
+    },
+    previewHighlight: {
+      en: '<strong>Odds on:</strong> ' + tA + ' priced at ' + homeOdds.toFixed(2) + ', ' + tB + ' at ' + awayOdds.toFixed(2) + ' — ' + (pH > pA ? tA : tB) + ' slight favourites.',
+      de: '<strong>Quote:</strong> ' + tA + ' bei ' + homeOdds.toFixed(2) + ', ' + tB + ' bei ' + awayOdds.toFixed(2) + ' — ' + (pH > pA ? tA : tB) + ' leichter Favorit.',
+      tr: '<strong>Oran:</strong> ' + tA + ' ' + homeOdds.toFixed(2) + ', ' + tB + ' ' + awayOdds.toFixed(2) + ' — ' + (pH > pA ? tA : tB) + ' hafif favori.',
+    },
+    h2h: null,
+    markets: null,
+    stats: [],
+  };
+}
+
+function saveApiKey() {
+  var k = document.getElementById('apiKey').value.trim();
+  if (k) localStorage.setItem('oddsApiKey', k);
+}
+
+async function loadLiveMatches() {
+  var key = document.getElementById('apiKey').value.trim() || localStorage.getItem('oddsApiKey') || '';
+  if (!key) {
+    document.getElementById('liveStatus').textContent = '\\u26A0 Enter your Odds API key first';
+    document.getElementById('liveStatus').className = 'live-status err';
+    return;
+  }
+  document.getElementById('apiKey').value = key;
+  document.getElementById('liveStatus').textContent = 'Fetching\\u2026';
+  document.getElementById('liveStatus').className = 'live-status';
+
+  var url = 'https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds/?apiKey=' + key + '&regions=eu&markets=h2h&oddsFormat=decimal';
+  try {
+    var resp = await fetch(url);
+    if (!resp.ok) {
+      var err = await resp.text();
+      throw new Error('HTTP ' + resp.status + ': ' + err.slice(0,120));
+    }
+    var data = await resp.json();
+    var added = 0;
+    data.forEach(function(entry) {
+      var id = makeMatchId(entry.home_team, entry.away_team);
+      // Skip if already in MATCHES or LIVE_MATCHES
+      if (MATCHES.find(function(x){ return x.id === id; })) return;
+      if (LIVE_MATCHES.find(function(x){ return x.id === id; })) return;
+      var match = buildMinimalMatch(entry);
+      LIVE_MATCHES.push(match);
+      addMatchToCalendar(match);
+      added++;
+    });
+    var remaining = resp.headers.get('x-requests-remaining');
+    document.getElementById('liveStatus').textContent = '\\u2714 Loaded ' + data.length + ' WC matches (' + added + ' new). Requests left: ' + (remaining || '?');
+    document.getElementById('liveStatus').className = 'live-status ok';
+    log('Loaded ' + data.length + ' live matches from The Odds API (' + added + ' new added).', 'ok');
+  } catch(e) {
+    document.getElementById('liveStatus').textContent = '\\u2716 ' + e.message;
+    document.getElementById('liveStatus').className = 'live-status err';
+    log('Live fetch failed: ' + e.message, 'warn');
+  }
+}
+
+// Adds a single match to the calendar DOM (finds or creates the date section)
+function addMatchToCalendar(m) {
+  var cal = document.getElementById('calendar');
+  var dateKey = 'list-' + m.date.replace(/[^a-z0-9]/gi,'_');
+  var list = document.getElementById(dateKey);
+  if (!list) {
+    var section = document.createElement('div');
+    section.className = 'date-section';
+    section.innerHTML =
+      '<div class="date-header">' +
+        '<div class="date-header-line"></div>' +
+        '<div class="date-header-text">' + m.date + '</div>' +
+        '<div class="date-header-line"></div>' +
+      '</div>' +
+      '<div class="match-list" id="' + dateKey + '"></div>';
+    // Insert in date order
+    var newKey = parseDateKey(m.date);
+    var inserted = false;
+    var sections = cal.querySelectorAll('.date-section');
+    for (var i = 0; i < sections.length; i++) {
+      var hdr = sections[i].querySelector('.date-header-text');
+      if (hdr && parseDateKey(hdr.textContent) > newKey) {
+        cal.insertBefore(section, sections[i]);
+        inserted = true;
+        break;
+      }
+    }
+    if (!inserted) cal.appendChild(section);
+    list = section.querySelector('.match-list');
+  }
+  list.appendChild(buildMatchRow(m));
+  // Update group pills if group not present
+  var existing = document.querySelector('.gf-pill[data-group="' + m.group + '"]');
+  if (!existing && m.group !== 'all') {
+    var container = document.getElementById('groupPills');
+    var btn = document.createElement('button');
+    btn.className = 'gf-pill';
+    btn.dataset.group = m.group;
+    btn.textContent = m.group;
+    btn.onclick = function() { filterGroup(m.group); };
+    container.appendChild(btn);
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 buildBrandSelect();
 buildGroupPills();
 buildCalendar();
+// Restore saved API key
+var savedKey = localStorage.getItem('oddsApiKey');
+if (savedKey) document.getElementById('apiKey').value = savedKey;
 </script>
 </body>
 </html>`;

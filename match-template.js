@@ -209,8 +209,9 @@ function generateMatchHTML(m, brand, lang) {
   function g(obj) { return (obj && obj[L]) || (obj && obj.en) || ""; }
 
   function formBadges(team) {
+    if (!team.form || !team.form.length) return '<span style="color:var(--t3);font-size:.72rem;">\u2014</span>';
     return team.form.map(function(f) {
-      return '<div class="fb ' + f.r.toLowerCase() + '" title="' + f.tip + '">' + f.r + '</div>';
+      return '<div class="fb ' + f.r.toLowerCase() + '" title="' + (f.tip || "") + '">' + f.r + '</div>';
     }).join("\n              ");
   }
 
@@ -260,34 +261,116 @@ function generateMatchHTML(m, brand, lang) {
   }
 
   var ht = m.homeTeam, at = m.awayTeam;
-  var allPlayers = [].concat(ht.players, at.players);
+  var allPlayers = [].concat(ht.players || [], at.players || []);
 
-  function barW(a, b, flip) {
-    var max = Math.max(a, b, 0.001);
-    var pA = Math.round((a / max) * 95);
-    var pB = Math.round((b / max) * 95);
-    return flip ? [pB, pA] : [pA, pB];
+  // Safe bar-width: returns [leftPct, rightPct], handles 0/NaN/Infinity
+  function barW(a, b) {
+    var a2 = (a && isFinite(a)) ? a : 0;
+    var b2 = (b && isFinite(b)) ? b : 0;
+    var max = Math.max(a2, b2, 0.001);
+    return [Math.round((a2 / max) * 95), Math.round((b2 / max) * 95)];
   }
 
-  var fifaBars = barW(1 / ht.fifa, 1 / at.fifa);
+  var fifaBars = barW(ht.fifa ? 1 / ht.fifa : 0, at.fifa ? 1 / at.fifa : 0);
   var fifaH = fifaBars[0], fifaA = fifaBars[1];
-  var eloBars = barW(ht.elo, at.elo);
+  var eloBars = barW(ht.elo || 0, at.elo || 0);
   var eloH = eloBars[0], eloA = eloBars[1];
-  var svH = parseFloat((ht.squadValue || "0").replace(/[^0-9.]/g, ""));
-  var svA = parseFloat((at.squadValue || "0").replace(/[^0-9.]/g, ""));
+  var svH = parseFloat(((ht.squadValue || "0").replace(/[^0-9.]/g, "")) || 0);
+  var svA = parseFloat(((at.squadValue || "0").replace(/[^0-9.]/g, "")) || 0);
   var sqBars = barW(svH, svA);
   var sqH = sqBars[0], sqA = sqBars[1];
-  var gpBars = barW(ht.goalsPerGame, at.goalsPerGame);
+  var gpBars = barW(ht.goalsPerGame || 0, at.goalsPerGame || 0);
   var gpH = gpBars[0], gpA = gpBars[1];
-  var cpBars = barW(1 / ht.concededPerGame, 1 / at.concededPerGame);
+  var cpBars = barW(ht.concededPerGame ? 1 / ht.concededPerGame : 0, at.concededPerGame ? 1 / at.concededPerGame : 0);
   var cpH = cpBars[0], cpA = cpBars[1];
-  var posBars = barW(ht.possession, at.possession);
+  var posBars = barW(ht.possession || 50, at.possession || 50);
   var posH = posBars[0], posA = posBars[1];
-  var csBars = barW(ht.cleanSheets, at.cleanSheets);
+  var csBars = barW(ht.cleanSheets || 0, at.cleanSheets || 0);
   var csH = csBars[0], csA = csBars[1];
 
-  var leadH = ht.elo >= at.elo ? " lead" : "";
-  var leadA = at.elo >= ht.elo ? " lead" : "";
+  var leadH = (ht.elo || 0) >= (at.elo || 0) ? " lead" : "";
+  var leadA = (at.elo || 0) >= (ht.elo || 0) ? " lead" : "";
+
+  // ── Optional section builders (return "" when data is absent) ──────────────
+  function h2hCard() {
+    if (!m.h2h || !m.h2h.total) return "";
+    var hw = Math.round(m.h2h.homeWins / m.h2h.total * 100);
+    var dr = Math.round(m.h2h.draws    / m.h2h.total * 100);
+    var aw = Math.round(m.h2h.awayWins / m.h2h.total * 100);
+    return '<div class="card">' +
+      '<div class="card-head">' +
+        '<div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">\uD83E\uDD1D</span> ' + t.headToHead + '</div>' +
+        '<span class="card-chip">' + t.matchesTotal(m.h2h.total) + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="prob-bar" style="height:26px;margin-bottom:.85rem;">' +
+          '<div class="ps home" style="width:' + hw + '%;">' + m.h2h.homeWins + ' ' + t.wins + '</div>' +
+          '<div class="ps draw" style="width:' + dr + '%;">' + m.h2h.draws + '</div>' +
+          '<div class="ps away" style="width:' + aw + '%;">' + m.h2h.awayWins + ' ' + t.wins + '</div>' +
+        '</div>' +
+        '<div class="prob-labels" style="margin-bottom:.9rem;">' +
+          '<span>' + ht.flag + ' ' + ht.name + '</span><span>' + t.draws + '</span><span>' + at.name + ' ' + at.flag + '</span>' +
+        '</div>' +
+        h2hRows(m) +
+        (m.h2h.note ? '<div style="margin-top:.6rem;font-size:.65rem;color:var(--t3);">' + m.h2h.note + '</div>' : "") +
+      '</div></div>';
+  }
+
+  function mktsCard() {
+    if (!m.markets) return "";
+    var mk = m.markets;
+    return '<div class="card">' +
+      '<div class="card-head">' +
+        '<div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\uD83D\uDCB0</span> ' + t.bettingMarkets + '</div>' +
+        '<span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">' + brandName + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="market"><div class="mkt-label">' + t.matchResult + '</div><div class="mkt-row">' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + ht.name + '</span><span class="mkt-btn-val">' + m.odds.home.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.draw + '</span><span class="mkt-btn-val">' + m.odds.draw.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + at.name + '</span><span class="mkt-btn-val">' + m.odds.away.toFixed(2) + '</span></a>' +
+        '</div></div>' +
+        (mk.bttsYes ? '<div class="market"><div class="mkt-label">' + t.bothTeamsScore + '</div><div class="mkt-row">' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.yes + '</span><span class="mkt-btn-val">' + mk.bttsYes.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.no + '</span><span class="mkt-btn-val">' + mk.bttsNo.toFixed(2) + '</span></a>' +
+        '</div></div>' : "") +
+        (mk.over25 ? '<div class="market"><div class="mkt-label">' + t.totalGoals + '</div><div class="mkt-row">' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.over25 + '</span><span class="mkt-btn-val">' + mk.over25.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.under25 + '</span><span class="mkt-btn-val">' + mk.under25.toFixed(2) + '</span></a>' +
+          (mk.over35 ? '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.over35 + '</span><span class="mkt-btn-val">' + mk.over35.toFixed(2) + '</span></a>' : "") +
+        '</div></div>' : "") +
+        (mk.goalscorers && mk.goalscorers.length ? '<div class="market"><div class="mkt-label">' + t.goalscorer + '</div><div class="mkt-row">' + mktBtns(mk.goalscorers) + '</div></div>' : "") +
+        (mk.correctScore && mk.correctScore.length ? '<div class="market"><div class="mkt-label">' + t.correctScore + '</div><div class="mkt-row">' + mktBtns(mk.correctScore) + '</div></div>' : "") +
+        (mk.dc1x ? '<div class="market"><div class="mkt-label">' + t.doubleChance + '</div><div class="mkt-row">' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">1X (' + ht.code + ' ' + t.orDraw + ')</span><span class="mkt-btn-val">' + mk.dc1x.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">X2 (' + at.code + ' ' + t.orDraw + ')</span><span class="mkt-btn-val">' + mk.dcX2.toFixed(2) + '</span></a>' +
+        '</div></div>' : "") +
+      '</div></div>';
+  }
+
+  function quickBetCard() {
+    if (!m.markets) return "";
+    var mk = m.markets;
+    if (!mk.htHome) return "";
+    return '<div class="card">' +
+      '<div class="card-head"><div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\u26A1</span> ' + t.quickBet + '</div></div>' +
+      '<div class="card-body">' +
+        '<div class="market"><div class="mkt-label">' + t.halfTime + '</div><div class="mkt-row">' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + ht.code + '</span><span class="mkt-btn-val">' + mk.htHome.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + t.draw + '</span><span class="mkt-btn-val">' + mk.htDraw.toFixed(2) + '</span></a>' +
+          '<a href="' + aff + '" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">' + at.code + '</span><span class="mkt-btn-val">' + mk.htAway.toFixed(2) + '</span></a>' +
+        '</div></div>' +
+        (mk.fgsFirst && mk.fgsFirst.length ? '<div class="market"><div class="mkt-label">' + t.firstGoal + '</div><div class="mkt-row">' + mktBtns(mk.fgsFirst) + '</div></div>' : "") +
+      '</div></div>';
+  }
+
+  function playersCard() {
+    if (!allPlayers.length) return "";
+    return '<div class="card">' +
+      '<div class="card-head"><div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\u2B50</span> ' + t.keyPlayers + '</div></div>' +
+      '<div class="card-body">' + playerRows(allPlayers) + '</div>' +
+    '</div>';
+  }
 
   return `<!DOCTYPE html>
 <html lang="${t.htmlLang}">
@@ -479,34 +562,34 @@ function generateMatchHTML(m, brand, lang) {
       <div class="mh-team">
         <div class="mh-flag">${ht.flag}</div>
         <div class="mh-name">${ht.name}</div>
-        <div class="mh-sub">FIFA #${ht.fifa} &middot; ${ht.role}</div>
+        <div class="mh-sub">${ht.fifa ? 'FIFA #' + ht.fifa + (ht.role ? ' &middot; ' + ht.role : '') : (ht.role || 'World Cup 2026')}</div>
       </div>
       <div class="mh-center">
-        <div class="mh-kick">${m.kickoff}</div>
-        <div class="mh-date">${m.date}</div>
-        <div class="mh-venue">${m.venue}</div>
+        <div class="mh-kick">${m.kickoff || "TBC"}</div>
+        <div class="mh-date">${m.date || ""}</div>
+        <div class="mh-venue">${m.venue || ""}</div>
       </div>
       <div class="mh-team">
         <div class="mh-flag">${at.flag}</div>
         <div class="mh-name">${at.name}</div>
-        <div class="mh-sub">FIFA #${at.fifa} &middot; ${at.role}</div>
+        <div class="mh-sub">${at.fifa ? 'FIFA #' + at.fifa + (at.role ? ' &middot; ' + at.role : '') : (at.role || 'World Cup 2026')}</div>
       </div>
     </div>
     <div class="mh-foot">
       <div class="odds-strip">
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
           <span class="odds-btn-label">${t.homeWin}</span>
-          <span class="odds-btn-val">${m.odds.home.toFixed(2)}</span>
+          <span class="odds-btn-val">${(+m.odds.home).toFixed(2)}</span>
           <span class="odds-btn-team">${ht.name}</span>
         </a>
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
           <span class="odds-btn-label">${t.draw}</span>
-          <span class="odds-btn-val">${m.odds.draw.toFixed(2)}</span>
+          <span class="odds-btn-val">${(+m.odds.draw).toFixed(2)}</span>
           <span class="odds-btn-team">${t.after90}</span>
         </a>
         <a href="${aff}" class="odds-btn" target="_blank" rel="noopener">
           <span class="odds-btn-label">${t.awayWin}</span>
-          <span class="odds-btn-val">${m.odds.away.toFixed(2)}</span>
+          <span class="odds-btn-val">${(+m.odds.away).toFixed(2)}</span>
           <span class="odds-btn-team">${at.name}</span>
         </a>
       </div>
@@ -635,74 +718,8 @@ function generateMatchHTML(m, brand, lang) {
         </div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--yellow-dim);">\uD83E\uDD1D</span> ${t.headToHead}</div>
-        <span class="card-chip">${t.matchesTotal(m.h2h.total)}</span>
-      </div>
-      <div class="card-body">
-        <div class="prob-bar" style="height:26px;margin-bottom:.85rem;">
-          <div class="ps home" style="width:${Math.round(m.h2h.homeWins / m.h2h.total * 100)}%;">${m.h2h.homeWins} ${t.wins}</div>
-          <div class="ps draw" style="width:${Math.round(m.h2h.draws / m.h2h.total * 100)}%;">${m.h2h.draws}</div>
-          <div class="ps away" style="width:${Math.round(m.h2h.awayWins / m.h2h.total * 100)}%;">${m.h2h.awayWins} ${t.wins}</div>
-        </div>
-        <div class="prob-labels" style="margin-bottom:.9rem;">
-          <span>${ht.flag} ${ht.name}</span><span>${t.draws}</span><span>${at.name} ${at.flag}</span>
-        </div>
-${h2hRows(m)}
-        ${m.h2h.note ? '<div style="margin-top:.6rem;font-size:.65rem;color:var(--t3);">' + m.h2h.note + '</div>' : ""}
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\uD83D\uDCB0</span> ${t.bettingMarkets}</div>
-        <span class="card-chip" style="color:var(--accent);background:var(--accent-dim);">${brandName}</span>
-      </div>
-      <div class="card-body">
-        <div class="market">
-          <div class="mkt-label">${t.matchResult}</div>
-          <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${ht.name}</span><span class="mkt-btn-val">${m.odds.home.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.draw}</span><span class="mkt-btn-val">${m.odds.draw.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${at.name}</span><span class="mkt-btn-val">${m.odds.away.toFixed(2)}</span></a>
-          </div>
-        </div>
-        <div class="market">
-          <div class="mkt-label">${t.bothTeamsScore}</div>
-          <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.yes}</span><span class="mkt-btn-val">${m.markets.bttsYes.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.no}</span><span class="mkt-btn-val">${m.markets.bttsNo.toFixed(2)}</span></a>
-          </div>
-        </div>
-        <div class="market">
-          <div class="mkt-label">${t.totalGoals}</div>
-          <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.over25}</span><span class="mkt-btn-val">${m.markets.over25.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.under25}</span><span class="mkt-btn-val">${m.markets.under25.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.over35}</span><span class="mkt-btn-val">${m.markets.over35.toFixed(2)}</span></a>
-          </div>
-        </div>
-        <div class="market">
-          <div class="mkt-label">${t.goalscorer}</div>
-          <div class="mkt-row">
-${mktBtns(m.markets.goalscorers)}
-          </div>
-        </div>
-        <div class="market">
-          <div class="mkt-label">${t.correctScore}</div>
-          <div class="mkt-row">
-${mktBtns(m.markets.correctScore)}
-          </div>
-        </div>
-        <div class="market">
-          <div class="mkt-label">${t.doubleChance}</div>
-          <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">1X (${ht.code} ${t.orDraw})</span><span class="mkt-btn-val">${m.markets.dc1x.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">X2 (${at.code} ${t.orDraw})</span><span class="mkt-btn-val">${m.markets.dcX2.toFixed(2)}</span></a>
-          </div>
-        </div>
-      </div>
-    </div>
+    ${h2hCard()}
+    ${mktsCard()}
   </div>
   <div class="sidebar" style="display:flex;flex-direction:column;gap:1rem;">
     <div class="side-cta">
@@ -711,48 +728,21 @@ ${mktBtns(m.markets.correctScore)}
       <div class="side-cta-sub">${g(brand.bonusSub)}</div>
       <a href="${aff}" class="side-cta-btn" target="_blank" rel="noopener">${g(brand.claimBonus)}</a>
     </div>
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--blue-dim);">\u2B50</span> ${t.keyPlayers}</div>
-      </div>
-      <div class="card-body">
-${playerRows(allPlayers)}
-      </div>
-    </div>
+    ${playersCard()}
     <div class="card">
       <div class="card-head">
         <div class="card-title"><span class="card-icon" style="background:var(--green-dim);">\uD83C\uDFDF\uFE0F</span> ${t.venueInfo}</div>
       </div>
       <div class="card-body">
-        <div style="font-size:.85rem;font-weight:800;color:var(--t0);margin-bottom:.15rem;">${m.venue.split(",")[0]}</div>
-        <div style="font-size:.72rem;color:var(--t2);margin-bottom:.65rem;">${m.venue.split(",").slice(1).join(",").trim()}</div>
-        <div class="venue-row"><span class="venue-key">${t.capacity}</span><span class="venue-val">${m.venueCapacity}</span></div>
-        <div class="venue-row"><span class="venue-key">${t.surface}</span><span class="venue-val">${m.venueSurface}</span></div>
-        <div class="venue-row"><span class="venue-key">${t.kickoffLocal}</span><span class="venue-val">${m.kickoffLocal}</span></div>
-        <div class="venue-row"><span class="venue-key">${t.kickoffCET}</span><span class="venue-val">${m.kickoffCET}</span></div>
+        <div style="font-size:.85rem;font-weight:800;color:var(--t0);margin-bottom:.15rem;">${(m.venue || "TBC").split(",")[0]}</div>
+        <div style="font-size:.72rem;color:var(--t2);margin-bottom:.65rem;">${(m.venue || "").split(",").slice(1).join(",").trim()}</div>
+        ${m.venueCapacity ? '<div class="venue-row"><span class="venue-key">' + t.capacity + '</span><span class="venue-val">' + m.venueCapacity + '</span></div>' : ""}
+        ${m.venueSurface ? '<div class="venue-row"><span class="venue-key">' + t.surface + '</span><span class="venue-val">' + m.venueSurface + '</span></div>' : ""}
+        ${m.kickoffLocal ? '<div class="venue-row"><span class="venue-key">' + t.kickoffLocal + '</span><span class="venue-val">' + m.kickoffLocal + '</span></div>' : ""}
+        ${m.kickoffCET ? '<div class="venue-row"><span class="venue-key">' + t.kickoffCET + '</span><span class="venue-val">' + m.kickoffCET + '</span></div>' : ""}
       </div>
     </div>
-    <div class="card">
-      <div class="card-head">
-        <div class="card-title"><span class="card-icon" style="background:var(--accent-dim);">\u26A1</span> ${t.quickBet}</div>
-      </div>
-      <div class="card-body">
-        <div class="market">
-          <div class="mkt-label">${t.halfTime}</div>
-          <div class="mkt-row">
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${ht.code}</span><span class="mkt-btn-val">${m.markets.htHome.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${t.draw}</span><span class="mkt-btn-val">${m.markets.htDraw.toFixed(2)}</span></a>
-            <a href="${aff}" class="mkt-btn" target="_blank" rel="noopener"><span class="mkt-btn-label">${at.code}</span><span class="mkt-btn-val">${m.markets.htAway.toFixed(2)}</span></a>
-          </div>
-        </div>
-        <div class="market">
-          <div class="mkt-label">${t.firstGoal}</div>
-          <div class="mkt-row">
-${mktBtns(m.markets.fgsFirst)}
-          </div>
-        </div>
-      </div>
-    </div>
+    ${quickBetCard()}
   </div>
 </div>
 <footer>
