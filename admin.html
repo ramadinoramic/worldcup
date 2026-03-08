@@ -190,7 +190,7 @@
     </div>
     <button class="btn btn-ghost" onclick="discoverLeagues()" title="Fetch all available soccer leagues from your API key">&#128269; Discover</button>
     <button class="btn btn-primary" onclick="loadLiveMatches()">&#9889; Load Matches</button>
-    <span class="live-status" id="liveStatus">Enter key &rarr; Discover leagues &rarr; Load</span>
+    <span class="live-status" id="liveStatus" id="liveStatus"></span>
   </div>
 </div>
 
@@ -2370,6 +2370,12 @@ function log(msg, type) {
 // ── LIVE MATCH LOADING ────────────────────────────────────────────────────────
 const LIVE_MATCHES = [];
 
+// When served via start.js (localhost), use local proxy to avoid CORS.
+// When opened as file://, attempt direct call (works in some browsers).
+var API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? '/proxy/v4'
+  : 'https://api.the-odds-api.com/v4';
+
 const LEAGUES = [
   { key: 'soccer_fifa_world_cup',          name: 'FIFA World Cup 2026',        round: 'Group Stage'   },
   { key: 'soccer_epl',                     name: 'Premier League 2025/26',     round: 'Premier League'},
@@ -2493,7 +2499,7 @@ async function discoverLeagues() {
   document.getElementById('liveStatus').className = 'live-status';
 
   try {
-    var resp = await fetch('https://api.the-odds-api.com/v4/sports/?apiKey=' + key);
+    var resp = await fetch(API_BASE + '/sports/?apiKey=' + key);
     if (!resp.ok) throw new Error('HTTP ' + resp.status + ' \u2014 check your key');
     var sports = await resp.json();
     // Filter active soccer leagues only
@@ -2545,7 +2551,7 @@ async function loadLiveMatches() {
   document.getElementById('liveStatus').textContent = 'Fetching ' + league.name + '\u2026';
   document.getElementById('liveStatus').className = 'live-status';
 
-  var url = 'https://api.the-odds-api.com/v4/sports/' + league.key + '/odds/?apiKey=' + key + '&regions=eu,uk&markets=h2h&oddsFormat=decimal';
+  var url = API_BASE + '/sports/' + league.key + '/odds/?apiKey=' + key + '&regions=eu,uk&markets=h2h&oddsFormat=decimal';
   try {
     var resp = await fetch(url);
     if (!resp.ok) {
@@ -2634,6 +2640,14 @@ buildCalendar();
   // Restore saved API key
   var savedKey = localStorage.getItem('oddsApiKey');
   if (savedKey) document.getElementById('apiKey').value = savedKey;
+
+  // Show usage hint based on how admin.html is being served
+  var statusEl = document.getElementById('liveStatus');
+  if (window.location.protocol === 'file:') {
+    statusEl.innerHTML = '<strong style="color:var(--accent)">\u26A0 Open via server, not file://</strong> &mdash; run <code style="background:var(--bg-input);padding:1px 5px;border-radius:4px;">node start.js</code> then visit <a href="http://localhost:3000" style="color:var(--blue)">localhost:3000</a>';
+  } else {
+    statusEl.textContent = 'Enter key \u2192 Discover leagues \u2192 Load Matches';
+  }
 })();
 </script>
 </body>
